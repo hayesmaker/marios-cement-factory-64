@@ -1,0 +1,18 @@
+parsing
+flex pass 1
+flex pass 2
+flex pass 3
+Output pass
+Writing prg file: C:\Users\hayesmaker64\Workspace\Mario-Cement-Factory-C64\bin\start.prg
+
+Memory Map
+----------
+Default-segment:
+  $0801-$080c Basic
+  $080e-$0a7f Basic End
+  $8000-$81f4 Map data
+  $d000-$d03f Sprites
+  $f000-$f1a7 Charset
+
+Writing Vice symbol file: C:\Users\hayesmaker64\Workspace\Mario-Cement-Factory-C64\bin\start.vs
+Writing Symbol file: start.sym

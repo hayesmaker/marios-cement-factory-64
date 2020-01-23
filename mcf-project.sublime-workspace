@@ -1,0 +1,443 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Y",
+				"Y_BORDER_OFFSET"
+			],
+			[
+				"Plaer",
+				"PlayerY"
+			],
+			[
+				"COL",
+				"COLLISION_Y1"
+			],
+			[
+				"J",
+				"JOY_DN"
+			],
+			[
+				"JOY",
+				"JOY_UP"
+			],
+			[
+				"Pos",
+				"PosX"
+			],
+			[
+				"Pla",
+				"PlayerWalkSpeed"
+			],
+			[
+				"Play",
+				"PlayerWalkSpeed"
+			],
+			[
+				"P",
+				"PlayerX"
+			],
+			[
+				"PL",
+				"PlayerX"
+			],
+			[
+				"SPRI",
+				"SPRITE_0_Y"
+			],
+			[
+				"SPRITE",
+				"SPRITE_MSB"
+			],
+			[
+				"Sprite",
+				"SPRITE_0_X"
+			],
+			[
+				"SPRITE_MU",
+				"SPRITE_MULTICOLOR"
+			],
+			[
+				"bin",
+				"binary"
+			],
+			[
+				"Col",
+				"ColumnLoop"
+			],
+			[
+				"co",
+				"COLOR_RAM"
+			],
+			[
+				"Sc",
+				"SCREEN_RAM"
+			],
+			[
+				"Draw",
+				"DrawMap"
+			],
+			[
+				"MAP",
+				"MAP_TILES"
+			],
+			[
+				"Tile",
+				"TileLookup"
+			],
+			[
+				"Row",
+				"RowLoop"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame-pdf4/actors/player.asm",
+			"settings":
+			{
+				"buffer_size": 2123,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame-pdf4/start.asm",
+			"settings":
+			{
+				"buffer_size": 724,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "Packages/Kick Assembler (C64)/Build Systems/KickAssembler(C64).sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Kick Assembler (C64)/Build Systems/KickAssembler(C64).sublime-build",
+					""
+				],
+				[
+					"Packages/Kick Assembler (C64)/Build Systems/KickAssembler(C64).sublime-build",
+					"Build and Run"
+				],
+				[
+					"Packages/Kick Assembler (C64)/Build Systems/KickAssembler(C64).sublime-build",
+					"Build and Debug"
+				],
+				[
+					"Packages/Kick Assembler (C64)/Build Systems/KickAssembler(C64).sublime-build",
+					"Build and Run Startup"
+				],
+				[
+					"Packages/Kick Assembler (C64)/Build Systems/KickAssembler(C64).sublime-build",
+					"Build and Debug Startup"
+				],
+				[
+					"Packages/Kick Assembler (C64)/Build Systems/KickAssembler(C64).sublime-build",
+					"Build Startup"
+				],
+				[
+					"Packages/Kick Assembler (C64)/Build Systems/KickAssembler(C64).sublime-build",
+					"Make"
+				]
+			],
+			[
+				"Packages/Kick Assembler (C64)/Build Systems/KickAssembler(C64).sublime-build",
+				"Build and Run"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Enable Package"
+			],
+			[
+				"Package Control: kick ",
+				"Package Control: List Packages"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 426.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame-pdf4",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame-pdf4/actors",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame-pdf4/lib"
+	],
+	"file_history":
+	[
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame-pdf4/lib/zeropage.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame-pdf4/lib/tables.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame/start.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame/actors/player.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/interrupts/score.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/README.md",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/interrupts/irq.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/game.asm",
+		"/C/Users/hayesmaker64/Workspace/Mario-Cement-Factory-C64/start.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/interrupts/monkey.asm",
+		"/C/Users/hayesmaker64/Workspace/Mario-Cement-Factory-C64/actors/cement-crate.asm",
+		"/C/Users/hayesmaker64/Workspace/Mario-Cement-Factory-C64/lib/map.asm",
+		"/C/Users/hayesmaker64/Workspace/Mario-Cement-Factory-C64/actors/player.asm",
+		"/C/Users/hayesmaker64/Workspace/Mario-Cement-Factory-C64/lib/vic.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame/lib/vic.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/lookups/vic.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/setup/macros.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/setup/maploader.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/setup/assets.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/lookups/enemySpriteData.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/lookups/labels.asm",
+		"/C/Users/hayesmaker64/Workspace/Mario-Cement-Factory-C64/lib/labels.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/lookups/registers.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/lookups/sid.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/lookups/spriteData.asm",
+		"/C/Users/hayesmaker64/Workspace/Donkey-Kong-Junior-C64/scripts/lookups/zeropage.asm",
+		"/C/Users/hayesmaker64/Workspace/Mario-Cement-Factory-C64/lib/zeropage.asm",
+		"/C/Users/hayesmaker64/Workspace/Mario-Cement-Factory-C64/lib/assets.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame/lib/map.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame/lib/assets.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame/lib/map2.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame/lib/zeropage.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame/assets.asm",
+		"/C/Users/hayesmaker64/Retro/c64/roms/Episode 6 - The Last V8/crack.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/KickAssembler/Examples/01.MusicIrq/MusicIrq.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/KickAssembler/Examples/02.Simple Scripting/SimpleScripting.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/shallan50k/LetsMakeAC64Game/src/Stream_Ep1/starting_soon.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/Learning/shallan50k/LetsMakeAC64Game/src/Stream_Ep1/2.asm",
+		"/C/Users/hayesmaker64/Retro/c64/dev/ExampleCode/GoatPowerExample.asm"
+	],
+	"find":
+	{
+		"height": 22.0
+	},
+	"find_in_files":
+	{
+		"height": 647.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"#ONE",
+			"ONE",
+			"StoreState",
+			"MainLoop",
+			"GameTick",
+			"PerformFrameCodeFlag",
+			"GameTickFlag",
+			"PerformFrameCodeFlag",
+			"GameTick",
+			"PerformFrameCodeFlag",
+			"ZP_COUNTER",
+			"PerformFrameCodeFlag",
+			"seed",
+			"Random",
+			"GameTickFlag",
+			"VECTOR4",
+			"monkey",
+			"Monkey.RESET",
+			"color"
+		],
+		"highlight": false,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame-pdf4/actors/player.asm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2123,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1059,
+								1059
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Kick Assembler (C64)/Syntaxes/KickAssembler (C64).tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 468.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/hayesmaker64/Retro/c64/dev/Learning/hayesmaker/MakeAGame-pdf4/start.asm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 724,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								610,
+								610
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Kick Assembler (C64)/Syntaxes/KickAssembler (C64).tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 206.4,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 22.0
+	},
+	"input":
+	{
+		"height": 209.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 200.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "mcf-project.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 128.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

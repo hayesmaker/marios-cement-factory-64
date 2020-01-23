@@ -1,0 +1,62 @@
+ 
+*** VICE Version 3.3, rev 35872 ***
+ 
+Welcome to x64sc, the free portable C64 Emulator.
+ 
+Current VICE team members:
+Marco van den Heuvel, Fabrizio Gennari, Groepaz, Olaf Seibert, Marcus Sutton, 
+Kajtar Zsolt, AreaScout, Bas Wassink, Michael C. Martin.
+ 
+This is free software with ABSOLUTELY NO WARRANTY.
+See the "About VICE" command for more info.
+ 
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\C64\kernal'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\C64\basic'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\C64\chargen'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\PRINTER\mps803'.
+Palette: Loading palette `c:\Users\hayesmaker64\Retro\c64\Vice\PRINTER\mps803.vpl'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\PRINTER\nl10-cbm'.
+Palette: Loading palette `c:\Users\hayesmaker64\Retro\c64\Vice\PRINTER\nl10.vpl'.
+NL10: Printer driver initialized.
+Palette: Loading palette `c:\Users\hayesmaker64\Retro\c64\Vice\PRINTER\1520.vpl'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\DRIVES\dos1540'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\DRIVES\dos1541'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\DRIVES\d1541II'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\DRIVES\dos1570'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\DRIVES\dos1571'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\DRIVES\dos1581'.
+DriveROM: Error - 2000 ROM image not found. Hardware-level 2000 emulation is not available.
+DriveROM: Error - 4000 ROM image not found. Hardware-level 4000 emulation is not available.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\DRIVES\dos2031'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\DRIVES\dos2040'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\DRIVES\dos3040'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\DRIVES\dos4040'.
+Loading system file `c:\Users\hayesmaker64\Retro\c64\Vice\DRIVES\dos1001'.
+Drive: Finished loading ROM images.
+VIC-II: Initializing chip model "MOS8565" (63 cycles per line, 312 raster lines).
+Sound: Available sound devices: dx wmm dummy fs dump wav voc iff aiff soundmovie
+Keyboard: Loading keymap `c:\Users\hayesmaker64\Retro\c64\Vice\C64\gtk3_sym.vkm'.
+AUTOSTART: Autodetecting image type of `bin/start.prg'.
+Filesystem Image Probe: Error - Import GCR: Unknown GCR image version 53.
+Filesystem Image: Unknown disk image `bin/start.prg'.
+Tape: Error - Cannot open file `bin/start.prg'
+Error - CRT header invalid.
+CART: 'bin/start.prg' is not a valid CRT file.
+AUTOSTART: Loading PRG file `bin/start.prg' with direct RAM injection.
+AUTOSTART: Resetting the machine to autostart '*'
+AUTOSTART: Turning Warp mode on
+AUTOSTART: `bin/start.prg' recognized as program/p00 file.
+Main CPU: starting at ($FFFC).
+Main CPU: RESET.
+Sound: Opened device `dx', speed 44100Hz, fragment size 2.9ms, buffer size 101ms
+reSID: MOS8580, filter on, sampling rate 44100Hz - resampling, pass to 19845Hz
+Drive 8: RESET.
+AUTOSTART: Injecting program data at $0801 (size $e9a7)
+AUTOSTART: Ready
+AUTOSTART: Turning Warp mode off
+AUTOSTART: Starting program.
+AUTOSTART: Done.
+Writing configuration file `C:\Users\hayesmaker64\AppData\Roaming\vice\vice.ini'.
+
+Exiting...
+Sound: Closing device `dx'
