@@ -11,8 +11,9 @@ PerformFrameCodeFlag:
 	.byte $00
 
 						// current, currentMax, startValue
-GameCounter:			.byte 24, 24, 27
+GameCounter:			.byte 50, 50, 50
 GameTickFlag:			.byte $00
+
 SpeedIncreaseCounter: 	.byte 48, 48
 
 .label MaxSpeed = 13
@@ -22,7 +23,7 @@ Entry:
 	jsr IRQ.Setup
 
 	//bank out BASIC & Kernal ROM
-	lda $01
+	lda $01    
 	and #%11111000
 	ora #%00000101
 	sta $01
@@ -33,12 +34,19 @@ Entry:
 	jsr VIC.SetupColours
 
 	jsr MAPLOADER.DrawMap
-	//jsr CRATE.Initialise
-	//jsr CRATE.DrawSprite
+	jsr CRATES.Initialise
+	
 	
 NewGame: {
 
     //
+    lda $00
+    sta GameTickFlag
+
+    lda GameCounter + 2
+    sta GameCounter + 0
+    jsr CRATES.DrawSprite
+
 
 }
 
@@ -51,10 +59,7 @@ NewGame: {
 
 	//do Frame Code
 	inc ZP_COUNTER
-
     jsr GameTick
-
-	
 
 
 	//end frame code
@@ -62,8 +67,19 @@ jmp !Loop-
 
 GameTick: {
 
+    lda GameCounter
+    bne !+
 
+    lda GameCounter + 1
+    sta GameCounter
 
+    //Short Tick
+
+    jsr CRATES.Update
+    //jsr CRATES.DrawSprite    
+    inc $d021
+
+    !:  
     rts
 }
 

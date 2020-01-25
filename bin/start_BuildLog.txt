@@ -9,7 +9,7 @@ Memory Map
 ----------
 Default-segment:
   $0801-$080c Basic
-  $080e-$0a7f Basic End
+  $080e-$0a90 Basic End
   $8000-$81f4 Map data
   $d000-$d03f Sprites
   $f000-$f1a7 Charset

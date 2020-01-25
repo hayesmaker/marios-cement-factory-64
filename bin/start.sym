@@ -1,6 +1,6 @@
 .label ZERO=$0
-.label GameCounter=$a1f
-.label PerformFrameCodeFlag=$a1e
+.label GameCounter=$a0e
+.label PerformFrameCodeFlag=$a0d
 .label ONE=$1
 .label IRQ=$972 {
   .label Setup=$972 {
@@ -11,7 +11,7 @@
 .label JOY_UP=$1
 .label JOY_DOWN=$2
 .label JOY_LEFT=$4
-.label Entry=$a25
+.label Entry=$a14
 .label MAPLOADER=$8b3 {
   .label Col1=$8b3
   .label Row1=$8b4
@@ -25,13 +25,13 @@
   }
   .label TileScreenLocations=$8b5
 }
-.label Random=$a4e {
-  .label init=$a65
-  .label seed=$a64
-  .label noEor=$a60
-  .label doEor=$a58
+.label Random=$a5f {
+  .label init=$a76
+  .label seed=$a75
+  .label noEor=$a71
+  .label doEor=$a69
 }
-.label SpeedIncreaseCounter=$a23
+.label SpeedIncreaseCounter=$a12
 .label TEMP1=$2
 .label TEMP2=$3
 .label ALL_ON=$ff
@@ -39,21 +39,22 @@
 .label MaxSpeed=$d
 .label VECTOR2=$811
 .label VECTOR1=$80f
-.label CRATES=$9b8 {
-  .label Speed=$9bc
-  .label PosX=$9b8
-  .label PosY=$9bb
-  .label Initialise=$9be {
+.label CRATES=$9be {
+  .label Speed=$9c2
+  .label PosX=$9be
+  .label PosY=$9c0
+  .label Initialise=$9c4 {
   }
-  .label Update=$a00 {
+  .label Crate1_PosX=$9c1
+  .label Update=$9f6 {
   }
-  .label DrawSprite=$9de {
+  .label DrawSprite=$9dc {
   }
 }
 .label JOY_ZP=$10
 .label GameTick=$a4d {
 }
-.label GameTickFlag=$a22
+.label GameTickFlag=$a11
 .label SPRITE_POINTERS=$c3f8
 .label MAP_TILES=$8000
 .label VIC=$81b {
@@ -113,7 +114,7 @@
 .label ZP_COUNTER=$80e
 .label SCREEN_RAM=$c000
 .label VECTOR4=$815
-.label NewGame=$a3c {
+.label NewGame=$a2e {
 }
 .label VECTOR3=$813
 .label CHAR_COLORS=$80d0
