@@ -6,9 +6,15 @@ CRATES: {
 
 	Crate1_PosX:
 		.byte $00
+	Crate1_PosX_MB:
+		.byte $00	
+
+
+	Crate1_PosY:
+		.byte $00	
 			
 	Speed:
-		.byte $10, $00	
+		.byte $00, $00	
 
 	Initialise: {
 		lda #$00

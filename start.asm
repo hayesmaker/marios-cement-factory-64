@@ -76,8 +76,8 @@ GameTick: {
     //Short Tick
 
     jsr CRATES.Update
-    //jsr CRATES.DrawSprite    
-    inc $d021
+
+    //inc $d021
 
     !:  
     rts
