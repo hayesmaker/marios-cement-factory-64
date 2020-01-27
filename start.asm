@@ -6,6 +6,7 @@ BasicUpstart2(Entry)
 #import "./lib/map.asm"
 #import "./lib/irq.asm"
 #import "./actors/cement-crates.asm"
+#import "./actors/elevators.asm"
 
 PerformFrameCodeFlag:
 	.byte $00
@@ -14,12 +15,6 @@ PerformFrameCodeFlag:
 GameTimerTick:			.byte 50, 50, 50
 GameCounter:			.byte $00
 TickState:              .byte $03
-
-//leftLiftTick             .byte 
-
-SpeedIncreaseCounter: 	.byte 48, 48
-
-.label MaxSpeed = 13
 
 Entry:
 
@@ -38,6 +33,7 @@ Entry:
 
 	jsr MAPLOADER.DrawMap
 	jsr CRATES.Initialise
+    jsr ELEVATORS.Initialise
 	
 	
 NewGame: {
@@ -52,7 +48,8 @@ NewGame: {
     lda #$03
     sta TickState
     
-    //jsr CRATES.DrawSprite
+    jsr CRATES.DrawSprite
+    jsr ELEVATORS.DrawSprite
 
 
 }
@@ -73,13 +70,15 @@ NewGame: {
 jmp !Loop-
 
 GameTick: {
-    clc
+    //every frame
     lda GameTimerTick
     bne !end+
 
+    //every 50 frames (1 tick = 1 second)
     lda GameTimerTick + 1
     sta GameTimerTick
     inc GameCounter
+
 
     lda TickState
     cmp #$03
@@ -96,6 +95,9 @@ GameTick: {
     lda TickState
     beq !tick1+
 
+    jsr ELEVATORS.Update
+
+//4 tick stepper
 !tick1:
     lda #$03
     sta TickState
