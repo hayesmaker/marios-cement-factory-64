@@ -28,8 +28,8 @@ IRQ: {
 
 	MainIRQ: {
 		:StoreState()
-			dec GameCounter
-			dec GameTickFlag
+			inc GameCounter
+			dec GameTimerTick
 
 			inc $d020
 			dec $d020

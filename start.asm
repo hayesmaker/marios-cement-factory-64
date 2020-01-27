@@ -11,8 +11,8 @@ PerformFrameCodeFlag:
 	.byte $00
 
 						// current, currentMax, startValue
-GameCounter:			.byte 50, 50, 50
-GameTickFlag:			.byte $00
+GameTimerTick:			.byte 50, 50, 50
+GameCounter:			.byte $00
 
 SpeedIncreaseCounter: 	.byte 48, 48
 
@@ -41,11 +41,12 @@ NewGame: {
 
     //
     lda $00
-    sta GameTickFlag
+    sta GameCounter
 
-    lda GameCounter + 2
-    sta GameCounter + 0
-    jsr CRATES.DrawSprite
+    lda GameTimerTick + 2
+    sta GameTimerTick + 0
+    
+    //jsr CRATES.DrawSprite
 
 
 }
@@ -67,11 +68,13 @@ jmp !Loop-
 
 GameTick: {
 
-    lda GameCounter
+    lda GameTimerTick
     bne !+
 
-    lda GameCounter + 1
-    sta GameCounter
+    lda GameTimerTick + 1
+    sta GameTimerTick
+
+    inc GameCounter
 
     //Short Tick
 
@@ -113,6 +116,6 @@ Random: {
         sta $dc0e
         sta $dd0e
         rts
-}	
+}
 
 #import "./lib/assets.asm"
