@@ -6,7 +6,7 @@ CRATES: {
 
 	
 	Crate1_PosX:
-			  //120	//93  //73
+			 //120 //93 //73
 		.byte $78, $5D, $49
 	Crate1_PosX_MB:
 		.byte $00, $00, $00	

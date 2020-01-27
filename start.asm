@@ -13,6 +13,9 @@ PerformFrameCodeFlag:
 						// current, currentMax, startValue
 GameTimerTick:			.byte 50, 50, 50
 GameCounter:			.byte $00
+TickState:              .byte $03
+
+//leftLiftTick             .byte 
 
 SpeedIncreaseCounter: 	.byte 48, 48
 
@@ -45,6 +48,9 @@ NewGame: {
 
     lda GameTimerTick + 2
     sta GameTimerTick + 0
+
+    lda #$03
+    sta TickState
     
     //jsr CRATES.DrawSprite
 
@@ -63,26 +69,48 @@ NewGame: {
     jsr GameTick
 
 
-	//end frame code
+	//end frame Code
 jmp !Loop-
 
 GameTick: {
-
+    clc
     lda GameTimerTick
-    bne !+
+    bne !end+
 
     lda GameTimerTick + 1
     sta GameTimerTick
-
     inc GameCounter
 
-    //Short Tick
+    lda TickState
+    cmp #$03
+    beq !tick4+
 
+    lda TickState
+    cmp #$02
+    beq !tick3+
+
+    lda TickState
+    cmp #$01
+    beq !tick2+
+
+    lda TickState
+    beq !tick1+
+
+!tick1:
+    lda #$03
+    sta TickState
+    jmp !end+
+!tick2:
+    jmp !+
+!tick3:
+    jmp !+
+!tick4:
     jsr CRATES.Update
-
+    //Short Tick
     //inc $d021
-
-    !:  
+!:
+    dec TickState
+!end:    
     rts
 }
 
