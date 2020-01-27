@@ -118,8 +118,8 @@ VIC: {
 		ldy #ZERO
 
 		Loop:	
-
-			lda #5
+			//char index
+			lda #$02
 			sta (SCREEN_ADDRESS), y
 			lda #0
 			sta (COLOR_ADDRESS), y

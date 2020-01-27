@@ -34,6 +34,7 @@ Entry:
 	jsr MAPLOADER.DrawMap
 	jsr CRATES.Initialise
     jsr ELEVATORS.Initialise
+    jsr VIC.ColourLastRow
 	
 	
 NewGame: {
@@ -50,6 +51,7 @@ NewGame: {
     
     jsr CRATES.DrawSprite
     jsr ELEVATORS.DrawSprite
+    jsr ELEVATORS.DrawSprite2
 
 
 }
@@ -95,18 +97,20 @@ GameTick: {
     lda TickState
     beq !tick1+
 
-    jsr ELEVATORS.Update
-
 //4 tick stepper
 !tick1:
     lda #$03
     sta TickState
+    jsr ELEVATORS.Update2
     jmp !end+
 !tick2:
+    jsr ELEVATORS.Update
     jmp !+
 !tick3:
+    jsr ELEVATORS.Update2
     jmp !+
 !tick4:
+    jsr ELEVATORS.Update
     jsr CRATES.Update
     //Short Tick
     //inc $d021

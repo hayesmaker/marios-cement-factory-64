@@ -2,7 +2,7 @@ CRATES: {
 	PosX:   //120
 		.byte $00, $00
 	PosY:
-		.byte $52
+		.byte 90
 
 	
 	Crate1_PosX:
@@ -10,8 +10,6 @@ CRATES: {
 		.byte $78, $5D, $49
 	Crate1_PosX_MB:
 		.byte $00, $00, $00	
-	Crate1_PosY:
-		.byte $52
 
 	Crate1_Pos_Index:
 		.byte 0	
@@ -35,7 +33,8 @@ CRATES: {
 		lda #$00
 		sta VIC.SPRITE_MULTICOLOR
 
-		ldx #0		
+		ldx #0
+		stx Crate1_Pos_Index	
 		rts
 	}
 
@@ -60,11 +59,13 @@ CRATES: {
     }
 
 	Update: {
-	  	cpx #3
-        bne !+
-        ldx #0
 
-    !:    
+		ldx Crate1_Pos_Index
+		cpx #3 //todo Create label
+		bne !Loop+
+
+		ldx #0
+    !Loop:    
 		clc
 		lda Crate1_PosX, x
 		sta PosX
@@ -74,6 +75,7 @@ CRATES: {
 
 		jsr DrawSprite
 		inx
+		stx Crate1_Pos_Index
 
 	
 		rts
