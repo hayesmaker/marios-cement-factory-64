@@ -107,10 +107,9 @@ GameTick: {
     jsr ELEVATORS.Update
     jmp !+
 !tick3:
-    jsr ELEVATORS.Update2
+
     jmp !+
 !tick4:
-    jsr ELEVATORS.Update
     jsr CRATES.Update
     //Short Tick
     //inc $d021
