@@ -1,70 +1,64 @@
 PLAYER: {
-	PlayerX:
-		.byte $00, $40, $00
-	PlayerY:
-		.byte $40
+	Pos_X:   //120
+		.byte 100, $00
+	Pos_Y:
+		.byte 120
 
-	PlayerWalkSpeed:
-		.byte $80, $00	
+	Player_X:
+		.byte 60, 88, 132, 165, 189
+	Player_Y:
+		.byte 189, 165, 132, 88, 60
+		
+	Player_PosX_Index:
+		.byte 0
+	Player_PosY_Index:
+		.byte 0	
+
 
 	Initialise: {
-		lda #$0a
-		sta VIC.SPRITE_MULTICOLOR_1
-		lda #$09
-		sta VIC.SPRITE_MULTICOLOR_2
+		lda #$00
+		sta VIC.SPRITE_COLOR_1
+		sta VIC.SPRITE_COLOR_2
 
-		lda #$05
-		sta VIC.SPRITE_COLOR_0
-
-		lda #$40
-		sta SPRITE_POINTERS + 0
+		lda #$41
+		sta SPRITE_POINTERS + 1
 
 		lda VIC.SPRITE_ENABLE 
 		ora #%00000001
 		sta VIC.SPRITE_ENABLE
 
-		lda VIC.SPRITE_MULTICOLOR
-		ora #%00000001
+		lda #$00
 		sta VIC.SPRITE_MULTICOLOR
 
-		lda #$40
-		sta VIC.SPRITE_0_X
-		sta VIC.SPRITE_0_Y
+
+		ldx #0
+		stx Player_PosX_Index
+		stx Player_PosY_Index
 		rts
 	}
 
-	DrawPlayer: {
-		//set player position X & Y
-		lda PlayerX + 1
-		sta VIC.SPRITE_0_X
+	DrawSprite: {
+        //set player position X & Y
+        lda Pos_X + 0
+        sta VIC.SPRITE_1_X
 
-		lda PlayerX + 2
-		beq !+
-		lda VIC.SPRITE_MSB
-		ora #%00000001
-		jmp !EndMSB+
-	!:
-		lda VIC.SPRITE_MSB
-		and #%11111110
-	!EndMSB:
-		sta VIC.SPRITE_MSB
-		lda PlayerY
-		sta VIC.SPRITE_0_Y	
-		rts
-	}
+        lda VIC.SPRITE_MSB
+        and #%11111110
+        sta VIC.SPRITE_MSB
 
-	PlayerControl: {
-		clc
-		lda PlayerX
-		adc PlayerWalkSpeed
-		sta PlayerX
-		lda PlayerX + 1
-		adc PlayerWalkSpeed + 1
-		sta PlayerX + 1
-		lda PlayerX + 2
-		adc #$00
-		and #$01
-		sta PlayerX + 2
+        lda Pos_X + 1
+        beq !+
+        lda VIC.SPRITE_MSB
+        ora #%00000001
+        sta VIC.SPRITE_MSB
+    !:
+        lda Pos_Y
+        sta VIC.SPRITE_1_Y
+        rts
+    }
+
+    Update: {
+		
 		rts
 	}
 }

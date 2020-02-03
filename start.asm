@@ -7,6 +7,7 @@ BasicUpstart2(Entry)
 #import "./lib/irq.asm"
 #import "./actors/cement-crates.asm"
 #import "./actors/elevators.asm"
+#import "./actors/player.asm"
 
 PerformFrameCodeFlag:
 	.byte $00
@@ -34,6 +35,7 @@ Entry:
 	jsr MAPLOADER.DrawMap
 	jsr CRATES.Initialise
     jsr ELEVATORS.Initialise
+    jsr PLAYER.Initialise
     jsr VIC.ColourLastRow
 	
 	
@@ -50,8 +52,9 @@ NewGame: {
     sta TickState
     
     jsr CRATES.DrawSprite
-    jsr ELEVATORS.DrawSprite
-    jsr ELEVATORS.DrawSprite2
+    jsr PLAYER.DrawSprite
+    //jsr ELEVATORS.DrawSprite
+    //jsr ELEVATORS.DrawSprite2
 
 
 }
@@ -101,17 +104,16 @@ GameTick: {
 !tick1:
     lda #$03
     sta TickState
-    jsr ELEVATORS.Update2
+    //jsr ELEVATORS.Update2
     jmp !end+
 !tick2:
-    jsr ELEVATORS.Update
+    //jsr ELEVATORS.Update
     jmp !+
 !tick3:
 
     jmp !+
 !tick4:
     jsr CRATES.Update
-    //Short Tick
     //inc $d021
 !:
     dec TickState
