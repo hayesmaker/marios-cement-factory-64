@@ -70,6 +70,8 @@ NewGame: {
 	inc ZP_COUNTER
     jsr GameTick
 
+    jsr PLAYER.Update
+
 
 	//end frame Code
 jmp !Loop-
