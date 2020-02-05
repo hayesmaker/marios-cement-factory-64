@@ -1,13 +1,15 @@
 PLAYER: {
 	Pos_X:   //120
-		.byte 100, $00
+		.byte 236, $00
 	Pos_Y:
 		.byte 120
 
-	Player_X:
-		.byte 100, 88, 132, 165, 189
+	Player_X: //0    1    2    3    4    5
+		.byte 104, 132, 156, 190, 215, 238
+	Player_X_MB:
+		.byte 0, 0, 0, 0, 0, 0	
 	Player_Y:
-		.byte 120, 120, 120, 120, 120
+		.byte 120, 120, 120, 120, 120, 120
 		
 	Player_PosX_Index:
 		.byte 0
@@ -15,7 +17,7 @@ PLAYER: {
 		.byte 0
 
 	DefaultFrame:
-		.byte $40, $40
+		.byte $41, $41
 
 	DebounceFlag:
 		.byte $00	
@@ -32,7 +34,8 @@ PLAYER: {
 		sta VIC.SPRITE_COLOR_1
 		sta VIC.SPRITE_COLOR_2
 
-		lda #$41
+		lda DefaultFrame + 1
+		sta DefaultFrame + 0
 		sta SPRITE_POINTERS + 1
 
 		lda VIC.SPRITE_ENABLE 
@@ -46,11 +49,17 @@ PLAYER: {
 		ldx #0
 		stx Player_PosX_Index
 		stx Player_PosY_Index
+
+		lda Player_X
+		sta Pos_X
+		lda Player_X_MB
+		sta Pos_X + 1
+
 		rts
 	}
 
 	DrawSprite: {
-		.label CURRENT_FRAME = TEMP2
+		//.label CURRENT_FRAME = TEMP2
         //set player position X & Y
         lda Pos_X + 0
         sta VIC.SPRITE_1_X
@@ -67,12 +76,16 @@ PLAYER: {
     !:
         lda Pos_Y
         sta VIC.SPRITE_1_Y
+
+        lda DefaultFrame + 0
+        sta SPRITE_POINTERS + 1
+
         rts
     }
 
     Update: {		    	
 		jsr PlayerControl
-		rts
+		jsr DrawSprite
 	}
 
     PlayerControl: {
@@ -104,12 +117,19 @@ PLAYER: {
 
         inc DebounceFlag
 
-        //todo: move player left
-        dec $d020
+        //move player left
+        ldx Player_PosX_Index
+        beq !+
+    	dex
+		stx Player_PosX_Index    	
+    	lda Player_X, x
+    	sta Pos_X
 
-        lda #$41
-        sta DefaultFrame
-
+    	//todo: update frame
+		lda DefaultFrame + 1
+		clc
+		adc Player_PosX_Index
+        sta DefaultFrame + 0
         jmp !end+
 
     !:
@@ -119,15 +139,22 @@ PLAYER: {
         and #JOY_RT
         bne !end+
 
-        inc DebounceFlag
-        //TODO: move player right
-        inc $d020
+        inc DebounceFlag              
+        //move player  right
+        ldx Player_PosX_Index
+        cpx #5
+        beq !end+
 
-        lda #$40
-        sta DefaultFrame
-        jmp !end+
+        inx 
+        stx Player_PosX_Index 
+    	lda Player_X, x
+    	sta Pos_X
 
-
+    	//todo: update frame
+		lda DefaultFrame + 1
+		clc
+		adc Player_PosX_Index
+        sta DefaultFrame + 0
     !end:
         rts
     }
