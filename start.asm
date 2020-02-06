@@ -53,6 +53,14 @@ NewGame: {
     
     jsr CRATES.DrawSprite
     jsr PLAYER.DrawSprite
+
+    // ldx #$09
+    // ldy #$0A
+    // jsr MAPLOADER.ColorByXY
+
+    ldx #$09
+    ldy #$0A
+    jsr MAPLOADER.SwitchCharAtXY
     //jsr ELEVATORS.DrawSprite
     //jsr ELEVATORS.DrawSprite2
 

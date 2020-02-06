@@ -1,5 +1,9 @@
 .label TEMP1 = $02
 .label TEMP2 = $03
+.label TEMP3 = $04
+.label TEMP4 = $05
+
+
 .label JOY_ZP = $10
 
 ZP_COUNTER: .byte $00

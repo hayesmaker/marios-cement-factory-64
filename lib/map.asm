@@ -1,14 +1,71 @@
 //export from Charpad with 2x2 tileset
 
 MAPLOADER: {
-
-	Col1: 
-		.byte $00
-	Row1:
-		.byte $00	
-
+	.label EMPTY_CHAR = 22
 	TileScreenLocations: 
 		.byte 0,1,40,41
+	RowColourTable:
+		.fillword 25, VIC.COLOR_RAM + (i * 40)
+	RowScreenTable:
+		.fillword 25, SCREEN_RAM + (i * 40)
+
+	ColorByXY: {
+		//pass in x and y (as col & row)
+		.label zpCharIndex = TEMP2
+		tya
+		asl
+		tay
+		lda RowColourTable, y
+		sta zpCharIndex
+		lda RowColourTable + 1, y
+		sta zpCharIndex + 1
+
+		txa
+		tay
+		lda #15
+		sta (zpCharIndex),y
+		rts
+	}
+
+	SwitchOffCharAtXY: {
+		//pass in x and y (as col & row)
+
+		.label zpCharIndex = TEMP2
+		tya
+		asl
+		tay
+		lda RowScreenTable, y
+		sta zpCharIndex
+		lda RowScreenTable + 1, y
+		sta zpCharIndex + 1
+
+		txa
+		tay
+		lda #EMPTY_CHAR
+		sta (zpCharIndex),y
+		rts
+	}
+
+	SwitchOnCharAtXY: {
+		.label zpOriginalCharIndex = TEMP1
+		.label zpCharIndex = TEMP2
+
+		tya
+		asl
+		tay
+		lda RowScreenTable, y
+		sta zpCharIndex
+		lda RowScreenTable + 1, y
+		sta zpCharIndex + 1
+
+		txa
+		tay
+		//lda #EMPTY_CHAR
+		
+
+		sta (zpCharIndex),y
+		rts
+	}
 
 
 	DrawMap: {
@@ -86,9 +143,6 @@ MAPLOADER: {
 		lda Tile + 2
 		adc #$00
 		sta Tile + 2
-
-
-
 
 		clc
 		lda Scr + 1
