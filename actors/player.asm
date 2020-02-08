@@ -130,6 +130,20 @@ PLAYER: {
 		clc
 		adc Player_PosX_Index
         sta DefaultFrame + 0
+
+        //Char Tile Updates
+        ldx Player_PosX_Index
+        cpx #1
+        beq !end+
+        bpl !end+
+
+            //add hand
+            lda Tiles.HAND_1_UP + 0
+            ldx Tiles.HAND_1_UP + 1
+            ldy Tiles.HAND_1_UP + 2
+            jsr MAPLOADER.SwitchCharAtXY
+
+
         jmp !end+
 
     !:
@@ -155,6 +169,20 @@ PLAYER: {
 		clc
 		adc Player_PosX_Index
         sta DefaultFrame + 0
+
+        //Char Tile Updates
+        ldx Player_PosX_Index
+        cpx #2
+        beq !end+
+        bpl !end+
+
+            //removehand
+            lda Tiles.EMPTY
+            ldx Tiles.HAND_1_UP + 1
+            ldy Tiles.HAND_1_UP + 2
+            jsr MAPLOADER.SwitchCharAtXY
+
+
     !end:
         rts
     }

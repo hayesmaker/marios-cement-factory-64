@@ -8,6 +8,7 @@ BasicUpstart2(Entry)
 #import "./actors/cement-crates.asm"
 #import "./actors/elevators.asm"
 #import "./actors/player.asm"
+#import "./game/constants.asm"
 
 PerformFrameCodeFlag:
 	.byte $00
@@ -57,10 +58,7 @@ NewGame: {
     // ldx #$09
     // ldy #$0A
     // jsr MAPLOADER.ColorByXY
-
-    ldx #$09
-    ldy #$0A
-    jsr MAPLOADER.SwitchCharAtXY
+    jsr MAPLOADER.Initialise
     //jsr ELEVATORS.DrawSprite
     //jsr ELEVATORS.DrawSprite2
 
