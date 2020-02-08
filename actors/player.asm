@@ -103,28 +103,30 @@ PLAYER: {
        sta JOY_ZP
 
        lda DebounceFireFlag
-       beq !rest+
+       beq !+
 
        lda JOY_ZP
        and #[JOY_FIRE]
        cmp #[JOY_FIRE]
-       bne !rest+
+       bne !movement+
 
        lda #$00
        sta DebounceFireFlag
 
-     !Fire:
+    !:
+    !Fire:
         lda JOY_ZP
         and #JOY_FIRE
-        bne !rest+
+        bne !+
 
         inc DebounceFireFlag
-        inc $d021
-
+        //inc $d021
+        
         lda CanOpen
-        beq !rest+
-        jsr FireRoutine       
-    !rest:   
+        beq !+
+        jsr DoFire       
+    !:
+    !movement:   
         //Check if we need debounce
         lda DebounceFlag
         beq !+
@@ -135,7 +137,7 @@ PLAYER: {
         bne !end+
 
         lda #$00
-        sta DebounceFlag
+        sta DebounceFlag    
     !:
     !Left:
         lda JOY_ZP
@@ -147,16 +149,8 @@ PLAYER: {
         //move player left
         ldx Player_PosX_Index
         beq !+
-    	dex
-		stx Player_PosX_Index    	
-    	lda Player_X, x
-    	sta Pos_X
 
-    	//todo: update frame
-		lda DefaultFrame + 1
-		clc
-		adc Player_PosX_Index
-        sta DefaultFrame + 0
+    	jsr DoLeft
 
         //Char Tile Updates
         ldx Player_PosX_Index
@@ -179,16 +173,7 @@ PLAYER: {
         cpx #5
         beq !end+
 
-        inx 
-        stx Player_PosX_Index 
-    	lda Player_X, x
-    	sta Pos_X
-
-    	//todo: update frame
-		lda DefaultFrame + 1
-		clc
-		adc Player_PosX_Index
-        sta DefaultFrame + 0
+        jsr DoRight
 
         //Char Tile Updates
         ldx Player_PosX_Index
@@ -201,15 +186,66 @@ PLAYER: {
         rts
     }
 
+    DoFire: {
+        //can fire?
+            //hand switch
+        lda Tiles.EMPTY
+        ldx Tiles.HAND_1_UP + 1
+        ldy Tiles.HAND_1_UP + 2
+        jsr MAPLOADER.SwitchCharAtXY
+
+        //hand switch
+        lda Tiles.HAND_1_DOWN + 0
+        ldx Tiles.HAND_1_DOWN + 1
+        ldy Tiles.HAND_1_DOWN + 2
+        jsr MAPLOADER.SwitchCharAtXY
+
+        rts
+    }
+
+    DoLeft: {
+        dex
+        stx Player_PosX_Index       
+        lda Player_X, x
+        sta Pos_X
+
+        //todo: update frame
+        lda DefaultFrame + 1
+        clc
+        adc Player_PosX_Index
+        sta DefaultFrame + 0
+        rts
+
+    }
+
+    DoRight: {
+        inx 
+        stx Player_PosX_Index 
+        lda Player_X, x
+        sta Pos_X
+
+        //todo: update frame
+        lda DefaultFrame + 1
+        clc
+        adc Player_PosX_Index
+        sta DefaultFrame + 0
+        rts
+    }
+
     RightCharUpdates: {
             //todo: enable CanOpen on PosX_Index=5
             lda #0
             sta CanOpen
 
-            //removehand
+            //removehands
             lda Tiles.EMPTY
             ldx Tiles.HAND_1_UP + 1
             ldy Tiles.HAND_1_UP + 2
+            jsr MAPLOADER.SwitchCharAtXY
+
+            lda Tiles.EMPTY
+            ldx Tiles.HAND_1_DOWN + 1
+            ldy Tiles.HAND_1_DOWN + 2
             jsr MAPLOADER.SwitchCharAtXY
 
         rts    
@@ -225,22 +261,5 @@ PLAYER: {
             ldy Tiles.HAND_1_UP + 2
             jsr MAPLOADER.SwitchCharAtXY
         rts    
-    }
-
-    FireRoutine: {
-        //can fire?
-            //hand switch
-            lda Tiles.EMPTY
-            ldx Tiles.HAND_1_UP + 1
-            ldy Tiles.HAND_1_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
-
-            //hand switch
-            lda Tiles.HAND_1_DOWN + 0
-            ldx Tiles.HAND_1_DOWN + 1
-            ldy Tiles.HAND_1_DOWN + 2
-            jsr MAPLOADER.SwitchCharAtXY
-        rts
-
     }
 }
