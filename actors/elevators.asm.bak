@@ -1,6 +1,28 @@
 ELEVATORS: {
-	Positions:
-		.fill 5, 0
+	Pos1_X:   //120
+		.byte 156, $00
+	Pos1_Y:
+		.byte 60
+
+	Pos2_X:   //120
+		.byte 188, $00
+	Pos2_Y:   //120
+		.byte 189
+	
+	Elevator_PosY:
+		.byte 60, 88, 132, 165, 189
+	Elevator2_PosY:
+		.byte 189, 165, 132, 88, 60
+		
+	Elevator1_Pos_Index:
+		.byte 0
+	Elevator2_Pos_Index:
+		.byte 0	
+			
+	Speed:
+		.byte $00, $00
+
+
 
 	Initialise: {
 		lda #$00
