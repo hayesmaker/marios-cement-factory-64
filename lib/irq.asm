@@ -30,6 +30,7 @@ IRQ: {
 		:StoreState()
 			inc GameCounter
 			dec GameTimerTick
+			dec PushButtonTimer + 1
 
 			inc $d020
 			dec $d020

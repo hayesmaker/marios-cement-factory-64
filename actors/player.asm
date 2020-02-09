@@ -26,7 +26,7 @@ PLAYER: {
 
     //player state
     CanOpen:
-        .byte $00
+        .byte $01
 
 
 	// .label STATE_FALL				= %00000010
@@ -91,7 +91,63 @@ PLAYER: {
     Update: {		    	
 		jsr PlayerControl
 		jsr DrawSprite
+
+        rts
 	}
+
+    ResetTimers: {
+        lda #0
+        sta PushButtonTimer + 0
+
+        lda PushButtonTimer + 2
+        sta PushButtonTimer + 1
+
+        rts
+    }
+
+    //Called from IRQ Timers
+    ResetButton: {
+        //inc $d020
+
+        lda Tiles.HAND_1_UP + 0
+        ldx Tiles.HAND_1_UP + 1
+        ldy Tiles.HAND_1_UP + 2
+        jsr MAPLOADER.SwitchCharAtXY
+
+        //hand switch
+        lda Tiles.EMPTY + 0
+        ldx Tiles.HAND_1_DOWN + 1
+        ldy Tiles.HAND_1_DOWN + 2
+        jsr MAPLOADER.SwitchCharAtXY
+
+        //SWITCH_1_UP:
+        lda Tiles.SWITCH_1_UP + 0
+        ldx Tiles.SWITCH_1_UP + 1
+        ldy Tiles.SWITCH_1_UP + 2
+        jsr MAPLOADER.SwitchCharAtXY
+        
+        //SWITCH_1_DOWN:
+        lda Tiles.EMPTY
+        ldx Tiles.SWITCH_1_DOWN + 1
+        ldy Tiles.SWITCH_1_DOWN + 2
+        jsr MAPLOADER.SwitchCharAtXY
+
+         //TRAP_1_OPEN
+        lda Tiles.EMPTY
+        ldx Tiles.TRAP_1_OPEN + 1
+        ldy Tiles.TRAP_1_OPEN + 2
+        jsr MAPLOADER.SwitchCharAtXY
+
+        //TRAP_1_CLOSED
+        lda Tiles.TRAP_1_CLOSED + 0
+        ldx Tiles.TRAP_1_CLOSED + 1
+        ldy Tiles.TRAP_1_CLOSED + 2
+        jsr MAPLOADER.SwitchCharAtXY
+
+        rts
+    }
+
+
 
     PlayerControl: {
         .label JOY_PORT_2 = $dc00
@@ -120,8 +176,6 @@ PLAYER: {
         bne !+
 
         inc DebounceFireFlag
-        //inc $d021
-        
         lda CanOpen
         beq !+
         jsr DoFire       
@@ -187,8 +241,14 @@ PLAYER: {
     }
 
     DoFire: {
+        //inc $d020
         //can fire?
-            //hand switch
+        //hand switch
+        jsr ResetTimers
+
+        lda #ONE
+        sta PushButtonTimer + 0
+
         lda Tiles.EMPTY
         ldx Tiles.HAND_1_UP + 1
         ldy Tiles.HAND_1_UP + 2
@@ -200,6 +260,36 @@ PLAYER: {
         ldy Tiles.HAND_1_DOWN + 2
         jsr MAPLOADER.SwitchCharAtXY
 
+        //SWITCH_1_UP:
+        lda Tiles.EMPTY + 0
+        ldx Tiles.SWITCH_1_UP + 1
+        ldy Tiles.SWITCH_1_UP + 2
+        jsr MAPLOADER.SwitchCharAtXY
+
+        //SWITCH_1_DOWN:
+        lda Tiles.SWITCH_1_DOWN + 0
+        ldx Tiles.SWITCH_1_DOWN + 1
+        ldy Tiles.SWITCH_1_DOWN + 2
+        jsr MAPLOADER.SwitchCharAtXY
+
+        //TRAP_1_OPEN
+        lda Tiles.TRAP_1_OPEN + 0
+        ldx Tiles.TRAP_1_OPEN + 1
+        ldy Tiles.TRAP_1_OPEN + 2
+        jsr MAPLOADER.SwitchCharAtXY
+
+        //TRAP_1_CLOSED
+        lda Tiles.EMPTY + 0
+        ldx Tiles.TRAP_1_CLOSED + 1
+        ldy Tiles.TRAP_1_CLOSED + 2
+        jsr MAPLOADER.SwitchCharAtXY
+        
+        
+
+
+        //
+
+
         rts
     }
 
@@ -208,6 +298,8 @@ PLAYER: {
         stx Player_PosX_Index       
         lda Player_X, x
         sta Pos_X
+
+        jsr ResetTimers
 
         //todo: update frame
         lda DefaultFrame + 1
@@ -223,6 +315,8 @@ PLAYER: {
         stx Player_PosX_Index 
         lda Player_X, x
         sta Pos_X
+
+        jsr ResetTimers
 
         //todo: update frame
         lda DefaultFrame + 1

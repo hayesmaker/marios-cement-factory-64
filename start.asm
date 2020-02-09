@@ -15,6 +15,8 @@ PerformFrameCodeFlag:
 
 						// current, currentMax, startValue
 GameTimerTick:			.byte 50, 50, 50
+PushButtonTimer:        .byte 0, 10, 10        
+
 GameCounter:			.byte $00
 TickState:              .byte $03
 
@@ -48,6 +50,8 @@ NewGame: {
 
     lda GameTimerTick + 2
     sta GameTimerTick + 0
+
+    jsr PLAYER.ResetTimers
 
     lda #$03
     sta TickState
@@ -84,6 +88,9 @@ jmp !Loop-
 
 GameTick: {
     //every frame
+    lda PushButtonTimer + 0
+    bne FrameCode
+
     lda GameTimerTick
     bne !end+
 
@@ -127,6 +134,22 @@ GameTick: {
     dec TickState
 !end:    
     rts
+}
+
+/**
+** Game Code you want Executed once per frame
+**/
+FrameCode: {
+
+    lda PushButtonTimer + 1
+    bne !end+
+
+        jsr PLAYER.ResetTimers
+        jsr PLAYER.ResetButton
+
+    !end:
+
+        rts
 }
 
 Random: {
