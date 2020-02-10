@@ -14,14 +14,37 @@ ELEVATORS: {
 	PosIndex_R:
 		.byte 0
 
+	ClearLoopIndex:
+		.byte 0	
+
 	Initialise: {
+
 		lda #0
 		sta PosIndex_L
 		sta PosIndex_R
+		
+		//Todo: Look at refactoring to stack - decide later
+		ldy #0
 
+	!Loop:	
+		sty ClearLoopIndex	
+		lda Tiles.LIFTS_Y, y
+		tay
 		ldx Tiles.LIFTS_L_X + 0
-		ldy Tiles.LIFTS_Y 
 		jsr RemoveLiftXY
+
+		ldy ClearLoopIndex
+
+		sty ClearLoopIndex	
+		lda Tiles.LIFTS_Y, y
+		tay
+		ldx Tiles.LIFTS_R_X + 0
+		jsr RemoveLiftXY
+
+		ldy ClearLoopIndex
+		iny
+		cpy #5
+		bmi !Loop-
 
 		rts
 	}
@@ -29,28 +52,32 @@ ELEVATORS: {
 	RemoveLiftXY: {
 		.label leftXIndex = TEMP1
 		.label leftYIndex = TEMP2
+		.label EmptyTile = TEMP3
+		
+		lda Tiles.EMPTY
+		sta EmptyTile		
 		stx leftXIndex
 		sty leftYIndex
 
-		lda Tiles.EMPTY
+		lda EmptyTile
 		ldx leftXIndex
 		ldy leftYIndex
 		jsr MAPLOADER.SwitchCharAtXY
-		
-		lda Tiles.EMPTY
+
+		lda EmptyTile
 		ldx leftXIndex
 		inx
 		ldy leftYIndex
 		jsr MAPLOADER.SwitchCharAtXY
 		
-		lda Tiles.EMPTY
+		lda EmptyTile
 		ldx leftXIndex
 		inx
 		inx
 		ldy leftYIndex
 		jsr MAPLOADER.SwitchCharAtXY
 
-		lda Tiles.EMPTY
+		lda EmptyTile
 		ldx leftXIndex
 		inx
 		inx

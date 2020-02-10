@@ -2,6 +2,9 @@
 .label TEMP2 = $03
 .label TEMP3 = $04
 .label TEMP4 = $05
+.label TEMP5 = $06
+.label TEMP6 = $07
+.label TEMP7 = $08
 
 
 .label JOY_ZP = $10

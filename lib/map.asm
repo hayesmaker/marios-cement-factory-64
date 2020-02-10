@@ -48,8 +48,8 @@ MAPLOADER: {
 	SwitchCharAtXY: {
 		//pass in a, x, y
 		//(char tile index, screenX, screenY)
-		.label charIndex = TEMP1
-		.label rowTableIndex = TEMP2
+		.label charIndex = TEMP5
+		.label rowTableIndex = TEMP6
 		sta charIndex
 		tya
 		asl
