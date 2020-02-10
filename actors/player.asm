@@ -102,12 +102,17 @@ PLAYER: {
         lda PushButtonTimer + 2
         sta PushButtonTimer + 1
 
+        //jsr Switch1Up
+
         rts
     }
 
     //Called from IRQ Timers
-    ResetButton: {
+    TimerButton1Reset: {
         //inc $d020
+
+        lda Player_PosX_Index
+        bne !+
 
         lda Tiles.HAND_1_UP + 0
         ldx Tiles.HAND_1_UP + 1
@@ -120,7 +125,14 @@ PLAYER: {
         ldy Tiles.HAND_1_DOWN + 2
         jsr MAPLOADER.SwitchCharAtXY
 
-        //SWITCH_1_UP:
+    !:   
+        jsr Switch1Up
+
+        rts
+    }
+
+    Switch1Up: {
+    	//SWITCH_1_UP:
         lda Tiles.SWITCH_1_UP + 0
         ldx Tiles.SWITCH_1_UP + 1
         ldy Tiles.SWITCH_1_UP + 2
@@ -316,7 +328,7 @@ PLAYER: {
         lda Player_X, x
         sta Pos_X
 
-        jsr ResetTimers
+        //jsr ResetTimers
 
         //todo: update frame
         lda DefaultFrame + 1

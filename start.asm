@@ -6,7 +6,7 @@ BasicUpstart2(Entry)
 #import "./lib/map.asm"
 #import "./lib/irq.asm"
 #import "./actors/cement-crates.asm"
-#import "./actors/elevators.asm"
+//#import "./actors/elevators.asm"
 #import "./actors/player.asm"
 #import "./game/constants.asm"
 
@@ -37,7 +37,7 @@ Entry:
 
 	jsr MAPLOADER.DrawMap
 	jsr CRATES.Initialise
-    jsr ELEVATORS.Initialise
+    //jsr ELEVATORS.Initialise
     jsr PLAYER.Initialise
     jsr VIC.ColourLastRow
 	
@@ -145,7 +145,7 @@ FrameCode: {
     bne !end+
 
         jsr PLAYER.ResetTimers
-        jsr PLAYER.ResetButton
+        jsr PLAYER.TimerButton1Reset
 
     !end:
 
