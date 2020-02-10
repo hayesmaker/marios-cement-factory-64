@@ -6,7 +6,7 @@ BasicUpstart2(Entry)
 #import "./lib/map.asm"
 #import "./lib/irq.asm"
 #import "./actors/cement-crates.asm"
-//#import "./actors/elevators.asm"
+#import "./actors/elevators.asm"
 #import "./actors/player.asm"
 #import "./game/constants.asm"
 
@@ -45,7 +45,7 @@ Entry:
 NewGame: {
 
     //
-    lda $00
+    lda #$00
     sta GameCounter
 
     lda GameTimerTick + 2
@@ -59,6 +59,7 @@ NewGame: {
     jsr CRATES.DrawSprite
     jsr PLAYER.DrawSprite
 
+    jsr ELEVATORS.Initialise
     // ldx #$09
     // ldy #$0A
     // jsr MAPLOADER.ColorByXY

@@ -1,6 +1,14 @@
 
 //todo: Convert to HEX
 Tiles: {
+	LIFTS_L_X:
+		.byte 16
+	LIFTS_R_X:
+		.byte 20
+	LIFTS_Y: 
+		.byte 4, 7, 11, 15, 19
+		
+	
 
 	EMPTY:
 		.byte 22
