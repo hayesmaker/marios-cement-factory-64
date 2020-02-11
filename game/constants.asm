@@ -8,7 +8,8 @@ Tiles: {
 	LIFTS_Y: 
 		.byte 4, 7, 11, 15, 19
 		
-	
+	LIFTS_CHAR:
+		.byte 53, 54, 55
 
 	EMPTY:
 		.byte 22

@@ -36,6 +36,7 @@ Entry:
 	jsr VIC.SetupColours
 
 	jsr MAPLOADER.DrawMap
+    jsr ELEVATORS.Initialise
 	jsr CRATES.Initialise
     //jsr ELEVATORS.Initialise
     jsr PLAYER.Initialise
@@ -59,7 +60,7 @@ NewGame: {
     jsr CRATES.DrawSprite
     jsr PLAYER.DrawSprite
 
-    jsr ELEVATORS.Initialise
+    
     // ldx #$09
     // ldy #$0A
     // jsr MAPLOADER.ColorByXY
@@ -120,10 +121,11 @@ GameTick: {
 !tick1:
     lda #$03
     sta TickState
-    //jsr ELEVATORS.Update2
+    jsr ELEVATORS.Update
     jmp !end+
 !tick2:
-    //jsr ELEVATORS.Update
+    //
+    jsr ELEVATORS.Update2
     jmp !+
 !tick3:
 
