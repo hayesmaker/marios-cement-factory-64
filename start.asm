@@ -14,7 +14,7 @@ PerformFrameCodeFlag:
 	.byte $00
 
 						// current, currentMax, startValue
-GameTimerTick:			.byte 50, 50, 50
+GameTimerTick:			.byte 25, 25, 25
 PushButtonTimer:        .byte 0, 10, 10        
 
 GameCounter:			.byte $00
@@ -121,16 +121,16 @@ GameTick: {
 !tick1:
     lda #$03
     sta TickState
-    jsr ELEVATORS.Update
     jmp !end+
 !tick2:
     //
-    jsr ELEVATORS.Update2
+    jsr ELEVATORS.Update
     jmp !+
 !tick3:
 
     jmp !+
 !tick4:
+    jsr ELEVATORS.Update
     jsr CRATES.Update
     //inc $d021
 !:

@@ -156,6 +156,12 @@ PLAYER: {
         ldy Tiles.TRAP_1_CLOSED + 2
         jsr MAPLOADER.SwitchCharAtXY
 
+        lda Tiles.TRAP_1_CLOSED_2 + 0
+        ldx Tiles.TRAP_1_CLOSED_2 + 1
+        ldy Tiles.TRAP_1_CLOSED_2 + 2
+
+        jsr MAPLOADER.SwitchCharAtXY
+
         rts
     }
 

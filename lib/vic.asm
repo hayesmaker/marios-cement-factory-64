@@ -144,7 +144,7 @@ VIC: {
 
 		lda #RED
 		sta VIC.EXTENDED_BG_COLOR_1
-		lda #YELLOW
+		lda #BLACK
 		sta VIC.EXTENDED_BG_COLOR_2
 
 

@@ -1,8 +1,11 @@
 ELEVATORS: {
-	//getLength: [ _Positions_L_end - Positions_L ]
-	Data_L:
-		.byte 1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0
+	//getLength: [ _Positions_L_end - Positions_L ]    
+	Data_L: //0 - - - 4 - - - 8 - - -12 - - -16 - - -20 - - - - - 
+		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0
 	_Data_L_End:
+
+	LeftDataIndex:
+		.byte 0
 
 	Data_R:
 		.byte 1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0
@@ -26,8 +29,12 @@ ELEVATORS: {
 		lda #0
 		sta PosIndex_L
 		sta PosIndex_R
-		
+		lda #0
+		sta DrawLoopIndex
 		jsr ClearAllLifts
+
+		lda #0
+		sta LeftDataIndex
 
 		rts
 	}
@@ -59,13 +66,56 @@ ELEVATORS: {
 		rts
 	}
 
-	AddLiftXY: {
+	AddTopLiftXY: {
 		.label leftXIndex = TEMP1
 		.label leftYIndex = TEMP2
+		//.label whichTile = TEMP3
 		//.label EmptyTile = TEMP3
 		//53 //54 //55
 		stx leftXIndex
 		sty leftYIndex
+		//sta whichTile
+
+		lda Tiles.LIFTS_CHAR_TOP + 0
+		ldx leftXIndex
+		ldy leftYIndex
+		jsr MAPLOADER.SwitchCharAtXY
+
+		lda Tiles.LIFTS_CHAR_TOP + 1	
+		ldx leftXIndex
+		inx
+		ldy leftYIndex
+		jsr MAPLOADER.SwitchCharAtXY
+		
+		lda Tiles.LIFTS_CHAR_TOP + 1	
+		ldx leftXIndex
+		inx
+		inx
+		ldy leftYIndex
+		jsr MAPLOADER.SwitchCharAtXY
+
+		lda Tiles.LIFTS_CHAR_TOP + 2	
+		ldx leftXIndex
+		inx
+		inx
+		inx
+		ldy leftYIndex
+		jsr MAPLOADER.SwitchCharAtXY
+		rts
+
+	}
+
+	AddLiftXY: {
+		.label leftXIndex = TEMP1
+		.label leftYIndex = TEMP2
+		//.label whichTile = TEMP3
+		//.label EmptyTile = TEMP3
+		//53 //54 //55
+		stx leftXIndex
+		sty leftYIndex
+		
+		
+		//sta whichTile
 
 		lda Tiles.LIFTS_CHAR + 0
 		ldx leftXIndex
@@ -145,10 +195,13 @@ ELEVATORS: {
 			sta StoreYPos
 			ldx Tiles.LIFTS_L_X
 	    	
-	    	ldy DrawLoopIndex
+	    	lda #4
+	    	sec
+	    	sbc DrawLoopIndex
+	    	clc
+	    	adc LeftDataIndex
+	    	tay 
 	    	lda Data_L, y
-	    	
-	    	beq !remove+
 	    	bne !add+
 
 	    	!remove:
@@ -157,31 +210,33 @@ ELEVATORS: {
 	    		jmp !end+
 	    	!add:
 	    		ldy StoreYPos
-	    		jsr AddLiftXY	
+	    		lda StoreYPos
+	    		cmp #4
+	    		beq !+
+
+	    		jsr AddLiftXY
+	    		jmp !end+
+	    	!:
+	    		jsr AddTopLiftXY	
 	    	
 	    	!end:
 	    	ldy DrawLoopIndex
 			iny
 			cpy #5
 			bmi !Loop-
+		
+			ldx LeftDataIndex
+			inx
 
-		rts
+			cpx #21
+			bne !return+
+
+			ldx #4
+
+		!return:
+			stx LeftDataIndex
+			rts
+
 	}
 
-	Update2: {
-		// ldx Elevator1_Pos_Index
-		// cpx #5
-		// bne !Loop+
-		// ldx #0
-	!Loop:	
-		// clc
-		// lda Elevator_PosY, x
-		// sta Pos1_Y
-		// //jsr DrawSprite
-		// inx
-		// stx Elevator1_Pos_Index
-		rts
-	}
-
-	
 }

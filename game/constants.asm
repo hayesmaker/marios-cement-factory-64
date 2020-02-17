@@ -11,6 +11,9 @@ Tiles: {
 	LIFTS_CHAR:
 		.byte 53, 54, 55
 
+	LIFTS_CHAR_TOP:
+		.byte 56, 57, 58
+
 	EMPTY:
 		.byte 22
 
@@ -31,9 +34,11 @@ Tiles: {
 		.byte 62, 10, 11
 
 	TRAP_1_CLOSED:
-		.byte 64, 7, 11
+		.byte 68, 7, 12
 	TRAP_1_OPEN:
-		.byte 66, 6, 12
+		.byte 6, 6, 12
+	TRAP_1_CLOSED_2:
+		.byte 75, 6, 12	
 			
 
 
