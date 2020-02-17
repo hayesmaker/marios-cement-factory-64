@@ -91,8 +91,10 @@ jmp !Loop-
 GameTick: {
     //every frame
     lda PushButtonTimer + 0
-    bne FrameCode
+    beq !+
+    jsr FrameCode
 
+!:
     lda GameTimerTick
     bne !end+
 
