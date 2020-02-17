@@ -7,14 +7,14 @@ PLAYER: {
 	Player_X: //0    1    2    3    4    5
 		.byte 104, 132, 156, 190, 215, 238
 	Player_X_MB:
-		.byte 0, 0, 0, 0, 0, 0	
+		.byte 0, 0, 0, 0, 0, 0            	
 	Player_Y:
-		.byte 120, 120, 120, 120, 120, 120
+		.byte 60, 88, 120, 152, 184, 200
 		
 	Player_PosX_Index:
 		.byte 0
 	Player_PosY_Index:
-		.byte 0    
+		.byte 2  
 
 	DefaultFrame:
 		.byte $41, $41
@@ -22,7 +22,12 @@ PLAYER: {
 	DebounceFlag:
 		.byte $00
     DebounceFireFlag:
-        .byte $00    
+        .byte $00
+
+    ShouldTakeLiftUp:
+        .byte 0
+    ShouldTakeLiftDown:
+        .byte 0
 
     //player state
     CanOpen:
@@ -50,11 +55,14 @@ PLAYER: {
 		lda #$00
 		sta VIC.SPRITE_MULTICOLOR
 
+        ldy #2
+        sty Player_PosY_Index
 
 		ldx #0
 		stx Player_PosX_Index
-		stx Player_PosY_Index
-
+        stx ShouldTakeLiftUp
+        stx ShouldTakeLiftDown
+        
 		lda Player_X
 		sta Pos_X
 		lda Player_X_MB
@@ -79,7 +87,8 @@ PLAYER: {
         ora #%00000001
         sta VIC.SPRITE_MSB
     !:
-        lda Pos_Y
+        ldy Player_PosY_Index
+        lda Player_Y, y
         sta VIC.SPRITE_1_Y
 
         lda DefaultFrame + 0
@@ -88,9 +97,113 @@ PLAYER: {
         rts
     }
 
+    /**
+    * Called from Elevators update.
+    * Moves player if on lift
+    *
+    * @sub CheckMovement
+    *
+    **/
+    CheckMovement: {
+        lda ShouldTakeLiftUp
+        bne !MoveUp+
+        
+        lda ShouldTakeLiftDown
+        bne !MoveDown+
+
+        jmp !end+
+    !MoveDown:
+        jsr MoveDownByOne
+        jmp !end+
+    !MoveUp:
+        jsr MoveUpByOne 
+        jmp !end+
+
+    !end:
+
+        lda #ZERO
+        sta ShouldTakeLiftUp
+        sta ShouldTakeLiftDown
+
+        rts
+    }
+
+
+    MoveUpByOne: {
+        //inc $d020
+
+        ldx Player_PosY_Index
+        dex
+        stx Player_PosY_Index
+        
+        rts
+    }
+    
+    MoveDownByOne: {
+        //inc $d021
+        ldx Player_PosY_Index
+        inx
+        stx Player_PosY_Index
+        
+        rts
+    }
+
+    /**
+    * If Player is on a lift, move player when lift moves
+    *
+    * @sub CheckLiftMovement
+    **/
+    CheckLiftMovement: {
+
+        lda Player_PosX_Index
+        cmp #2
+        beq !LeftLiftZone+
+        cmp #3
+        beq !RightLiftZone+
+
+        lda #ZERO
+        sta ShouldTakeLiftUp
+        sta ShouldTakeLiftDown
+
+        jmp !end+
+
+    !LeftLiftZone:
+        //inc $d020
+        
+        lda ELEVATORS.LeftDataIndex
+        clc
+        adc Player_PosY_Index
+        tay
+        lda ELEVATORS.Data_L,y
+        beq !end+ //todo: Player Dies Here
+
+        //Player's on Lift
+        lda #ONE
+        sta ShouldTakeLiftDown
+
+        jmp !end+
+
+    !RightLiftZone:
+        //inc $d021
+        lda ELEVATORS.RightDataIndex
+        clc
+        adc Player_PosY_Index
+        tay
+        lda ELEVATORS.Data_R,y
+        beq !end+ //todo: Player Dies Here
+
+        //Player's on Lift
+        lda #ONE
+        sta ShouldTakeLiftUp
+    !end:
+        rts
+    }
+
     Update: {		    	
 		jsr PlayerControl
+        jsr CheckLiftMovement
 		jsr DrawSprite
+        
 
         rts
 	}

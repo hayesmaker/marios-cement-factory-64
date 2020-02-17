@@ -247,6 +247,9 @@ ELEVATORS: {
 
 		!return:
 			stx LeftDataIndex
+
+		//jsr PLAYER.CheckMovement	
+
 			rts
 
 	}
@@ -302,6 +305,9 @@ ELEVATORS: {
 
 		!return:
 			stx RightDataIndex
+
+			//jsr PLAYER.CheckMovement	
+			
 			rts
 
 	}
