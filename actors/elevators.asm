@@ -7,22 +7,32 @@ ELEVATORS: {
 	LeftDataIndex:
 		.byte 0
 
-	Data_R:
-		.byte 1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0
-	_Data_R_End:
-
 	PosIndex_L:
 		.byte 0
-
-	PosIndex_R:
-		.byte 0
-
-	ClearLoopIndex:
-		.byte 0
+	//todo: make this local var
 	DrawLoopIndex:
 		.byte 0
 	StoreYPos:
 		.byte 0		
+	
+	Data_R:// - - - - -                                           - - - - -
+		.byte 1,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,1,0,0,0,1
+	_Data_R_End:
+
+	RightDataIndex:
+		.byte 0
+	PosIndex_R:
+		.byte 0
+	//todo: make this local var
+	DrawLoopIndex_R:
+	.byte 0
+	StoreYPos_R:
+		.byte 0			
+
+	ClearLoopIndex:
+		.byte 0
+	
+	
 
 	Initialise: {
 
@@ -31,10 +41,12 @@ ELEVATORS: {
 		sta PosIndex_R
 		lda #0
 		sta DrawLoopIndex
+		sta DrawLoopIndex_R
 		jsr ClearAllLifts
 
 		lda #0
 		sta LeftDataIndex
+		sta RightDataIndex
 
 		rts
 	}
@@ -235,6 +247,61 @@ ELEVATORS: {
 
 		!return:
 			stx LeftDataIndex
+			rts
+
+	}
+
+
+
+	Update2: {
+    	//.label LeftIndex = TEMP1
+
+    	ldy #0
+
+    	!Loop:
+	    	sty DrawLoopIndex_R
+			lda Tiles.LIFTS_Y, y
+			sta StoreYPos_R
+			ldx Tiles.LIFTS_R_X
+
+			lda DrawLoopIndex_R
+			clc
+			adc RightDataIndex
+			tay
+	    	lda Data_R, y
+	    	bne !add+
+
+	    	!remove:
+	    		ldy StoreYPos_R
+	    		jsr RemoveLiftXY
+	    		jmp !end+
+	    	!add:
+	    		ldy StoreYPos_R
+	    		lda StoreYPos_R
+	    		cmp #4
+	    		beq !+
+
+	    		jsr AddLiftXY
+	    		jmp !end+
+	    	!:
+	    		jsr AddTopLiftXY	
+	    	
+	    	!end:
+	    	ldy DrawLoopIndex_R
+			iny
+			cpy #5
+			bmi !Loop-
+		
+			ldx RightDataIndex
+			inx
+
+			cpx #26 //todo: change this val
+			bne !return+
+
+			ldx #0 //todo: reset val
+
+		!return:
+			stx RightDataIndex
 			rts
 
 	}

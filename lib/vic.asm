@@ -139,7 +139,7 @@ VIC: {
 
 		lda #LIGHT_GREY
 		sta VIC.BACKGROUND_COLOR
-		lda #BLACK
+		//lda #GREY
 		sta VIC.BORDER_COLOR
 
 		lda #RED

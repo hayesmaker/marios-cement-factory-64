@@ -14,7 +14,7 @@ PerformFrameCodeFlag:
 	.byte $00
 
 						// current, currentMax, startValue
-GameTimerTick:			.byte 25, 25, 25
+GameTimerTick:			.byte 50, 50, 50
 PushButtonTimer:        .byte 0, 10, 10        
 
 GameCounter:			.byte $00
@@ -40,7 +40,7 @@ Entry:
 	jsr CRATES.Initialise
     //jsr ELEVATORS.Initialise
     jsr PLAYER.Initialise
-    jsr VIC.ColourLastRow
+    //jsr VIC.ColourLastRow
 	
 	
 NewGame: {
@@ -123,12 +123,15 @@ GameTick: {
 !tick1:
     lda #$03
     sta TickState
+    jsr ELEVATORS.Update2
+
     jmp !end+
 !tick2:
     //
     jsr ELEVATORS.Update
     jmp !+
 !tick3:
+    jsr ELEVATORS.Update2
 
     jmp !+
 !tick4:
