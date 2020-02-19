@@ -1,15 +1,12 @@
 PLAYER: {
 	Pos_X:   //120
 		.byte 236, $00
-	Pos_Y:
-		.byte 120
-
 	Player_X: //0    1    2    3    4    5
 		.byte 104, 132, 156, 190, 215, 238
 	Player_X_MB:
 		.byte 0, 0, 0, 0, 0, 0            	
 	Player_Y:
-		.byte 60, 88, 120, 152, 184, 200
+		.byte 60, 88, 120, 152, 184
 		
 	Player_PosX_Index:
 		.byte 0
@@ -71,6 +68,51 @@ PLAYER: {
 		rts
 	}
 
+    MoveWithLiftY1: {
+        //accumulator passed in from Elevators (DrawLoopIndex)
+        tay
+        
+        lda Player_PosX_Index
+        cmp #2
+        bne !return+
+        
+        dey
+        cpy Player_PosY_Index
+        bne !return+
+
+        lda Player_PosY_Index
+        clc
+        adc #1 
+        sta Player_PosY_Index 
+        
+        !return:
+        
+        rts
+    }
+
+
+    MoveWithLiftY2: {
+        //accumulator passed in from Elevators (DrawLoopIndex)
+        tay
+        
+        lda Player_PosX_Index
+        cmp #3
+        bne !return+
+        
+        iny
+        cpy Player_PosY_Index
+        bne !return+
+
+        lda Player_PosY_Index
+        sec
+        sbc #1 
+        sta Player_PosY_Index 
+        
+        !return:
+        
+        rts
+    }
+
 	DrawSprite: {
 		//.label CURRENT_FRAME = TEMP2
         //set player position X & Y
@@ -104,7 +146,7 @@ PLAYER: {
     * @sub CheckMovement
     *
     **/
-    CheckMovement: {
+    DoMovement: {
         lda ShouldTakeLiftUp
         bne !MoveUp+
         
@@ -113,58 +155,39 @@ PLAYER: {
 
         jmp !end+
     !MoveDown:
-        jsr MoveDownByOne
-        jmp !end+
-    !MoveUp:
-        jsr MoveUpByOne 
-        jmp !end+
-
-    !end:
-
-        lda #ZERO
-        sta ShouldTakeLiftUp
-        sta ShouldTakeLiftDown
-
-        rts
-    }
-
-
-    MoveUpByOne: {
-        //inc $d020
-
-        ldx Player_PosY_Index
-        dex
-        stx Player_PosY_Index
-        
-        rts
-    }
-    
-    MoveDownByOne: {
-        //inc $d021
         ldx Player_PosY_Index
         inx
         stx Player_PosY_Index
-        
+        jmp !end+
+    !MoveUp:
+        ldx Player_PosY_Index
+        dex
+        stx Player_PosY_Index
+    !end:
+        jsr ResetLiftChecks
         rts
     }
+
+    ResetLiftChecks: {
+        lda #ZERO
+        sta ShouldTakeLiftUp
+        sta ShouldTakeLiftDown
+        rts
+    }
+
 
     /**
     * If Player is on a lift, move player when lift moves
     *
-    * @sub CheckLiftMovement
+    * @sub CheckMovement
     **/
-    CheckLiftMovement: {
+    CheckMovement: {
 
         lda Player_PosX_Index
         cmp #2
         beq !LeftLiftZone+
         cmp #3
         beq !RightLiftZone+
-
-        lda #ZERO
-        sta ShouldTakeLiftUp
-        sta ShouldTakeLiftDown
-
         jmp !end+
 
     !LeftLiftZone:
@@ -174,12 +197,15 @@ PLAYER: {
         clc
         adc Player_PosY_Index
         tay
+        
         lda ELEVATORS.Data_L,y
         beq !end+ //todo: Player Dies Here
 
         //Player's on Lift
         lda #ONE
         sta ShouldTakeLiftDown
+        lda #ZERO
+        sta ShouldTakeLiftUp
 
         jmp !end+
 
@@ -189,22 +215,26 @@ PLAYER: {
         clc
         adc Player_PosY_Index
         tay
+        //dey
         lda ELEVATORS.Data_R,y
         beq !end+ //todo: Player Dies Here
 
         //Player's on Lift
         lda #ONE
         sta ShouldTakeLiftUp
+        lda #ZERO
+        sta ShouldTakeLiftDown
+
     !end:
         rts
     }
 
     Update: {		    	
 		jsr PlayerControl
-        jsr CheckLiftMovement
+        //jsr ResetLiftChecks
+        //jsr CheckLiftMovement
 		jsr DrawSprite
         
-
         rts
 	}
 

@@ -14,7 +14,7 @@ PerformFrameCodeFlag:
 	.byte $00
 
 						// current, currentMax, startValue
-GameTimerTick:			.byte 40, 40, 40
+GameTimerTick:			.byte 50, 50, 50
 PushButtonTimer:        .byte 0, 10, 10        
 
 GameCounter:			.byte $00
@@ -80,9 +80,10 @@ NewGame: {
 
 	//do Frame Code
 	inc ZP_COUNTER
+    jsr PLAYER.Update
     jsr GameTick
 
-    jsr PLAYER.Update
+    
 
 
 	//end frame Code
@@ -124,22 +125,22 @@ GameTick: {
     lda #$03
     sta TickState
     jsr ELEVATORS.Update2
-    jsr PLAYER.CheckMovement    
+    //jsr PLAYER.CheckMovement    
 
     jmp !end+
 !tick2:
     //
     jsr ELEVATORS.Update
-    jsr PLAYER.CheckMovement    
+    //jsr PLAYER.CheckMovement
     jmp !+
 !tick3:
     jsr ELEVATORS.Update2
-    jsr PLAYER.CheckMovement    
+    //jsr PLAYER.CheckMovement    
 
     jmp !+
 !tick4:
     jsr ELEVATORS.Update
-    jsr PLAYER.CheckMovement    
+    //jsr PLAYER.CheckMovement    
     jsr CRATES.Update
     //inc $d021
 !:

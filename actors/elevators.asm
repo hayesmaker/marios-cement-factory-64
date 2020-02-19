@@ -1,5 +1,5 @@
 ELEVATORS: {
-	//getLength: [ _Positions_L_end - Positions_L ]    
+	//getLength: [ _Positions_L_end - Positions_L ]    6
 	Data_L: //0 - - - 4 - - - 8 - - -12 - - -16 - - -20 - - - - - 
 		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0
 	_Data_L_End:
@@ -198,6 +198,7 @@ ELEVATORS: {
 
     Update: {
     	//.label LeftIndex = TEMP1
+    	//jsr PLAYER.CheckMovement
 
     	ldy #0
 
@@ -221,6 +222,9 @@ ELEVATORS: {
 	    		jsr RemoveLiftXY
 	    		jmp !end+
 	    	!add:
+	    		lda DrawLoopIndex
+	    		jsr PLAYER.MoveWithLiftY1
+
 	    		ldy StoreYPos
 	    		lda StoreYPos
 	    		cmp #4
@@ -246,9 +250,10 @@ ELEVATORS: {
 			ldx #4
 
 		!return:
+
 			stx LeftDataIndex
 
-		//jsr PLAYER.CheckMovement	
+			//jsr PLAYER.CheckMovement
 
 			rts
 
@@ -279,6 +284,10 @@ ELEVATORS: {
 	    		jsr RemoveLiftXY
 	    		jmp !end+
 	    	!add:
+
+	    		lda DrawLoopIndex_R
+	    		jsr PLAYER.MoveWithLiftY2
+
 	    		ldy StoreYPos_R
 	    		lda StoreYPos_R
 	    		cmp #4
