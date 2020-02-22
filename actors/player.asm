@@ -31,6 +31,13 @@ PLAYER: {
         .byte $01
 
 
+    FramesTable: 
+        .byte $00, $00, $ff, $ff, $00, $00, $00, $00
+        .byte $00, $00, $50, $51, $00, $00, $00, $00
+        .byte $41, $42, $43, $44, $45, $46, $00, $00
+        .byte $47, $48, $49, $4a, $4b, $4c, $00, $00
+        .byte $00, $4d, $4e, $4f, $00, $00, $00, $00
+        .byte $00, $00, $ff, $ff, $00, $00, $00, $00
 	// .label STATE_FALL				= %00000010
 	// .label STATE_WALK_LEFT 			= %00000100
 	// .label STATE_WALK_RIGHT			= %00001000
@@ -55,7 +62,7 @@ PLAYER: {
         ldy #2
         sty Player_PosY_Index
 
-		ldx #0
+		ldx #1
 		stx Player_PosX_Index
         stx ShouldTakeLiftUp
         stx ShouldTakeLiftDown
@@ -133,6 +140,7 @@ PLAYER: {
         lda Player_Y, y
         sta VIC.SPRITE_1_Y
 
+        //Sprite Frame Index
         lda DefaultFrame + 0
         sta SPRITE_POINTERS + 1
 
