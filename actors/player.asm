@@ -1,6 +1,5 @@
 PLAYER: {
-	Pos_X:   //120
-		.byte 236, $00
+	
 	Player_X: //0    1    2    3    4    5
 		.byte 104, 132, 156, 190, 215, 238
 	Player_X_MB:
@@ -62,16 +61,9 @@ PLAYER: {
         ldy #2
         sty Player_PosY_Index
 
-		ldx #1
-		stx Player_PosX_Index
-        stx ShouldTakeLiftUp
-        stx ShouldTakeLiftDown
-        
-		lda Player_X
-		sta Pos_X
-		lda Player_X_MB
-		sta Pos_X + 1
-
+		ldy #1
+		sty Player_PosX_Index
+		
 		rts
 	}
 
@@ -123,14 +115,20 @@ PLAYER: {
 	DrawSprite: {
 		//.label CURRENT_FRAME = TEMP2
         //set player position X & Y
-        lda Pos_X + 0
+
+        //x position index: Player_PosX_Index
+        //x pixel coords table: Player_X
+
+        ldy Player_PosX_Index
+        lda Player_X, y
         sta VIC.SPRITE_1_X
 
         lda VIC.SPRITE_MSB
         and #%11111110
         sta VIC.SPRITE_MSB
 
-        lda Pos_X + 1
+        ldy Player_PosX_Index
+        lda Player_X_MB, y
         beq !+
         lda VIC.SPRITE_MSB
         ora #%00000001
@@ -144,96 +142,6 @@ PLAYER: {
         lda DefaultFrame + 0
         sta SPRITE_POINTERS + 1
 
-        rts
-    }
-
-    /**
-    * Called from Elevators update.
-    * Moves player if on lift
-    *
-    * @sub CheckMovement
-    *
-    **/
-    DoMovement: {
-        lda ShouldTakeLiftUp
-        bne !MoveUp+
-        
-        lda ShouldTakeLiftDown
-        bne !MoveDown+
-
-        jmp !end+
-    !MoveDown:
-        ldx Player_PosY_Index
-        inx
-        stx Player_PosY_Index
-        jmp !end+
-    !MoveUp:
-        ldx Player_PosY_Index
-        dex
-        stx Player_PosY_Index
-    !end:
-        jsr ResetLiftChecks
-        rts
-    }
-
-    ResetLiftChecks: {
-        lda #ZERO
-        sta ShouldTakeLiftUp
-        sta ShouldTakeLiftDown
-        rts
-    }
-
-
-    /**
-    * If Player is on a lift, move player when lift moves
-    *
-    * @sub CheckMovement
-    **/
-    CheckMovement: {
-
-        lda Player_PosX_Index
-        cmp #2
-        beq !LeftLiftZone+
-        cmp #3
-        beq !RightLiftZone+
-        jmp !end+
-
-    !LeftLiftZone:
-        //inc $d020
-        
-        lda ELEVATORS.LeftDataIndex
-        clc
-        adc Player_PosY_Index
-        tay
-        
-        lda ELEVATORS.Data_L,y
-        beq !end+ //todo: Player Dies Here
-
-        //Player's on Lift
-        lda #ONE
-        sta ShouldTakeLiftDown
-        lda #ZERO
-        sta ShouldTakeLiftUp
-
-        jmp !end+
-
-    !RightLiftZone:
-        //inc $d021
-        lda ELEVATORS.RightDataIndex
-        clc
-        adc Player_PosY_Index
-        tay
-        //dey
-        lda ELEVATORS.Data_R,y
-        beq !end+ //todo: Player Dies Here
-
-        //Player's on Lift
-        lda #ONE
-        sta ShouldTakeLiftUp
-        lda #ZERO
-        sta ShouldTakeLiftDown
-
-    !end:
         rts
     }
 
@@ -465,16 +373,13 @@ PLAYER: {
     DoLeft: {
         dex
         stx Player_PosX_Index       
-        lda Player_X, x
-        sta Pos_X
-
         jsr ResetTimers
-
         //todo: update frame
         lda DefaultFrame + 1
         clc
         adc Player_PosX_Index
         sta DefaultFrame + 0
+
         rts
 
     }
@@ -482,11 +387,6 @@ PLAYER: {
     DoRight: {
         inx 
         stx Player_PosX_Index 
-        lda Player_X, x
-        sta Pos_X
-
-        //jsr ResetTimers
-
         //todo: update frame
         lda DefaultFrame + 1
         clc
