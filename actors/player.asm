@@ -113,9 +113,6 @@ PLAYER: {
     }
 
 	DrawSprite: {
-		//.label CURRENT_FRAME = TEMP2
-        //set player position X & Y
-
         //x position index: Player_PosX_Index
         //x pixel coords table: Player_X
 
@@ -138,8 +135,19 @@ PLAYER: {
         lda Player_Y, y
         sta VIC.SPRITE_1_Y
 
-        //Sprite Frame Index
-        lda DefaultFrame + 0
+        //sdjkhfaksjdhfa
+        //y * 8 + x = table index
+        
+        //....
+
+        lda Player_PosY_Index
+        asl
+        asl 
+        asl 
+        clc
+        adc Player_PosX_Index
+        tay
+        lda FramesTable, y
         sta SPRITE_POINTERS + 1
 
         rts
