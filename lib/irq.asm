@@ -27,6 +27,7 @@ IRQ: {
 	}
 
 	MainIRQ: {
+		
 		:StoreState()
 			inc GameCounter
 			dec GameTimerTick
@@ -39,6 +40,7 @@ IRQ: {
 			sta PerformFrameCodeFlag
 			asl VIC.INTERRUPT_STATUS
 		:RestoreState()	
+		
 		rti
 	}
 }
