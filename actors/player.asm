@@ -29,7 +29,9 @@ PLAYER: {
     CanOpen:
         .byte $01
 
-
+    
+    FramesTableIndex:
+        .byte $00
     FramesTable: 
         .byte $00, $00, $ff, $ff, $00, $00, $00, $00
         .byte $00, $00, $50, $51, $00, $00, $00, $00
@@ -148,6 +150,7 @@ PLAYER: {
         adc Player_PosX_Index
         tay
         lda FramesTable, y
+        sty FramesTableIndex
         sta SPRITE_POINTERS + 1
 
         rts
@@ -286,10 +289,12 @@ PLAYER: {
         inc DebounceFlag
 
         //move player left
-        ldx Player_PosX_Index
+        ldy FramesTableIndex
+        dey
+        lda FramesTable, y
         beq !+
-
-    	jsr DoLeft
+    	   ldx Player_PosX_Index
+           jsr DoLeft
 
         //Char Tile Updates
         ldx Player_PosX_Index
@@ -308,10 +313,12 @@ PLAYER: {
 
         inc DebounceFlag              
         //move player  right
-        ldx Player_PosX_Index
-        cpx #5
+        ldy FramesTableIndex
+        iny
+        lda FramesTable, y
         beq !end+
 
+        ldx Player_PosX_Index
         jsr DoRight
 
         //Char Tile Updates
