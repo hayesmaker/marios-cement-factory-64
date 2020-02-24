@@ -39,6 +39,15 @@ PLAYER: {
         .byte $47, $48, $49, $4a, $4b, $4c, $00, $00
         .byte $00, $4d, $4e, $4f, $00, $00, $00, $00
         .byte $00, $00, $ff, $ff, $00, $00, $00, $00
+
+    ActionTable: 
+        .byte $00, $00, $00, $00, $00, $00, $00, $00
+        .byte $00, $00, $00, $00, $00, $00, $00, $00
+        .byte $01, $10, $00, $00, $12, $03, $00, $00
+        .byte $02, $11, $00, $00, $13, $04, $00, $00
+        .byte $00, $00, $00, $00, $00, $00, $00, $00
+        .byte $00, $00, $00, $00, $00, $00, $00, $00
+    
 	// .label STATE_FALL				= %00000010
 	// .label STATE_WALK_LEFT 			= %00000100
 	// .label STATE_WALK_RIGHT			= %00001000
@@ -137,32 +146,82 @@ PLAYER: {
         lda Player_Y, y
         sta VIC.SPRITE_1_Y
 
-        //sdjkhfaksjdhfa
-        //y * 8 + x = table index
-        
-        //....
 
-        lda Player_PosY_Index
-        asl
-        asl 
-        asl 
-        clc
-        adc Player_PosX_Index
+        //y * 8 + x = table index
+        lda FramesTableIndex
         tay
         lda FramesTable, y
-        sty FramesTableIndex
         sta SPRITE_POINTERS + 1
 
         rts
     }
 
+    SetFrameNumber: {
+        lda Player_PosY_Index
+        asl
+        asl
+        asl
+        clc
+        adc Player_PosX_Index
+        sta FramesTableIndex
+        rts
+    }
+
     Update: {		    	
 		jsr PlayerControl
+		jsr SetFrameNumber
+		jsr CheckCharUpdates
         //jsr ResetLiftChecks
         //jsr CheckLiftMovement
 		jsr DrawSprite
         
         rts
+	}
+
+    /*
+    FramesTableIndex:
+            .byte $00
+        FramesTable:
+            .byte $00, $00, $ff, $ff, $00, $00, $00, $00
+            .byte $00, $00, $50, $51, $00, $00, $00, $00
+            .byte $41, $42, $43, $44, $45, $46, $00, $00
+            .byte $47, $48, $49, $4a, $4b, $4c, $00, $00
+            .byte $00, $4d, $4e, $4f, $00, $00, $00, $00
+            .byte $00, $00, $ff, $ff, $00, $00, $00, $00
+
+        ActionTable:
+            .byte $00, $00, $00, $00, $00, $00, $00, $00
+            .byte $00, $00, $00, $00, $00, $00, $00, $00
+            .byte $01, $10, $00, $00, $12, $03, $00, $00
+            .byte $02, $11, $00, $00, $13, $04, $00, $00
+            .byte $00, $00, $00, $00, $00, $00, $00, $00
+            .byte $00, $00, $00, $00, $00, $00, $00, $00
+    */
+
+	CheckCharUpdates: {
+
+	    lda FramesTableIndex
+	    tay
+	    lda ActionTable, y
+
+	    cmp #$01
+	    beq !position1+
+
+        cmp #$10
+        beq !position10+
+
+        jmp !return+
+
+	    !position1:
+	        jsr CharsPosition01
+	        jmp !return+
+	    !position10:
+	        jsr CharsPosition10
+	        jmp !return+
+
+
+        !return:
+            rts
 	}
 
     ResetTimers: {
@@ -263,10 +322,11 @@ PLAYER: {
         and #JOY_FIRE
         bne !+
 
-        inc DebounceFireFlag
-        lda CanOpen
+        ldy FramesTableIndex
+        lda ActionTable, y
         beq !+
-        jsr DoFire       
+        // beq !+
+        jsr OpenHopper1          
     !:
     !movement:   
         //Check if we need debounce
@@ -295,15 +355,6 @@ PLAYER: {
         beq !+
     	   ldx Player_PosX_Index
            jsr DoLeft
-
-        //Char Tile Updates
-        ldx Player_PosX_Index
-        cpx #1
-        beq !end+
-        bpl !end+
-            jsr LeftCharUpates
-        jmp !end+
-
     !:
     !Right:
 
@@ -321,18 +372,11 @@ PLAYER: {
         ldx Player_PosX_Index
         jsr DoRight
 
-        //Char Tile Updates
-        ldx Player_PosX_Index
-        cpx #2
-        beq !end+
-        bpl !end+
-
-            jsr RightCharUpdates
     !end:
         rts
     }
 
-    DoFire: {
+    OpenHopper1: {
         //inc $d020
         //can fire?
         //hand switch
@@ -388,33 +432,18 @@ PLAYER: {
     DoLeft: {
         dex
         stx Player_PosX_Index       
-        jsr ResetTimers
-        //todo: update frame
-        lda DefaultFrame + 1
-        clc
-        adc Player_PosX_Index
-        sta DefaultFrame + 0
-
+        //jsr ResetTimers
         rts
 
     }
 
     DoRight: {
         inx 
-        stx Player_PosX_Index 
-        //todo: update frame
-        lda DefaultFrame + 1
-        clc
-        adc Player_PosX_Index
-        sta DefaultFrame + 0
+        stx Player_PosX_Index
         rts
     }
 
-    RightCharUpdates: {
-            //todo: enable CanOpen on PosX_Index=5
-            lda #0
-            sta CanOpen
-
+    CharsPosition10: {
             //removehands
             lda Tiles.EMPTY
             ldx Tiles.HAND_1_UP + 1
@@ -429,10 +458,9 @@ PLAYER: {
         rts    
     }
 
-    LeftCharUpates: {
-        lda #1
-            sta CanOpen
+    CharsPosition01: {
 
+            inc $d020
             //add hand
             lda Tiles.HAND_1_UP + 0
             ldx Tiles.HAND_1_UP + 1

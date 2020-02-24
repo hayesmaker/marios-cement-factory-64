@@ -11,7 +11,7 @@ BasicUpstart2(Entry)
 #import "./game/constants.asm"
 
 PerformFrameCodeFlag:
-	.byte $00
+	.byte $00  
 
 						// current, currentMax, startValue
 GameTimerTick:			.byte 50, 50, 50
@@ -44,7 +44,7 @@ Entry:
 	
 	
 NewGame: {
-
+    
     //
     lda #$00
     sta GameCounter
@@ -60,7 +60,6 @@ NewGame: {
     jsr CRATES.DrawSprite
     jsr PLAYER.DrawSprite
 
-    
     // ldx #$09
     // ldy #$0A
     // jsr MAPLOADER.ColorByXY
@@ -73,7 +72,7 @@ NewGame: {
 
 
 //Main Game loop
-!Loop: 
+!Loop:
 	lda PerformFrameCodeFlag
 	beq !Loop-
 	dec PerformFrameCodeFlag
@@ -90,6 +89,7 @@ NewGame: {
 jmp !Loop-
 
 GameTick: {
+
     //every frame
     lda PushButtonTimer + 0
     beq !+

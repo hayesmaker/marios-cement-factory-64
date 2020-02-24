@@ -2,3 +2,5 @@ bin/
 *.sublime-project
 mcf-project.sublime-project
 mcf-project.sublime-workspace
+.idea/
+out/
