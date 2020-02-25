@@ -26,6 +26,16 @@ Tiles: {
 		.byte 61, 9, 14
 	SWITCH_2_DOWN:
 		.byte 63, 9, 15
+
+	SWITCH_3_UP:
+		.byte 74, 30, 10
+	SWITCH_3_DOWN:
+		.byte 78, 30, 11
+
+	SWITCH_4_UP:
+		.byte 74, 30, 14
+	SWITCH_4_DOWN:
+		.byte 78, 30, 15	
 		
 	
 	HAND_1_UP:
@@ -33,12 +43,49 @@ Tiles: {
 	HAND_1_DOWN:
 		.byte 62, 10, 11
 
+	HAND_2_UP:
+		.byte 59, 10, 14
+	HAND_2_DOWN:
+		.byte 62, 10, 15
+
+	HAND_3_UP:
+		.byte 76, 29, 10
+	HAND_3_DOWN:
+		.byte 77, 29, 11
+		
+	HAND_4_UP:
+		.byte 76, 29, 14
+	HAND_4_DOWN:
+		.byte 77, 29, 15		
+	
+
 	TRAP_1_CLOSED:
 		.byte 68, 7, 12
 	TRAP_1_OPEN:
 		.byte 6, 6, 12
 	TRAP_1_CLOSED_2:
 		.byte 75, 6, 12	
+
+	TRAP_2_CLOSED:
+		.byte 68, 7, 16
+	TRAP_2_OPEN:
+		.byte 6, 6, 16
+	TRAP_2_CLOSED_2:
+		.byte 75, 6, 16
+
+	TRAP_3_CLOSED:
+		.byte 68, 32, 12
+	TRAP_3_OPEN:
+		.byte 6, 31, 12
+	TRAP_3_CLOSED_2:
+		.byte 75, 31, 12	
+
+	TRAP_4_CLOSED:
+		.byte 68, 32, 16
+	TRAP_4_OPEN:
+		.byte 6, 31, 16
+	TRAP_4_CLOSED_2:
+		.byte 75, 31, 16			
 			
 
 

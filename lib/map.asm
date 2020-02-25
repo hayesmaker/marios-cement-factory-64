@@ -15,6 +15,21 @@ MAPLOADER: {
 		jsr SwitchCharAtXY
 
 		lda Tiles.EMPTY
+		ldx Tiles.SWITCH_2_DOWN + 1
+		ldy Tiles.SWITCH_2_DOWN + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.SWITCH_3_DOWN + 1
+		ldy Tiles.SWITCH_3_DOWN + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.SWITCH_4_DOWN + 1
+		ldy Tiles.SWITCH_4_DOWN + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
 		ldx Tiles.HAND_1_DOWN + 1
 		ldy Tiles.HAND_1_DOWN + 2
 		jsr SwitchCharAtXY
@@ -22,6 +37,36 @@ MAPLOADER: {
 		lda Tiles.TRAP_1_CLOSED_2 + 0
 		ldx Tiles.TRAP_1_CLOSED_2 + 1
 		ldy Tiles.TRAP_1_CLOSED_2 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.HAND_2_UP + 1
+		ldy Tiles.HAND_2_UP + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.HAND_2_DOWN + 1
+		ldy Tiles.HAND_2_DOWN + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.HAND_3_UP + 1
+		ldy Tiles.HAND_3_UP + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.HAND_3_DOWN + 1
+		ldy Tiles.HAND_3_DOWN + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.HAND_4_UP + 1
+		ldy Tiles.HAND_4_UP + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.HAND_4_DOWN + 1
+		ldy Tiles.HAND_4_DOWN + 2
 		jsr SwitchCharAtXY
 
 		rts

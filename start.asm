@@ -23,7 +23,6 @@ TickState:              .byte $03
 Entry:
 
 	jsr IRQ.Setup
-
 	//bank out BASIC & Kernal ROM
 	lda $01    
 	and #%11111000
