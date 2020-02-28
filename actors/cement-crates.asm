@@ -1,23 +1,15 @@
 CRATES: {
-	PosX:   //120
+	PosX:
 		.byte $00, $00
 	PosY:
 		.byte 90
 
-	
-	Crate1_PosX:
-			 //120 //93 //73
-		.byte $78, $5D, $49
-	Crate1_PosX_MB:
-		.byte $00, $00, $00	
-
-	Crate1_Pos_Index:
-		.byte 0	
-			
-	Speed:
-		.byte $00, $00
-
-
+	//Crates Positions Table - Refactor to use this 
+	PositionsTableIndex1:
+		.byte $00	
+	PositionsTable1:
+			  //120 //93 //73
+		.byte $78, $5D, $49, $49, 53
 
 	Initialise: {
 		lda #$00
@@ -34,7 +26,7 @@ CRATES: {
 		sta VIC.SPRITE_MULTICOLOR
 
 		ldx #0
-		stx Crate1_Pos_Index	
+		stx PositionsTableIndex1	
 		rts
 	}
 
@@ -60,22 +52,22 @@ CRATES: {
 
 	Update: {
 
-		ldx Crate1_Pos_Index
-		cpx #3 //todo Create label
+		ldx PositionsTableIndex1
+		cpx #5 //todo Create label
 		bne !Loop+
 
 		ldx #0
     !Loop:    
 		clc
-		lda Crate1_PosX, x
+		lda PositionsTable1, x
 		sta PosX
 
-		lda Crate1_PosX_MB, x
+		lda #$00
 		sta PosX + 1
 
 		jsr DrawSprite
 		inx
-		stx Crate1_Pos_Index
+		stx PositionsTableIndex1
 
 	
 		rts
