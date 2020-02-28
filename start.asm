@@ -124,17 +124,20 @@ GameTick: {
     lda #$03
     sta TickState
     jsr ELEVATORS.Update2
-    //jsr PLAYER.CheckMovement    
+    //jsr PLAYER.CheckMovement 
+    jsr CRATES.Update   
 
     jmp !end+
 !tick2:
     //
     jsr ELEVATORS.Update
     //jsr PLAYER.CheckMovement
+    jsr CRATES.Update
     jmp !+
 !tick3:
     jsr ELEVATORS.Update2
-    //jsr PLAYER.CheckMovement    
+    //jsr PLAYER.CheckMovement  
+    jsr CRATES.Update  
 
     jmp !+
 !tick4:

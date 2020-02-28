@@ -4,12 +4,19 @@ CRATES: {
 	PosY:
 		.byte 90
 
-	//Crates Positions Table - Refactor to use this 
+	//Crate 1 Positions Table
 	PositionsTableIndex1:
 		.byte $00	
 	PositionsTable1:
-			  //120 //93 //73
-		.byte $78, $5D, $49, $49, 53
+			  //120//93 //73
+		.byte $78, $5D, $49, $49, $49, $35
+
+	FramesTable1:
+		.byte $40, $40, $40, $56, $57, $58	
+
+		//use this or make labels to specifc indexes for actions?
+	ActionsTable:
+		.byte $00, $00, $00, $01, $02, $00		
 
 	Initialise: {
 		lda #$00
@@ -47,16 +54,23 @@ CRATES: {
     !:
         lda PosY
         sta VIC.SPRITE_0_Y
+
+        lda PositionsTableIndex1
+        tay
+        lda FramesTable1, y
+        sta SPRITE_POINTERS + 0
+
         rts
     }
 
 	Update: {
 
 		ldx PositionsTableIndex1
-		cpx #5 //todo Create label
+		cpx #6 //todo Create label
 		bne !Loop+
 
 		ldx #0
+		stx PositionsTableIndex1
     !Loop:    
 		clc
 		lda PositionsTable1, x
