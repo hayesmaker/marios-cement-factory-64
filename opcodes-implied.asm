@@ -43,5 +43,7 @@ plp
 asl //Arithmetic shift left (accumulator) - puts cut off bit in carry flag
 lsr //logical shift right
 
-rol // roll left accumulator
+rol // roll left accumulator           
+c = 1       11001100  <   shift left & insert carry flag to the right   <   c = 1   10011001
 ror // roll right accumulator
+c = 1       11001100  >   shift right & insert carry flag to the left   >   c = 0   11100110 
