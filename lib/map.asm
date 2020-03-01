@@ -126,7 +126,7 @@ MAPLOADER: {
 		ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
 		jsr SwitchCharAtXY
 
-		jsr ClearHoppers
+		jsr CEMENTS.Initialise
 
 		rts
 	}

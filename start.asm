@@ -5,6 +5,7 @@ BasicUpstart2(Entry)
 #import "./lib/vic.asm"
 #import "./lib/map.asm"
 #import "./lib/irq.asm"
+#import "./actors/cements.asm"
 #import "./actors/cement-crates.asm"
 #import "./actors/elevators.asm"
 #import "./actors/player.asm"
