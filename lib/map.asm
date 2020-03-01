@@ -69,6 +69,147 @@ MAPLOADER: {
 		ldy Tiles.HAND_4_DOWN + 2
 		jsr SwitchCharAtXY
 
+		//new chars
+		//#4
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
+		ldy Tiles.CEMENT_NEW_LEFT_1 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_NEW_LEFT_2 + 1
+		ldy Tiles.CEMENT_NEW_LEFT_2 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CRATE_DOOR_1 + 1
+		ldy Tiles.CRATE_DOOR_1 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_1_LEFT_1 + 1
+		ldy Tiles.CEMENT_SPILL_1_LEFT_1 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_1_LEFT_2 + 1
+		ldy Tiles.CEMENT_SPILL_1_LEFT_2 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_2_LEFT_1 + 1
+		ldy Tiles.CEMENT_SPILL_2_LEFT_1 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_2_LEFT_2 + 1
+		ldy Tiles.CEMENT_SPILL_2_LEFT_2 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_2_LEFT_3 + 1
+		ldy Tiles.CEMENT_SPILL_2_LEFT_3 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_3_LEFT_1 + 1
+		ldy Tiles.CEMENT_SPILL_3_LEFT_1 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_3_LEFT_2 + 1
+		ldy Tiles.CEMENT_SPILL_3_LEFT_2 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
+		ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
+		jsr SwitchCharAtXY
+
+		jsr ClearHoppers
+
+		rts
+	}
+
+	//Create a Clear Hopper by index (0,1,2,3) subroutine
+	ClearHoppers: {
+		//1-2
+		ldx Tiles.Cements.Hopper1.PosX + 0
+		ldy Tiles.Cements.Hopper1.PosY + 0
+		jsr ClearCementAtXY
+
+		ldx Tiles.Cements.Hopper1.PosX + 0
+		ldy Tiles.Cements.Hopper1.PosY + 1
+		jsr ClearCementAtXY
+
+		ldx Tiles.Cements.Hopper1.PosX + 0
+		ldy Tiles.Cements.Hopper1.PosY + 2
+		jsr ClearCementAtXY
+
+		ldx Tiles.Cements.Hopper2.PosX + 0
+		ldy Tiles.Cements.Hopper2.PosY + 0
+		jsr ClearCementAtXY
+
+		ldx Tiles.Cements.Hopper2.PosX + 0
+		ldy Tiles.Cements.Hopper2.PosY + 1
+		jsr ClearCementAtXY
+
+		ldx Tiles.Cements.Hopper2.PosX + 0
+		ldy Tiles.Cements.Hopper2.PosY + 2
+		jsr ClearCementAtXY
+
+		//3-4
+		ldx Tiles.Cements.Hopper3.PosX + 0
+		ldy Tiles.Cements.Hopper3.PosY + 0
+		jsr ClearCementAtXY
+
+		ldx Tiles.Cements.Hopper3.PosX + 0
+		ldy Tiles.Cements.Hopper3.PosY + 1
+		jsr ClearCementAtXY
+
+		ldx Tiles.Cements.Hopper3.PosX + 0
+		ldy Tiles.Cements.Hopper3.PosY + 2
+		jsr ClearCementAtXY
+
+		ldx Tiles.Cements.Hopper4.PosX + 0
+		ldy Tiles.Cements.Hopper4.PosY + 0
+		jsr ClearCementAtXY
+
+		ldx Tiles.Cements.Hopper4.PosX + 0
+		ldy Tiles.Cements.Hopper4.PosY + 1
+		jsr ClearCementAtXY
+
+		ldx Tiles.Cements.Hopper4.PosX + 0
+		ldy Tiles.Cements.Hopper4.PosY + 2
+		jsr ClearCementAtXY
+
+		rts
+	}
+
+	ClearCementAtXY: {
+		.label leftXIndex = TEMP1
+		.label leftYIndex = TEMP2
+		stx leftXIndex
+		sty leftYIndex
+
+		lda Tiles.HOPPER_LEFT_EMPTY
+		ldx leftXIndex
+		ldy leftYIndex
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx leftXIndex
+		inx
+		ldy leftYIndex
+		jsr SwitchCharAtXY
+
+		lda Tiles.HOPPER_RIGHT_EMPTY
+		ldx leftXIndex
+		inx
+		inx
+		ldy leftYIndex
+		jsr MAPLOADER.SwitchCharAtXY
+
 		rts
 	}	
 
