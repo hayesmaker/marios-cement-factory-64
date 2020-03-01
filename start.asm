@@ -5,7 +5,7 @@ BasicUpstart2(Entry)
 #import "./lib/vic.asm"
 #import "./lib/map.asm"
 #import "./lib/irq.asm"
-#import "./actors/cements.asm"
+#import "./actors/tubes.asm"
 #import "./actors/cement-crates.asm"
 #import "./actors/elevators.asm"
 #import "./actors/player.asm"
@@ -16,7 +16,7 @@ PerformFrameCodeFlag:
 
 						// current, currentMax, startValue
 GameTimerTick:			.byte 50, 50, 50
-PushButtonTimer:        .byte 0, 10, 10        
+PushButtonTimer:        .byte 0, 10, 10
 
 GameCounter:			.byte $00
 TickState:              .byte $03
@@ -64,6 +64,7 @@ NewGame: {
     // ldy #$0A
     // jsr MAPLOADER.ColorByXY
     jsr MAPLOADER.Initialise
+    jsr Tubes.Initialise
     //jsr ELEVATORS.DrawSprite
     //jsr ELEVATORS.DrawSprite2
 
@@ -132,6 +133,7 @@ GameTick: {
 !tick2:
     //
     jsr ELEVATORS.Update
+    jsr Tubes.Update
     //jsr PLAYER.CheckMovement
     jsr CRATES.Update
     jmp !+
@@ -143,6 +145,7 @@ GameTick: {
     jmp !+
 !tick4:
     jsr ELEVATORS.Update
+    jsr Tubes.Update
     //jsr PLAYER.CheckMovement    
     jsr CRATES.Update
     //inc $d021

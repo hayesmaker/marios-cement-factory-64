@@ -9,14 +9,14 @@ CRATES: {
 		.byte $00	
 	PositionsTable1:
 			  //120//93 //73
-		.byte $78, $5D, $49, $49, $49, $35
+		.byte $78, $5D, $49, $49, $49, $49, $35
 
 	FramesTable1:
-		.byte $40, $40, $40, $56, $57, $58	
+		.byte $40, $40, $40, $56, $57, $58, $58	
 
 		//use this or make labels to specifc indexes for actions?
-	ActionsTable:
-		.byte $00, $00, $00, $01, $02, $00		
+	//ActionsTable:
+		//.byte $00, $00, $00, $01, $02, $00		
 
 	Initialise: {
 		lda #$00
@@ -63,10 +63,36 @@ CRATES: {
         rts
     }
 
+    OpenCrateDoor: {
+    	lda Tiles.CRATE_DOOR_1 + 0
+    	ldx Tiles.CRATE_DOOR_1 + 1
+    	ldy Tiles.CRATE_DOOR_1 + 2
+    	jsr MAPLOADER.SwitchCharAtXY
+    	rts
+    }
+
+    CloseCrateDoor: {
+    	lda Tiles.EMPTY
+    	ldx Tiles.CRATE_DOOR_1 + 1
+    	ldy Tiles.CRATE_DOOR_1 + 2
+    	jsr MAPLOADER.SwitchCharAtXY
+    	rts
+    }
+
 	Update: {
+		jsr SetPosition
+		jsr CheckIsOpen
+		jsr CheckPourCement
+		jsr DrawSprite
 
 		ldx PositionsTableIndex1
-		cpx #6 //todo Create label
+		inx
+		stx PositionsTableIndex1
+	}
+
+	SetPosition: {
+		ldx PositionsTableIndex1
+		cpx #7 //todo Create label
 		bne !Loop+
 
 		ldx #0
@@ -78,12 +104,40 @@ CRATES: {
 
 		lda #$00
 		sta PosX + 1
-
-		jsr DrawSprite
-		inx
-		stx PositionsTableIndex1
-
 	
+		rts
+	}
+
+	CheckIsOpen: {
+
+		lda PositionsTableIndex1
+		cmp #3
+		bne !closeCheck+
+		jsr OpenCrateDoor
+
+		!closeCheck:
+		cmp #5
+		bne !dontclose+
+
+		jsr CloseCrateDoor
+
+		!dontclose:
+
+		rts;	
+	}
+
+	CheckPourCement: {
+		lda PositionsTableIndex1
+		cmp #4
+		bne !checkClear+
+		jsr Tubes.PourCement1
+		!checkClear:
+
+		cmp #6
+		bne !skip+
+
+		jsr Tubes.AddCement1
+		!skip:
 		rts
 	}
 }
