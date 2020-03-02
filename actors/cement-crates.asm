@@ -8,7 +8,7 @@ CRATES: {
 		.byte $40, $40, $40, $56, $57, $58, $58
 	//Crate 1 Positions Table
 	PositionsTableIndex1:
-		.byte $00	
+		.byte 0	
 	PositionsTable1_LB:
 			  //120//93 //73
 		.byte $78, $5D, $49, $49, $49, $49, $35
@@ -16,7 +16,7 @@ CRATES: {
 		.byte $00, $00, $00, $00, $00, $00, $00	
 			
 	PositionsTableIndex2:
-		.byte $00
+		.byte 0
 	PositionsTable2_LB:
 		.byte 224, 251, 180, 180, 180, 180, 200
 	PositionsTable2_MB:
@@ -109,24 +109,25 @@ CRATES: {
     }
 
 	Update: {
-	//check if at max position index and reset to 0 if necessary
 		ldx PositionsTableIndex1
+		inx
+		stx PositionsTableIndex1
+		//check if at max position index and reset to 0 if necessary
 		cpx #7 //todo Create label
 		bne !skip+
 
 			ldx #0
 			stx PositionsTableIndex1
 		
-	!skip:
-
-	//Crate1 Updates	
+		!skip:
+		//Crate1 Updates	
 		jsr CheckIsOpen
 		jsr CheckPourCement
 		jsr DrawSprite
 		ldx PositionsTableIndex1
 
-		inx
-		stx PositionsTableIndex1
+		//increment crate position
+		
 		rts
 	}
 
