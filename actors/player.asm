@@ -125,11 +125,11 @@ PLAYER: {
 	DrawSprite: {
         //x position index: Player_PosX_Index
         //x pixel coords table: Player_X
-
         ldy Player_PosX_Index
         lda Player_X, y
         sta VIC.SPRITE_0_X
 
+        //crate 1 msb code
         lda VIC.SPRITE_MSB
         and #%11111110
         sta VIC.SPRITE_MSB
