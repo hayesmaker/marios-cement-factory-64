@@ -4,26 +4,36 @@ CRATES: {
 	PosY:
 		.byte 90
 
+	FramesTable:
+		.byte $40, $40, $40, $56, $57, $58, $58
 	//Crate 1 Positions Table
 	PositionsTableIndex1:
 		.byte $00	
-	PositionsTable1:
+	PositionsTable1_LB:
 			  //120//93 //73
 		.byte $78, $5D, $49, $49, $49, $49, $35
+	PositionsTable1_HB:	
+		.byte $00, $00, $00, $00, $00, $00, $00	
+			
+	PositionsTableIndex2:
+		.byte $00
+	PositionsTable2_LB:
+		.byte 224, 251, 180, 180, 180, 180, 200
+	PositionsTable2_MB:
+		.byte $00, $00, $00, $00, $00, $00, $00				
 
-	FramesTable1:
-		.byte $40, $40, $40, $56, $57, $58, $58	
-
-		//use this or make labels to specifc indexes for actions?
-	//ActionsTable:
-		//.byte $00, $00, $00, $01, $02, $00		
+		// TODO: Decide to use this or make labels to specifc indexes for actions?
+		// ActionsTable:
+		// .byte $00, $00, $00, $01, $02, $00		
 
 	Initialise: {
 		lda #$00
-		sta VIC.SPRITE_COLOR_0
+		sta VIC.SPRITE_COLOR_1
+		sta VIC.SPRITE_COLOR_2
 
 		lda #$40
 		sta SPRITE_POINTERS + 1
+		sta SPRITE_POINTERS + 2
 
 		lda VIC.SPRITE_ENABLE 
 		ora #%00000001
@@ -33,20 +43,25 @@ CRATES: {
 		sta VIC.SPRITE_MULTICOLOR
 
 		ldx #0
-		stx PositionsTableIndex1	
+		stx PositionsTableIndex1
+		stx PositionsTableIndex2	
 		rts
 	}
 
 	DrawSprite: {
-        //set player position X & Y
-        lda PosX + 0
+        // crate 1 pos x
+        lda PositionsTableIndex1
+        tay
+        lda PositionsTable1_LB, y
         sta VIC.SPRITE_1_X
 
         lda VIC.SPRITE_MSB
         and #%11111110
         sta VIC.SPRITE_MSB
 
-        lda PosX + 1
+       	lda PositionsTableIndex1
+        tay
+        lda PositionsTable1_HB, y
         beq !+
         lda VIC.SPRITE_MSB
         ora #%00000001
@@ -54,11 +69,25 @@ CRATES: {
     !:
         lda PosY
         sta VIC.SPRITE_1_Y
+        sta VIC.SPRITE_2_Y
 
+        //crate 2 pos x
+        lda PositionsTableIndex2
+        tay
+        lda PositionsTable2_LB, y
+        sta VIC.SPRITE_2_X
+
+        //Crate1
         lda PositionsTableIndex1
         tay
-        lda FramesTable1, y
+        lda FramesTable, y
         sta SPRITE_POINTERS + 1
+
+        //Crate2
+        lda PositionsTableIndex2
+        tay
+        lda FramesTable, y
+        sta SPRITE_POINTERS + 2
 
         rts
     }
@@ -80,31 +109,24 @@ CRATES: {
     }
 
 	Update: {
-		jsr SetPosition
+	//check if at max position index and reset to 0 if necessary
+		ldx PositionsTableIndex1
+		cpx #7 //todo Create label
+		bne !skip+
+
+			ldx #0
+			stx PositionsTableIndex1
+		
+	!skip:
+
+	//Crate1 Updates	
 		jsr CheckIsOpen
 		jsr CheckPourCement
 		jsr DrawSprite
-
 		ldx PositionsTableIndex1
+
 		inx
 		stx PositionsTableIndex1
-	}
-
-	SetPosition: {
-		ldx PositionsTableIndex1
-		cpx #7 //todo Create label
-		bne !Loop+
-
-		ldx #0
-		stx PositionsTableIndex1
-    !Loop:    
-		clc
-		lda PositionsTable1, x
-		sta PosX
-
-		lda #$00
-		sta PosX + 1
-	
 		rts
 	}
 

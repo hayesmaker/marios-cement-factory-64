@@ -55,12 +55,11 @@ PLAYER: {
 
 	Initialise: {
 		lda #$00
-		sta VIC.SPRITE_COLOR_1
-		sta VIC.SPRITE_COLOR_2
+		sta VIC.SPRITE_COLOR_0
 
 		lda DefaultFrame + 1
 		sta DefaultFrame + 0
-		sta SPRITE_POINTERS + 1
+		sta SPRITE_POINTERS + 0
 
 		lda VIC.SPRITE_ENABLE 
 		ora #%00000001
