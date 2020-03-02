@@ -23,7 +23,7 @@ CRATES: {
 		sta VIC.SPRITE_COLOR_0
 
 		lda #$40
-		sta SPRITE_POINTERS + 0
+		sta SPRITE_POINTERS + 1
 
 		lda VIC.SPRITE_ENABLE 
 		ora #%00000001
@@ -40,7 +40,7 @@ CRATES: {
 	DrawSprite: {
         //set player position X & Y
         lda PosX + 0
-        sta VIC.SPRITE_0_X
+        sta VIC.SPRITE_1_X
 
         lda VIC.SPRITE_MSB
         and #%11111110
@@ -53,12 +53,12 @@ CRATES: {
         sta VIC.SPRITE_MSB
     !:
         lda PosY
-        sta VIC.SPRITE_0_Y
+        sta VIC.SPRITE_1_Y
 
         lda PositionsTableIndex1
         tay
         lda FramesTable1, y
-        sta SPRITE_POINTERS + 0
+        sta SPRITE_POINTERS + 1
 
         rts
     }

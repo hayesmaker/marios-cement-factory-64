@@ -129,7 +129,7 @@ PLAYER: {
 
         ldy Player_PosX_Index
         lda Player_X, y
-        sta VIC.SPRITE_1_X
+        sta VIC.SPRITE_0_X
 
         lda VIC.SPRITE_MSB
         and #%11111110
@@ -144,14 +144,14 @@ PLAYER: {
     !:
         ldy Player_PosY_Index
         lda Player_Y, y
-        sta VIC.SPRITE_1_Y
+        sta VIC.SPRITE_0_Y
 
 
         //y * 8 + x = table index
         lda FramesTableIndex
         tay
         lda FramesTable, y
-        sta SPRITE_POINTERS + 1
+        sta SPRITE_POINTERS + 0
 
         rts
     }

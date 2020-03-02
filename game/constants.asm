@@ -90,6 +90,15 @@ Tiles: {
 	CRATE_DOOR_1:
 		.byte 79, 8, 8
 
+	//new chars
+	//#4 feature
+	CEMENT_NEW_RIGHT_1:
+		.byte 81, 32, 8
+	CEMENT_NEW_RIGHT_2:
+		.byte 80, 33, 8
+	CRATE_DOOR_2:
+		.byte 82, 31, 8	
+
 	CEMENT_SPILL_1_LEFT_1:
 		.byte 83, 9, 9
 	CEMENT_SPILL_1_LEFT_2:
