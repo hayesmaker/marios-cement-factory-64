@@ -20,6 +20,20 @@ Tubes: {
 		rts
 	}
 
+	CheckMixerDrop1: {
+		lda #2
+		tay
+		lda Hopper1, y
+
+		beq !return+
+
+			//@todo pour cement from Mixer 1 to Mixer 3 (Left Mixers)
+			//inc $d020
+
+		!return:
+		rts
+	}
+
 	Update1: {
 		jsr UpdateMixer1
 		jsr DrawTubes1

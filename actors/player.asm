@@ -67,6 +67,9 @@ PLAYER: {
 
 		lda #$00
 		sta VIC.SPRITE_MULTICOLOR
+        //initialise debounce flags
+        sta DebounceFlag
+        sta DebounceFireFlag
 
         ldy #2
         sty Player_PosY_Index
@@ -177,26 +180,9 @@ PLAYER: {
         rts
 	}
 
-    /*
-    FramesTableIndex:
-            .byte $00
-        FramesTable:
-            .byte $00, $00, $ff, $ff, $00, $00, $00, $00
-            .byte $00, $00, $50, $51, $00, $00, $00, $00
-            .byte $41, $42, $43, $44, $45, $46, $00, $00
-            .byte $47, $48, $49, $4a, $4b, $4c, $00, $00
-            .byte $00, $4d, $4e, $4f, $00, $00, $00, $00
-            .byte $00, $00, $ff, $ff, $00, $00, $00, $00
-
-        ActionTable:
-            .byte $00, $00, $00, $00, $00, $00, $00, $00
-            .byte $00, $00, $00, $00, $00, $00, $00, $00
-            .byte $01, $10, $00, $00, $12, $03, $00, $00
-            .byte $02, $11, $00, $00, $13, $04, $00, $00
-            .byte $00, $00, $00, $00, $00, $00, $00, $00
-            .byte $00, $00, $00, $00, $00, $00, $00, $00
-    */
-
+    /**
+    * @subroutine CheckCharUpdates
+    **/
 	CheckCharUpdates: {
 
 	    lda FramesTableIndex
@@ -253,10 +239,6 @@ PLAYER: {
         !position13:
             jsr CharsPosition13
             jmp !return+           
-
-
-
-
         !return:
             rts
 	}
@@ -333,6 +315,7 @@ PLAYER: {
             ldy Tiles.HAND_4_DOWN + 2
             jsr MAPLOADER.SwitchCharAtXY   
         !:   
+            //@todo: only switch up at the mixer player is at.
             jsr Switch1Up
             jsr Switch2Up
             jsr Switch3Up
@@ -477,38 +460,38 @@ PLAYER: {
     }
 
 
-
     PlayerControl: {
         .label JOY_PORT_2 = $dc00
         .label JOY_LT = %00100
         .label JOY_RT = %01000
         .label JOY_FIRE = %10000
 
-       lda JOY_PORT_2
-       sta JOY_ZP
+        lda JOY_PORT_2
+        sta JOY_ZP
 
+        lda JOY_ZP
+        and #JOY_FIRE
+        beq !fireButtonPressed+
+
+        lda #$00
+        sta DebounceFireFlag
+        jmp !movement+
+    
+    !fireButtonPressed:
        lda DebounceFireFlag
-       beq !+
-
-       lda JOY_ZP
-       and #[JOY_FIRE]
-       cmp #[JOY_FIRE]
        bne !movement+
-
-       lda #$00
-       sta DebounceFireFlag
-
     !:
     !Fire:
         lda JOY_ZP
         and #JOY_FIRE
-        bne !+
+        bne !movement+
 
         ldy FramesTableIndex
         lda ActionTable, y
         cmp #$01
         bne !+
-            jsr OpenHopper1      
+            jsr OpenHopper1   //top left mixer 
+            inc $d020  
         // beq !+
         !:
         cmp #$02
@@ -517,12 +500,13 @@ PLAYER: {
         !:
         cmp #$03
         bne !+
-            jsr OpenHopper3
+            jsr OpenHopper3   //top right mixer
         !:    
         cmp #$04
         bne !+
-            jsr OpenHopper4
+            jsr OpenHopper4  
         !:
+        inc DebounceFireFlag
     !movement:   
         //Check if we need debounce
         lda DebounceFlag
@@ -542,7 +526,6 @@ PLAYER: {
         bne !+
 
         inc DebounceFlag
-
         //move player left
         ldy FramesTableIndex
         dey
@@ -573,6 +556,10 @@ PLAYER: {
 
     OpenHopper1: {
         jsr ResetTimers
+
+        //@todo jsr CheckMixerDrop1
+        jsr Tubes.CheckMixerDrop1
+
         lda #ONE
         sta PushButtonTimer + 0
         lda Tiles.EMPTY
@@ -604,6 +591,7 @@ PLAYER: {
         ldx Tiles.TRAP_1_CLOSED + 1
         ldy Tiles.TRAP_1_CLOSED + 2
         jsr MAPLOADER.SwitchCharAtXY
+        
         rts
     }
 
