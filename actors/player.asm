@@ -558,7 +558,7 @@ PLAYER: {
         jsr ResetTimers
 
         //@todo jsr CheckMixerDrop1
-        jsr Tubes.CheckMixerDrop1
+        jsr Mixers.CheckMixerDrop1
 
         lda #ONE
         sta PushButtonTimer + 0

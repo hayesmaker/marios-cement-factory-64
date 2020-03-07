@@ -1,4 +1,4 @@
-Tubes: {
+Mixers: {
 
 	//left hand mixers
 	Hopper1:

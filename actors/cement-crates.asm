@@ -220,13 +220,13 @@ CRATES: {
 		lda PositionsTableIndex1
 		cmp #4
 		bne !checkClear+
-		jsr Tubes.PourCement1
+		jsr Mixers.PourCement1
 		!checkClear:
 
 		cmp #6
 		bne !skip+
 
-		jsr Tubes.AddCement1
+		jsr Mixers.AddCement1
 		!skip:
 		rts
 	}
@@ -235,13 +235,13 @@ CRATES: {
 		lda PositionsTableIndex2
 		cmp #4
 		bne !checkClear+
-		jsr Tubes.PourCement3
+		jsr Mixers.PourCement3
 		!checkClear:
 
 		cmp #6
 		bne !skip+
 
-		jsr Tubes.AddCement3
+		jsr Mixers.AddCement3
 		!skip:
 		rts
 	}

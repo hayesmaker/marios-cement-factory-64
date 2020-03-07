@@ -5,7 +5,7 @@ BasicUpstart2(Entry)
 #import "./lib/vic.asm"
 #import "./lib/map.asm"
 #import "./lib/irq.asm"
-#import "./actors/tubes.asm"
+#import "./actors/mixers.asm"
 #import "./actors/cement-crates.asm"
 #import "./actors/elevators.asm"
 #import "./actors/player.asm"
@@ -64,7 +64,7 @@ NewGame: {
     // ldy #$0A
     // jsr MAPLOADER.ColorByXY
     jsr MAPLOADER.Initialise
-    jsr Tubes.Initialise
+    jsr Mixers.Initialise
     //jsr ELEVATORS.DrawSprite
     //jsr ELEVATORS.DrawSprite2
 
@@ -126,26 +126,26 @@ GameTick: {
     lda #$03
     sta TickState
     jsr ELEVATORS.Update2
-    jsr Tubes.Update3
+    jsr Mixers.Update3
     jsr CRATES.Update2   
 
     jmp !end+
 !tick2:
     //
     jsr ELEVATORS.Update
-    jsr Tubes.Update1
+    jsr Mixers.Update1
     //jsr PLAYER.CheckMovement
     jsr CRATES.Update
     jmp !+
 !tick3:
     jsr ELEVATORS.Update2
-    jsr Tubes.Update3
+    jsr Mixers.Update3
     jsr CRATES.Update2  
 
     jmp !+
 !tick4:
     jsr ELEVATORS.Update
-    jsr Tubes.Update1
+    jsr Mixers.Update1
     //jsr PLAYER.CheckMovement    
     jsr CRATES.Update
     //inc $d021
