@@ -140,7 +140,7 @@ CRATES: {
     }
 
 
-	Update: {
+	Update1: {
 		ldx PositionsTableIndex1
 		inx
 		stx PositionsTableIndex1
@@ -219,30 +219,31 @@ CRATES: {
 	CheckPourCement1: {
 		lda PositionsTableIndex1
 		cmp #4
-		bne !checkClear+
+		bne !return+
 		jsr Mixers.PourCement1
-		!checkClear:
+		// !checkClear:
 
-		cmp #6
-		bne !skip+
+		// cmp #6
+		// bne !skip+
 
-		jsr Mixers.AddCement1
-		!skip:
+		// jsr Mixers.AddCement1
+		// !skip:
+		!return:
 		rts
 	}
 
 	CheckPourCement2: {
 		lda PositionsTableIndex2
 		cmp #4
-		bne !checkClear+
+		bne !return+
 		jsr Mixers.PourCement3
-		!checkClear:
+		// !checkClear:
 
-		cmp #6
-		bne !skip+
+		// cmp #6
+		// bne !skip+
 
-		jsr Mixers.AddCement3
-		!skip:
+		// jsr Mixers.AddCement3
+		!return:
 		rts
 	}
 }

@@ -1,21 +1,46 @@
 Mixers: {
 
 	//left hand mixers
+	//upper
 	Hopper1:
 		.byte $00, $00, $00
 
+	//lower
 	Hopper2:
 		.byte $00, $00, $00
 
-//right hand mixers
+	//right hand mixers
+	//upper 
 	Hopper3:
 		.byte $00, $00, $00
 
+	//lower	
 	Hopper4:
-		.byte $00, $00, $00		
+		.byte $00, $00, $00
+
+	CementsPoured:
+		.byte $00, $00, $00, $00
+
+	OddEvenTick:
+		.byte $00				
 
 	
 	Initialise: {
+		lda #$00
+		ldy #$00
+		sta CementsPoured, y
+		sta OddEvenTick
+
+		iny 
+		sta CementsPoured, y
+
+		iny 
+		sta CementsPoured, y
+
+		iny 
+		sta CementsPoured, y
+
+
 		jsr ClearMixers
 		rts
 	}
@@ -33,6 +58,46 @@ Mixers: {
 		!return:
 		rts
 	}
+
+
+	Update: {
+		
+		// inc OddEvenTick
+		// lda OddEvenTick
+		// and #$01
+		// beq !alternate+
+		// // 	//inc $d020 //change border colour
+		//  	jsr Update1
+		// !alternate:
+		//Check pouring
+		//Top Mixers
+		//check 1 pour
+		
+		ldy #0
+		lda CementsPoured, y
+		beq !next+
+			clc
+			adc #1
+			sta CementsPoured, y
+			cmp #6
+			bne !next+
+				jsr AddCement1
+			
+		!next:
+		//check 3 pour
+
+
+		//lower Mixers
+		//check 2 pour
+
+
+		//check 4 pour
+
+		!return:
+		rts
+
+	}
+
 
 	Update1: {
 		jsr UpdateMixer1
@@ -487,6 +552,12 @@ Mixers: {
 	}
 
 	PourCement1: {
+		//add pour flag at 0
+		lda #1
+		ldy #0
+		sta CementsPoured, y
+
+		//render the two poured cement chars
 		lda Tiles.CEMENT_NEW_LEFT_1 + 0
 		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
 		ldy Tiles.CEMENT_NEW_LEFT_1 + 2
@@ -500,6 +571,10 @@ Mixers: {
 	}
 
 	AddCement1: {
+		//clear the pour flag
+		lda #0
+		ldy #0
+		sta CementsPoured, y
 		//Clear Cement Pouring TopLeft
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_LEFT_1 + 1

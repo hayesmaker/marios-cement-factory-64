@@ -80,6 +80,39 @@ PLAYER: {
 		rts
 	}
 
+    DrawSprite: {
+        //x position index: Player_PosX_Index
+        //x pixel coords table: Player_X
+        ldy Player_PosX_Index
+        lda Player_X, y
+        sta VIC.SPRITE_0_X
+
+        //crate 1 msb code
+        lda VIC.SPRITE_MSB
+        and #%11111110
+        sta VIC.SPRITE_MSB
+
+        ldy Player_PosX_Index
+        lda Player_X_MB, y
+        beq !+
+        lda VIC.SPRITE_MSB
+        ora #%00000001
+        sta VIC.SPRITE_MSB
+    !:
+        ldy Player_PosY_Index
+        lda Player_Y, y
+        sta VIC.SPRITE_0_Y
+
+
+        //y * 8 + x = table index
+        lda FramesTableIndex
+        tay
+        lda FramesTable, y
+        sta SPRITE_POINTERS + 0
+
+        rts
+    }
+
     MoveWithLiftY1: {
         //accumulator passed in from Elevators (DrawLoopIndex)
         tay
@@ -125,39 +158,6 @@ PLAYER: {
         rts
     }
 
-	DrawSprite: {
-        //x position index: Player_PosX_Index
-        //x pixel coords table: Player_X
-        ldy Player_PosX_Index
-        lda Player_X, y
-        sta VIC.SPRITE_0_X
-
-        //crate 1 msb code
-        lda VIC.SPRITE_MSB
-        and #%11111110
-        sta VIC.SPRITE_MSB
-
-        ldy Player_PosX_Index
-        lda Player_X_MB, y
-        beq !+
-        lda VIC.SPRITE_MSB
-        ora #%00000001
-        sta VIC.SPRITE_MSB
-    !:
-        ldy Player_PosY_Index
-        lda Player_Y, y
-        sta VIC.SPRITE_0_Y
-
-
-        //y * 8 + x = table index
-        lda FramesTableIndex
-        tay
-        lda FramesTable, y
-        sta SPRITE_POINTERS + 0
-
-        rts
-    }
-
     SetFrameNumber: {
         lda Player_PosY_Index
         asl
@@ -173,8 +173,6 @@ PLAYER: {
 		jsr PlayerControl
 		jsr SetFrameNumber
 		jsr CheckCharUpdates
-        //jsr ResetLiftChecks
-        //jsr CheckLiftMovement
 		jsr DrawSprite
         
         rts
@@ -490,7 +488,7 @@ PLAYER: {
         lda ActionTable, y
         cmp #$01
         bne !+
-            jsr OpenHopper1   //top left mixer 
+            jsr OpenHopper1   //top left mixer
             inc $d020  
         // beq !+
         !:

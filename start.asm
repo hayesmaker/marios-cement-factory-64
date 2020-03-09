@@ -9,17 +9,19 @@ BasicUpstart2(Entry)
 #import "./actors/cement-crates.asm"
 #import "./actors/elevators.asm"
 #import "./actors/player.asm"
+#import "./actors/mixer-cements.asm"
 #import "./game/constants.asm"
 
 PerformFrameCodeFlag:
 	.byte $00  
 
 						// current, currentMax, startValue
-GameTimerTick:			.byte 50, 50, 50
+GameTimerTick:			.byte 27, 27, 27
 PushButtonTimer:        .byte 0, 10, 10
 
 GameCounter:			.byte $00
-TickState:              .byte $03
+MaxTickStates:          .byte $07
+TickState:              .byte $00
 
 Entry:
 
@@ -38,7 +40,8 @@ Entry:
 	jsr MAPLOADER.DrawMap
     jsr ELEVATORS.Initialise
 	jsr CRATES.Initialise
-    //jsr ELEVATORS.Initialise
+    jsr MixerCements.Initialise
+    jsr Mixers.Initialise
     jsr PLAYER.Initialise
     //jsr VIC.ColourLastRow
 	
@@ -54,7 +57,7 @@ NewGame: {
 
     jsr PLAYER.ResetTimers
 
-    lda #$03
+    lda MaxTickStates
     sta TickState
     
     jsr CRATES.DrawSprite
@@ -64,7 +67,8 @@ NewGame: {
     // ldy #$0A
     // jsr MAPLOADER.ColorByXY
     jsr MAPLOADER.Initialise
-    jsr Mixers.Initialise
+    jsr MixerCements.DrawSprite
+
     //jsr ELEVATORS.DrawSprite
     //jsr ELEVATORS.DrawSprite2
 
@@ -105,6 +109,21 @@ GameTick: {
     sta GameTimerTick
     inc GameCounter
 
+    lda TickState
+    cmp #$07
+    beq !tick0+
+
+    lda TickState
+    cmp #$06
+    beq !tick1+
+
+    lda TickState
+    cmp #$05
+    beq !tick2+
+
+    lda TickState
+    cmp #$04
+    beq !tick3+
 
     lda TickState
     cmp #$03
@@ -112,43 +131,56 @@ GameTick: {
 
     lda TickState
     cmp #$02
-    beq !tick3+
+    beq !tick5+
 
     lda TickState
     cmp #$01
-    beq !tick2+
+    beq !tick6+
 
     lda TickState
-    beq !tick1+
+    beq !tick7+
 
-//4 tick stepper
+
+//MAIN GAME ACTIONS ON TICKS
+!tick0: 
+    //Reset TickState counter
+    jsr CRATES.Update1
+
+    jmp !+
 !tick1:
-    lda #$03
-    sta TickState
     jsr ELEVATORS.Update2
-    jsr Mixers.Update3
-    jsr CRATES.Update2   
-
-    jmp !end+
+    //jsr Mixers.Update
+    jmp !+
 !tick2:
     //
-    jsr ELEVATORS.Update
-    jsr Mixers.Update1
-    //jsr PLAYER.CheckMovement
-    jsr CRATES.Update
+    
+    //jsr Mixers.Update
     jmp !+
 !tick3:
-    jsr ELEVATORS.Update2
-    jsr Mixers.Update3
-    jsr CRATES.Update2  
-
+    jsr ELEVATORS.Update1
+    
+    //jsr ELEVATORS.Update2
     jmp !+
 !tick4:
-    jsr ELEVATORS.Update
-    jsr Mixers.Update1
-    //jsr PLAYER.CheckMovement    
-    jsr CRATES.Update
-    //inc $d021
+    jsr CRATES.Update2
+    //jsr CRATES.Update2
+    
+    jmp !+
+!tick5:
+    jsr ELEVATORS.Update2    
+
+    jmp !+
+
+!tick6: 
+
+    jmp !+
+!tick7:
+    lda MaxTickStates
+    sta TickState
+
+    jsr ELEVATORS.Update1    
+    jmp !end+
+    //jsr ELEVATORS.Update2
 !:
     dec TickState
 !end:    

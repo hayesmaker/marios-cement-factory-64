@@ -33,8 +33,8 @@ IRQ: {
 			dec GameTimerTick
 			dec PushButtonTimer + 1
 
-			inc $d020
-			dec $d020
+			//inc $d020
+			//dec $d020
 			
 			lda #$01
 			sta PerformFrameCodeFlag

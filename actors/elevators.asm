@@ -196,7 +196,7 @@ ELEVATORS: {
 		rts
 	}
 
-    Update: {
+    Update1: {
     	//.label LeftIndex = TEMP1
     	//jsr PLAYER.CheckMovement
 
