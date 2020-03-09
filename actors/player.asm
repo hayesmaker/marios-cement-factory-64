@@ -489,8 +489,6 @@ PLAYER: {
         cmp #$01
         bne !+
             jsr OpenHopper1   //top left mixer
-            inc $d020  
-        // beq !+
         !:
         cmp #$02
         bne !+

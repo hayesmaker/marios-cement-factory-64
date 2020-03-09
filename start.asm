@@ -67,7 +67,7 @@ NewGame: {
     // ldy #$0A
     // jsr MAPLOADER.ColorByXY
     jsr MAPLOADER.Initialise
-    jsr MixerCements.DrawSprite
+    //jsr MixerCements.DrawSprite
 
     //jsr ELEVATORS.DrawSprite
     //jsr ELEVATORS.DrawSprite2

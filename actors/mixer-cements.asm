@@ -3,11 +3,11 @@ MixerCements: {
 		.byte $00
 
 	Positions_X_LB:
-		.byte 80, $00, $00, $00
+		.byte $50, $50, $18, $18
 	Positions_X_HB:
-		.byte $00, $00, $00, $00	
+		.byte $00, $00, $01, $01	
 	Positions_Y:
-		.byte 149, $00, $00, $00
+		.byte $95, $B5, $95, $B5
 
 	FRAME_ID:
 		.byte $5B
@@ -22,7 +22,7 @@ MixerCements: {
 		sta SPRITE_POINTERS + 3
 
 		lda VIC.SPRITE_ENABLE 
-		ora #%00000001
+		ora #%00001000
 		sta VIC.SPRITE_ENABLE
 
         //initialise debounce flags 	
@@ -30,6 +30,27 @@ MixerCements: {
         //sta DebounceFireFlag
 		rts
 	}
+
+    HideSprite: {
+        lda VIC.SPRITE_ENABLE 
+        and #%11110111
+        sta VIC.SPRITE_ENABLE
+        rts
+    }
+    
+    ShowSprite: {
+        //set accumulator
+        //to position index
+        sta PositionFrameIndex  
+
+        lda VIC.SPRITE_ENABLE 
+        ora #%00001000
+        sta VIC.SPRITE_ENABLE
+
+        jsr DrawSprite
+
+        rts
+    }
 
     DrawSprite: {
         //x position index: Player_PosX_Index
