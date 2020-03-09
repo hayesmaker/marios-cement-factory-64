@@ -71,8 +71,8 @@ Mixers: {
 		// !alternate:
 		//Check pouring
 		//Top Mixers
-		//check 1 pour
 		
+		//check 1 pour
 		ldy #0
 		lda CementsPoured, y
 		beq !next+
@@ -84,8 +84,20 @@ Mixers: {
 				jsr AddCement1
 			
 		!next:
-		//check 3 pour
+			jsr Update1
 
+		//check 3 pour
+		ldy #2
+		lda CementsPoured, y
+		beq !next+
+			clc
+			adc #1
+			sta CementsPoured, y
+			cmp #6
+			bne !next+
+				jsr AddCement3
+		!next:
+			jsr Update3
 
 		//lower Mixers
 		//check 2 pour
@@ -518,6 +530,10 @@ Mixers: {
 
 
 	PourCement3: {
+		lda #1
+		ldy #2
+		sta CementsPoured, y
+
 		lda Tiles.CEMENT_NEW_RIGHT_1 + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_1 + 1
 		ldy Tiles.CEMENT_NEW_RIGHT_1 + 2

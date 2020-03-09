@@ -102,7 +102,9 @@ GameTick: {
 
 !:
     lda GameTimerTick
-    bne !end+
+    beq !doTick+
+        jmp !end+
+    !doTick:
 
     //every 50 frames (1 tick = 1 second)
     lda GameTimerTick + 1
@@ -145,39 +147,44 @@ GameTick: {
 !tick0: 
     //Reset TickState counter
     jsr CRATES.Update1
-
+    jsr Mixers.Update
     jmp !+
 !tick1:
     jsr ELEVATORS.Update2
-    //jsr Mixers.Update
+    jsr Mixers.Update
+    //
     jmp !+
 !tick2:
     //
-    
     //jsr Mixers.Update
     jmp !+
 !tick3:
     jsr ELEVATORS.Update1
-    
+    jsr Mixers.Update
     //jsr ELEVATORS.Update2
     jmp !+
 !tick4:
     jsr CRATES.Update2
+    jsr Mixers.Update
     //jsr CRATES.Update2
     
     jmp !+
 !tick5:
     jsr ELEVATORS.Update2    
-
+    jsr Mixers.Update
+    
     jmp !+
 
 !tick6: 
+    jsr Mixers.Update
 
     jmp !+
 !tick7:
+    //tickstate = 0
     lda MaxTickStates
     sta TickState
 
+    jsr Mixers.Update
     jsr ELEVATORS.Update1    
     jmp !end+
     //jsr ELEVATORS.Update2
