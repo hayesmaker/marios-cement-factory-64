@@ -72,20 +72,39 @@ Mixers: {
 		rts
 	}
 
+	CheckMixerDrop3: {
+		lda #2
+		tay
+		lda Hopper3, y
+
+		beq !return+
+
+			lda #2
+			jsr MixerCements.ShowSprite
+
+			//@todo check CementsPoured y index
+			ldy #3
+			lda #1
+			sta CementsPoured, y
+
+			ldy #2
+			lda #0
+			sta Hopper3, y
+
+			jsr DrawTubes3
+			//@todo pour cement from Mixer 1 to Mixer 3 (Left Mixers)
+			//inc $d020
+		!return:
+		rts
+	}
+
 
 	Update: {
-		
-		// inc OddEvenTick
-		// lda OddEvenTick
-		// and #$01
-		// beq !alternate+
-		// // 	//inc $d020 //change border colour
-		//  	jsr Update1
-		// !alternate:
-		//Check pouring
-		//Top Mixers
-		
-		//check 1 pour
+		jsr Update1
+		jsr Update2
+		jsr Update3
+		jsr Update4	
+
 		ldy #0
 		lda CementsPoured, y
 		beq !next+
@@ -94,10 +113,13 @@ Mixers: {
 			sta CementsPoured, y
 			cmp #6
 			bne !next+
+				lda #0
+				ldy #0
+				sta CementsPoured, y
 				jsr AddCement1
 			
 		!next:
-			jsr Update1
+			//jsr Update1
 
 		//check 3 pour
 		ldy #2
@@ -108,10 +130,12 @@ Mixers: {
 			sta CementsPoured, y
 			cmp #6
 			bne !next+
+				lda #0
+				ldy #2
+				sta CementsPoured, y
 				jsr AddCement3
 		!next:
-			jsr Update3
-
+			//jsr Update3
 
 		ldy #1
 		lda CementsPoured, y
@@ -121,15 +145,25 @@ Mixers: {
 		 	sta CementsPoured, y
 		 	cmp#6
 		 	bne !next+
+		 		lda #0
+		 		ldy #1
+				sta CementsPoured, y
 		 		jsr AddCement2
 		!next:
-			jsr Update2		
 
-		//lower Mixers
-		//check 2 pour
-
-		//check 4 pour
-
+		ldy #3
+		lda CementsPoured, y
+		beq !next+
+			clc
+			adc #1
+			sta CementsPoured, y
+			cmp #6
+			bne !next+
+				lda #0
+				ldy #3
+				sta CementsPoured, y
+				jsr AddCement4
+		!next: 		
 		!return:
 		rts
 
@@ -501,7 +535,7 @@ Mixers: {
 
 	DrawTubes4: {
 		ldy #0
-		lda Hopper3, y
+		lda Hopper4, y
 
 		beq !remove+
 		// Add Cement At 1
@@ -517,7 +551,7 @@ Mixers: {
 	
 	!next:
 		ldy #01
-		lda Hopper3, y
+		lda Hopper4, y
 
 		beq !remove+
 		// Add Cement At 1
@@ -555,8 +589,6 @@ Mixers: {
 
 	AddCement2: {
 		jsr MixerCements.HideSprite
-		// inc $d020
-		inc $d020
 
 		// lda #0
 		// ldy #0
@@ -567,6 +599,18 @@ Mixers: {
 
 		// jsr DrawTubes1
 		jsr DrawTubes2
+		rts
+	}
+
+	AddCement4: {
+		jsr MixerCements.HideSprite
+
+		lda #1
+		ldy #0
+		sta Hopper4, y
+
+
+		jsr DrawTubes4
 		rts
 	}
 
@@ -629,10 +673,6 @@ Mixers: {
 	}
 
 	AddCement1: {
-		//clear the pour flag
-		lda #0
-		ldy #0
-		sta CementsPoured, y
 		//Clear Cement Pouring TopLeft
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
