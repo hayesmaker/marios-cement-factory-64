@@ -24,7 +24,10 @@ Mixers: {
 		.byte $00, $00, $00, $00
 
 	OddEvenTick:
-		.byte $00				
+		.byte $00
+
+	POUR_DELAY: //3 OR 6?
+		.byte $04			
 
 	
 	Initialise: {
@@ -111,7 +114,7 @@ Mixers: {
 			clc
 			adc #1
 			sta CementsPoured, y
-			cmp #6
+			cmp POUR_DELAY
 			bne !next+
 				lda #0
 				ldy #0
@@ -128,7 +131,7 @@ Mixers: {
 			clc
 			adc #1
 			sta CementsPoured, y
-			cmp #6
+			cmp POUR_DELAY
 			bne !next+
 				lda #0
 				ldy #2
@@ -143,7 +146,7 @@ Mixers: {
 		 	clc 
 		 	adc #1
 		 	sta CementsPoured, y
-		 	cmp#6
+		 	cmp POUR_DELAY
 		 	bne !next+
 		 		lda #0
 		 		ldy #1
@@ -157,7 +160,7 @@ Mixers: {
 			clc
 			adc #1
 			sta CementsPoured, y
-			cmp #6
+			cmp POUR_DELAY
 			bne !next+
 				lda #0
 				ldy #3

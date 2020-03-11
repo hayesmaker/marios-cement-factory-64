@@ -147,7 +147,7 @@ GameTick: {
 !tick0: 
     //Reset TickState counter
     jsr CRATES.Update1
-    jsr Mixers.Update
+    //jsr Mixers.Update
     jmp !+
 !tick1:
     jsr ELEVATORS.Update2
@@ -165,7 +165,7 @@ GameTick: {
     jmp !+
 !tick4:
     jsr CRATES.Update2
-    jsr Mixers.Update
+    //jsr Mixers.Update
     //jsr CRATES.Update2
     
     jmp !+
@@ -176,7 +176,7 @@ GameTick: {
     jmp !+
 
 !tick6: 
-    jsr Mixers.Update
+    //jsr Mixers.Update
 
     jmp !+
 !tick7:
@@ -184,8 +184,9 @@ GameTick: {
     lda MaxTickStates
     sta TickState
 
+    jsr ELEVATORS.Update1
     jsr Mixers.Update
-    jsr ELEVATORS.Update1    
+        
     jmp !end+
     //jsr ELEVATORS.Update2
 !:
