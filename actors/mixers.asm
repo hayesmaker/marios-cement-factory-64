@@ -75,52 +75,6 @@ Mixers: {
 		rts
 	}
 
-	PlayerDrop2: {
-		lda #2
-		tay
-		lda Hopper1, y
-
-		beq !return+
-			lda #0
-			jsr PouredCement.ShowSprite	
-
-			//increase cements poured to mixer 2
-			inc NumPoured2
-
-			//Remove the Tube from Hopper 1
-			ldy #2
-			lda #0
-			sta Hopper1, y
-
-			jsr DrawTubes1
-		!return:
-		rts
-	}
-
-	PlayerDrop4: {
-		lda #2
-		tay
-		lda Hopper3, y
-
-		beq !return+
-			//show the pouring cement
-			lda #2
-			jsr PouredCement.ShowSprite
-
-			//increase the cements poured to mixer 4
-			inc NumPoured4
-
-			//clear the tube from hopper 3
-			ldy #2
-			lda #0
-			sta Hopper3, y
-
-			jsr DrawTubes3
-		!return:
-		rts
-	}
-
-
 	Update: {
 		inc TwoStep1
 		lda TwoStep1
@@ -624,6 +578,7 @@ Mixers: {
 		rts
 	}
 
+	// Poured Cement initiated by Cement Crates
 	PourCement1: {
 		inc NumPoured1
 
@@ -640,19 +595,12 @@ Mixers: {
 		rts
 	}
 
-
 	PourCement3: {
 		lda #1
 		ldy #2
 		sta CementsPoured, y
 
 		inc NumPoured3
-
-		//start pour timer
-		// lda #1
-		// sta CementPourTimer3 + 0
-		// lda CementPourTimer3 + 2
-		// sta CementPourTimer3 + 1
 
 		lda Tiles.CEMENT_NEW_RIGHT_1 + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_1 + 1
@@ -666,12 +614,57 @@ Mixers: {
 		rts
 	}
 
+	//PouredCement initiated by Player
+	PlayerDrop2: {
+		lda #2
+		tay
+		lda Hopper1, y
+
+		beq !return+
+			lda #0
+			jsr PouredCement.ShowSprite	
+
+			//increase cements poured to mixer 2
+			inc NumPoured2
+
+			//Remove the Tube from Hopper 1
+			ldy #2
+			lda #0
+			sta Hopper1, y
+
+			jsr DrawTubes1
+		!return:
+		rts
+	}
+
+	PlayerDrop4: {
+		lda #2
+		tay
+		lda Hopper3, y
+
+		beq !return+
+			//show the pouring cement
+			lda #2
+			jsr PouredCement.ShowSprite
+
+			//increase the cements poured to mixer 4
+			inc NumPoured4
+
+			//clear the tube from hopper 3
+			ldy #2
+			lda #0
+			sta Hopper3, y
+
+			jsr DrawTubes3
+		!return:
+		rts
+	}
+
 	//Public: Add Cement to a Hopper at index
 
 	AddCement1: {
 		//remove NumPoured count
 		dec NumPoured1
-
 
 		//Clear Cement Pouring TopLeft
 		lda Tiles.EMPTY + 0
@@ -748,8 +741,6 @@ Mixers: {
 		sta Hopper4, y
 
 		jsr DrawTubes4
-
-		//!return:
 		rts
 	}
 
