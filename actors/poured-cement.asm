@@ -12,6 +12,8 @@ PouredCement: {
 	FRAME_ID:
 		.byte $5B
 	
+    //@todo ADD A Second Sprite to handle right poured cements seperately
+    //@todo OR use char sprites for poured cements here (requires redrawing tiles)
 	Initialise: {
 		lda #$00
 		sta VIC.SPRITE_COLOR_3

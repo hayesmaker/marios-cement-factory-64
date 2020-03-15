@@ -97,6 +97,7 @@ GameTick: {
     sta GameTimerTick
     inc GameCounter
 
+    //Tick Switch Statement
     lda TickState
     cmp #$07
     beq !tick0+
