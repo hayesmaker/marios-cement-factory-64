@@ -50,44 +50,60 @@ Mixers: {
 		rts
 	}
 
-	CheckMixerDrop1: {
+	PlayerDrop2: {
 		lda #2
 		tay
 		lda Hopper1, y
 
 		beq !return+
+			//inc $d021
+			//@todo start timer:
+			//start pour timer
+			lda #1
+			sta CementPourTimer2 + 0
+			lda CementPourTimer2 + 2
+			sta CementPourTimer1 + 1
 
 			lda #0
-			jsr MixerCements.ShowSprite
+			jsr PouredCement.ShowSprite	
 
+			//increase cements poured to mixer 2
 			ldy #1
-			lda #1
+			lda CementsPoured, y
+			clc
+			adc #1
 			sta CementsPoured, y
 
+			//Remove the Tube from Hopper 1
 			ldy #2
 			lda #0
 			sta Hopper1, y
 
 			jsr DrawTubes1
-			//@todo pour cement from Mixer 1 to Mixer 3 (Left Mixers)
-			//inc $d020
 		!return:
 		rts
 	}
 
-	CheckMixerDrop3: {
+	PlayerDrop4: {
 		lda #2
 		tay
 		lda Hopper3, y
 
 		beq !return+
+			//start the pour timer
+			lda #1
+			sta CementPourTimer4 + 0
+			lda CementPourTimer4 + 2
+			sta CementPourTimer4 + 1
 
 			lda #2
-			jsr MixerCements.ShowSprite
+			jsr PouredCement.ShowSprite
 
-			//@todo check CementsPoured y index
+			//increase the cements poured to mixer 4
 			ldy #3
-			lda #1
+			lda CementsPoured, y
+			clc
+			adc #1
 			sta CementsPoured, y
 
 			ldy #2
@@ -95,8 +111,6 @@ Mixers: {
 			sta Hopper3, y
 
 			jsr DrawTubes3
-			//@todo pour cement from Mixer 1 to Mixer 3 (Left Mixers)
-			//inc $d020
 		!return:
 		rts
 	}
@@ -108,65 +122,6 @@ Mixers: {
 		jsr Update3
 		jsr Update4	
 
-		ldy #0
-		lda CementsPoured, y
-		beq !next+
-			clc
-			adc #1
-			sta CementsPoured, y
-			cmp POUR_DELAY
-			bne !next+
-				lda #0
-				ldy #0
-				sta CementsPoured, y
-				jsr AddCement1
-			
-		!next:
-			//jsr Update1
-
-		//check 3 pour
-		ldy #2
-		lda CementsPoured, y
-		beq !next+
-			clc
-			adc #1
-			sta CementsPoured, y
-			cmp POUR_DELAY
-			bne !next+
-				lda #0
-				ldy #2
-				sta CementsPoured, y
-				jsr AddCement3
-		!next:
-			//jsr Update3
-
-		ldy #1
-		lda CementsPoured, y
-		beq !next+
-		 	clc 
-		 	adc #1
-		 	sta CementsPoured, y
-		 	cmp POUR_DELAY
-		 	bne !next+
-		 		lda #0
-		 		ldy #1
-				sta CementsPoured, y
-		 		jsr AddCement2
-		!next:
-
-		ldy #3
-		lda CementsPoured, y
-		beq !next+
-			clc
-			adc #1
-			sta CementsPoured, y
-			cmp POUR_DELAY
-			bne !next+
-				lda #0
-				ldy #3
-				sta CementsPoured, y
-				jsr AddCement4
-		!next: 		
 		!return:
 		rts
 
@@ -588,32 +543,28 @@ Mixers: {
 		rts
 	}
 
-
-
-	AddCement2: {
-		jsr MixerCements.HideSprite
-
-		// lda #0
-		// ldy #0
-		// sta Hopper1, y
+	PourCement1: {
+		//add pour flag at 0
 		lda #1
 		ldy #0
-		sta Hopper2, y
+		sta CementsPoured, y
 
-		// jsr DrawTubes1
-		jsr DrawTubes2
-		rts
-	}
-
-	AddCement4: {
-		jsr MixerCements.HideSprite
-
+		//start pour timer
 		lda #1
-		ldy #0
-		sta Hopper4, y
+		sta CementPourTimer1 + 0
+		lda CementPourTimer1 + 2
+		sta CementPourTimer1 + 1
 
+		//render the two poured cement chars
+		lda Tiles.CEMENT_NEW_LEFT_1 + 0
+		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
+		ldy Tiles.CEMENT_NEW_LEFT_1 + 2
+		jsr MAPLOADER.SwitchCharAtXY
 
-		jsr DrawTubes4
+		lda Tiles.CEMENT_NEW_LEFT_2 + 0
+		ldx Tiles.CEMENT_NEW_LEFT_2 + 1
+		ldy Tiles.CEMENT_NEW_LEFT_2 + 2
+		jsr MAPLOADER.SwitchCharAtXY
 		rts
 	}
 
@@ -622,6 +573,12 @@ Mixers: {
 		lda #1
 		ldy #2
 		sta CementsPoured, y
+
+		//start pour timer
+		lda #1
+		sta CementPourTimer3 + 0
+		lda CementPourTimer3 + 2
+		sta CementPourTimer3 + 1
 
 		lda Tiles.CEMENT_NEW_RIGHT_1 + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_1 + 1
@@ -635,7 +592,76 @@ Mixers: {
 		rts
 	}
 
+	//Public: Add Cement to a Hopper at index
+
+	AddCement1: {
+		 //Reset Timer
+		lda #0
+        sta CementPourTimer1 + 0
+        lda CementPourTimer1 + 2
+        sta CementPourTimer1 + 1
+		//Clear cementsPoured state 0
+		lda #0
+		ldy #0
+		sta CementsPoured, y
+		//Clear Cement Pouring TopLeft
+		lda Tiles.EMPTY + 0
+		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
+		ldy Tiles.CEMENT_NEW_LEFT_1 + 2
+		jsr MAPLOADER.SwitchCharAtXY
+
+		lda Tiles.EMPTY + 0
+		ldx Tiles.CEMENT_NEW_LEFT_2 + 1
+		ldy Tiles.CEMENT_NEW_LEFT_2 + 2
+		jsr MAPLOADER.SwitchCharAtXY
+		
+		//Add Cement to Hopper1
+		lda #1
+		ldy #0
+		sta Hopper1, y
+
+		jsr DrawTubes1
+		rts
+	}
+
+	AddCement2: {
+		//only sprites are used for mixer1>2 2>exit mixer3>4 4>exit
+		ldy #1
+		lda CementsPoured, y
+		beq !return+
+		sec
+		sbc #1
+		sta CementsPoured, y
+		bne !skip+
+			//
+			lda #0
+        	sta CementPourTimer2 + 0
+        	jsr PouredCement.HideSprite
+		!skip:
+			lda CementPourTimer2 + 2
+    		sta CementPourTimer2 + 1
+
+    	//Add a Tube to next Hopper
+		lda #1
+		ldy #0
+		sta Hopper2, y
+		jsr DrawTubes2
+
+		!return:
+		rts
+	}
+
+
 	AddCement3: {
+		//Reset timings
+		lda #0
+        sta CementPourTimer3 + 0
+        lda CementPourTimer3 + 2
+        sta CementPourTimer3 + 1
+		//Clear cementsPoured state
+		lda #0
+		ldy #2
+		sta CementsPoured, y
 		//Clear Cement Pouring TopRight
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_1 + 1
@@ -656,45 +682,33 @@ Mixers: {
 		rts
 	}
 
-	PourCement1: {
-		//add pour flag at 0
+	AddCement4: {
+		//only sprites are used for mixer1>2 2>exit mixer3>4 4>exit
+		ldy #3
+		lda CementsPoured, y
+		beq !return+
+		sec
+		sbc #1
+		sta CementsPoured,y
+		bne !skip+
+			lda #0
+			sta CementPourTimer4 + 0
+			jsr PouredCement.HideSprite
+		!skip:
+			lda CementPourTimer4 + 2
+			sta CementPourTimer4 + 1	
+		//Add a Tube to next Hopper
 		lda #1
 		ldy #0
-		sta CementsPoured, y
+		sta Hopper4, y
 
-		//render the two poured cement chars
-		lda Tiles.CEMENT_NEW_LEFT_1 + 0
-		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
-		ldy Tiles.CEMENT_NEW_LEFT_1 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr DrawTubes4
 
-		lda Tiles.CEMENT_NEW_LEFT_2 + 0
-		ldx Tiles.CEMENT_NEW_LEFT_2 + 1
-		ldy Tiles.CEMENT_NEW_LEFT_2 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		!return:
 		rts
 	}
 
-	AddCement1: {
-		//Clear Cement Pouring TopLeft
-		lda Tiles.EMPTY + 0
-		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
-		ldy Tiles.CEMENT_NEW_LEFT_1 + 2
-		jsr MAPLOADER.SwitchCharAtXY
-
-		lda Tiles.EMPTY + 0
-		ldx Tiles.CEMENT_NEW_LEFT_2 + 1
-		ldy Tiles.CEMENT_NEW_LEFT_2 + 2
-		jsr MAPLOADER.SwitchCharAtXY
-		
-		//Add Cement to Hopper1
-		lda #1
-		ldy #0
-		sta Hopper1, y
-
-		jsr DrawTubes1
-		rts
-	}
+	//Privates:
 
 	AddCementAtXY: {
 		.label leftXIndex = TEMP1

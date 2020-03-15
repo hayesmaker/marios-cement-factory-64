@@ -9,15 +9,21 @@ BasicUpstart2(Entry)
 #import "./actors/cement-crates.asm"
 #import "./actors/elevators.asm"
 #import "./actors/player.asm"
-#import "./actors/mixer-cements.asm"
+#import "./actors/poured-cement.asm"
 #import "./game/constants.asm"
 
 PerformFrameCodeFlag:
 	.byte $00  
-
 						// current, currentMax, startValue
 GameTimerTick:			.byte 27, 27, 27
+                        //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
 PushButtonTimer:        .byte 0, 10, 10
+CementPourTimer1:       .byte 0, 50, 50
+CementPourTimer2:       .byte 0, 50, 50
+CementPourTimer3:       .byte 0, 50, 50
+CementPourTimer4:       .byte 0, 50, 50
+CementPourTimer5:       .byte 0, 50, 50
+CementPourTimer6:       .byte 0, 50, 50
 
 GameCounter:			.byte $00
 MaxTickStates:          .byte $07
@@ -40,15 +46,13 @@ Entry:
 	jsr MAPLOADER.DrawMap
     jsr ELEVATORS.Initialise
 	jsr CRATES.Initialise
-    jsr MixerCements.Initialise
+    jsr PouredCement.Initialise
     jsr Mixers.Initialise
     jsr PLAYER.Initialise
     //jsr VIC.ColourLastRow
 	
 	
 NewGame: {
-    
-    //
     lda #$00
     sta GameCounter
 
@@ -63,18 +67,8 @@ NewGame: {
     jsr CRATES.DrawSprite
     jsr PLAYER.DrawSprite
 
-    // ldx #$09
-    // ldy #$0A
-    // jsr MAPLOADER.ColorByXY
     jsr MAPLOADER.Initialise
-    //jsr MixerCements.DrawSprite
-
-    //jsr ELEVATORS.DrawSprite
-    //jsr ELEVATORS.DrawSprite2
-
-
 }
-
 
 //Main Game loop
 !Loop:
@@ -86,26 +80,18 @@ NewGame: {
 	inc ZP_COUNTER
     jsr PLAYER.Update
     jsr GameTick
-
-    
-
-
+    jsr FrameCode
 	//end frame Code
-jmp !Loop-
+    jmp !Loop-
 
 GameTick: {
-
     //every frame
-    lda PushButtonTimer + 0
-    beq !+
-    jsr FrameCode
 
-!:
+    //Check GameTimerTick and Do a GameTick onComplete
     lda GameTimerTick
     beq !doTick+
         jmp !end+
     !doTick:
-
     //every 50 frames (1 tick = 1 second)
     lda GameTimerTick + 1
     sta GameTimerTick
@@ -201,14 +187,57 @@ GameTick: {
 FrameCode: {
 
     lda PushButtonTimer + 1
-    bne !end+
+    bne !next+
+        lda PushButtonTimer + 0
+        beq !next+
+            jsr PLAYER.ResetTimers
+            jsr PLAYER.TimerButton1Reset
+    !next:
+    //check pour cement timers completed:
+    //check cement poured into 1
+    lda CementPourTimer1 + 1
+    bne !next+
+        lda CementPourTimer1 + 0
+        beq !next+
+            jsr Mixers.AddCement1
+    !next:
 
-        jsr PLAYER.ResetTimers
-        jsr PLAYER.TimerButton1Reset
+    //check cement poured into 2
+    lda CementPourTimer2 + 1
+    bne !next+
+        lda CementPourTimer2 + 0
+        beq !next+
+            jsr Mixers.AddCement2
+    !next:  
+    
+    //check cement poured into 3
+    //@todo check bug in timings (pours at wrong time)
+    lda CementPourTimer3 + 1
+    bne !next+ 
+        lda CementPourTimer3 + 0
+        beq !next+
+            jsr Mixers.AddCement3
 
-    !end:
+    !next:    
+    lda CementPourTimer4 + 1
+    bne !next+
+        lda CementPourTimer4 + 0
+        beq !next+
+            jsr Mixers.AddCement4
+    !next:    
+    lda CementPourTimer5 + 1
+    and CementPourTimer5 + 0
+    bne !next+
+        // @todo do Cement Pour 5
 
-        rts
+     !next:    
+    lda CementPourTimer6 + 1
+    and CementPourTimer6 + 0
+    beq !next+
+        // @todo do Cement Pour 6  
+    
+    !next:        
+     rts        
 }
 
 Random: {

@@ -554,7 +554,7 @@ PLAYER: {
         jsr ResetTimers
 
         //@todo jsr CheckMixerDrop1
-        jsr Mixers.CheckMixerDrop1
+        jsr Mixers.PlayerDrop2
 
         lda #ONE
         sta PushButtonTimer + 0
@@ -630,7 +630,7 @@ PLAYER: {
 
     OpenHopper3: {
         jsr ResetTimers
-        jsr Mixers.CheckMixerDrop3
+        jsr Mixers.PlayerDrop4
         
         lda #ONE
         sta PushButtonTimer + 0
