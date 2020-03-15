@@ -164,6 +164,7 @@ Mixers: {
 			bne !next+
 				lda #0
 				sta PourTick1
+				sta TwoStep1
 				jsr AddCement1
 				jsr DrawTubes1
 		!next:
@@ -175,6 +176,7 @@ Mixers: {
 			bne !next+
 				lda #0
 				sta PourTick2
+				sta TwoStep2
 				jsr AddCement2
 				jsr DrawTubes2
 		!next: 
@@ -186,6 +188,7 @@ Mixers: {
 			bne !next+
 				lda #0
 				sta PourTick3
+				sta TwoStep3
 				jsr AddCement3
 				jsr DrawTubes3
 		!next:				
@@ -197,6 +200,7 @@ Mixers: {
 			bne !next+
 				lda #0
 				sta PourTick4
+				sta TwoStep4
 				jsr AddCement4
 				jsr DrawTubes4
 		!next:
