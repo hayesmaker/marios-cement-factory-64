@@ -593,6 +593,7 @@ PLAYER: {
 
     OpenHopper2: {
         jsr ResetTimers    
+        jsr Mixers.PlayerDrop5
 
         lda #ONE
         sta PushButtonTimer + 0
@@ -668,6 +669,8 @@ PLAYER: {
 
     OpenHopper4: {
         jsr ResetTimers
+        jsr Mixers.PlayerDrop6
+
         lda #ONE
         sta PushButtonTimer + 0
         lda Tiles.EMPTY

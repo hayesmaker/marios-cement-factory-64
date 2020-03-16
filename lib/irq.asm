@@ -32,13 +32,6 @@ IRQ: {
 			inc GameCounter
 			dec GameTimerTick
 			dec PushButtonTimer + 1
-			dec CementPourTimer1 + 1
-			dec CementPourTimer2 + 1
-			dec CementPourTimer3 + 1
-			dec CementPourTimer4 + 1
-			dec CementPourTimer5 + 1
-			dec CementPourTimer6 + 1
-
 			//inc $d020
 			//dec $d020
 			

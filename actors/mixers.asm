@@ -40,13 +40,11 @@ Mixers: {
 	TwoStep1: .byte $00
 	TwoStep2: .byte $00
 	TwoStep3: .byte $00
-	TwoStep4: .byte $00		
+	TwoStep4: .byte $00
+	//todo do i need these
+	// TwoStep5: .byte $00
+	// TwoStep6: .byte $00
 
-	OddEvenTick:
-		.byte $00
-
-	POUR_DELAY: //3 OR 6?
-		.byte $04			
 
 	
 	Initialise: {
@@ -157,6 +155,28 @@ Mixers: {
 				sta TwoStep4
 				jsr AddCement4
 				jsr DrawTubes4
+		!next:
+		lda NumPoured5
+		beq !next+
+			inc PourTick5
+			lda PourTick5
+			cmp #3
+			bne !next+
+				lda #0
+				sta PourTick5
+				//sta TwoStep5
+				jsr AddCement5
+		!next:
+		lda NumPoured6
+		beq !next+
+			inc PourTick6
+			lda PourTick6
+			cmp #3
+			bne !next+
+				lda #0
+				sta PourTick5
+				//sta TwoStep6
+				jsr AddCement6
 		!next:
 		rts
 
@@ -616,8 +636,7 @@ Mixers: {
 
 	//PouredCement initiated by Player
 	PlayerDrop2: {
-		lda #2
-		tay
+		ldy #2
 		lda Hopper1, y
 
 		beq !return+
@@ -638,8 +657,7 @@ Mixers: {
 	}
 
 	PlayerDrop4: {
-		lda #2
-		tay
+		ldy #2
 		lda Hopper3, y
 
 		beq !return+
@@ -659,6 +677,59 @@ Mixers: {
 		!return:
 		rts
 	}
+
+
+	//PouredCement initiated by Player
+	PlayerDrop5: {
+		ldy#2
+		lda Hopper2, y
+
+		beq !return+
+			//show poured cement at position 1
+			lda #1
+			jsr PouredCement.ShowSprite	
+
+			//increase cements poured to mixer 2
+			inc NumPoured5
+
+			//Remove the Tube from Hopper 2
+			ldy #2
+			lda #0
+			sta Hopper2, y
+
+			jsr DrawTubes2
+		!return:
+		rts
+	}
+
+	// 1   2
+	// 3   4
+	// 5   6
+	//PouredCement initiated by Player
+	PlayerDrop6: {
+		//check if tube is in the hopper
+		ldy#2
+		lda Hopper4, y
+
+		beq !return+
+			//show poured cement at position 1
+			lda #3
+			jsr PouredCement.ShowSprite	
+
+			//increase cements poured to truck
+			inc NumPoured6
+
+			//Remove the Tube from Hopper 2
+			ldy #2
+			lda #0
+			sta Hopper4, y
+
+			jsr DrawTubes4
+		!return:
+		rts
+	}
+
+
 
 	//Public: Add Cement to a Hopper at index
 
@@ -743,6 +814,26 @@ Mixers: {
 		jsr DrawTubes4
 		rts
 	}
+
+	AddCement5: {		
+		dec NumPoured5
+		lda NumPoured5
+		bne !skip+
+			jsr PouredCement.HideSprite
+		!skip:
+		rts
+	}
+
+	AddCement6: {
+		dec NumPoured6
+		lda NumPoured6
+		bne !skip+
+			jsr PouredCement.HideSprite
+		!skip:
+		rts
+	}
+
+
 
 	//Privates:
 	AddCementAtXY: {

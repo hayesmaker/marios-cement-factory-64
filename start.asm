@@ -15,16 +15,9 @@ BasicUpstart2(Entry)
 PerformFrameCodeFlag:
 	.byte $00  
 						// current, currentMax, startValue
-GameTimerTick:			.byte 27, 27, 27
+GameTimerTick:			.byte 25, 25, 25
                         //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
 PushButtonTimer:        .byte 0, 10, 10
-CementPourTimer1:       .byte 0, 50, 50
-CementPourTimer2:       .byte 0, 50, 50
-CementPourTimer3:       .byte 0, 50, 50
-CementPourTimer4:       .byte 0, 50, 50
-CementPourTimer5:       .byte 0, 50, 50
-CementPourTimer6:       .byte 0, 50, 50
-
 GameCounter:			.byte $00
 MaxTickStates:          .byte $07
 TickState:              .byte $00
@@ -193,50 +186,6 @@ FrameCode: {
         beq !next+
             jsr PLAYER.ResetTimers
             jsr PLAYER.TimerButton1Reset
-    !next:
-    //check pour cement timers completed:
-    //check cement poured into 1
-    lda CementPourTimer1 + 1
-    bne !next+
-        lda CementPourTimer1 + 0
-        beq !next+
-            jsr Mixers.AddCement1
-    !next:
-
-    //check cement poured into 2
-    lda CementPourTimer2 + 1
-    bne !next+
-        lda CementPourTimer2 + 0
-        beq !next+
-            jsr Mixers.AddCement2
-    !next:  
-    
-    //check cement poured into 3
-    //@todo check bug in timings (pours at wrong time)
-    lda CementPourTimer3 + 1
-    bne !next+ 
-        lda CementPourTimer3 + 0
-        beq !next+
-            jsr Mixers.AddCement3
-
-    !next:    
-    lda CementPourTimer4 + 1
-    bne !next+
-        lda CementPourTimer4 + 0
-        beq !next+
-            jsr Mixers.AddCement4
-    !next:    
-    lda CementPourTimer5 + 1
-    and CementPourTimer5 + 0
-    bne !next+
-        // @todo do Cement Pour 5
-
-     !next:    
-    lda CementPourTimer6 + 1
-    and CementPourTimer6 + 0
-    beq !next+
-        // @todo do Cement Pour 6  
-    
     !next:        
      rts        
 }
