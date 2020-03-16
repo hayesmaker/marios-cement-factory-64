@@ -1,5 +1,9 @@
 
 //todo: Convert to HEX
+
+Numberwang: 
+	.byte $60, $61
+
 Tiles: {
 	EMPTY:
 		.byte 22

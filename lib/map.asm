@@ -8,7 +8,62 @@ MAPLOADER: {
 	RowScreenTable:
 		.fillword 25, SCREEN_RAM + (i * 40)
 
+	numberYPos:
+		.byte $00
+	numberYIndex:
+		.byte $00
+
+	/**
+	Set A to Required number
+	Set Y to Required Y Pos Index
+	Set X to Required X Pos Index
+	*/
+	DrawNumber: {
+		sty numberYPos
+		asl 
+		tay 
+		lda Numberwang, y
+		iny
+		sty numberYIndex
+		ldy numberYPos
+		jsr SwitchCharAtXY
+
+		ldy numberYIndex
+		lda Numberwang, y
+		ldy numberYPos
+		iny
+		jsr SwitchCharAtXY
+		rts
+	}
+
+
+	DrawScore: {
+
+		ldx #11
+		ldy #3
+		lda #0
+		jsr DrawNumber
+
+		ldx #12
+		ldy #3
+		lda #0
+		jsr DrawNumber
+
+		ldx #13
+		ldy #3
+		lda #0
+		jsr DrawNumber
+
+		rts
+
+	}
+		
+
 	Initialise: {
+
+		jsr DrawScore
+
+
 		lda Tiles.EMPTY
 		ldx Tiles.SWITCH_1_DOWN + 1
 		ldy Tiles.SWITCH_1_DOWN + 2
