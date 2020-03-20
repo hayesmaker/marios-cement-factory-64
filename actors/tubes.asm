@@ -442,12 +442,12 @@ Tubes: {
 		lda Tiles.CEMENT_NEW_RIGHT_1 + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_1 + 1
 		ldy Tiles.CEMENT_NEW_RIGHT_1 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.CEMENT_NEW_RIGHT_2 + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_2 + 1
 		ldy Tiles.CEMENT_NEW_RIGHT_2 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		rts
 	}
 
@@ -456,12 +456,12 @@ Tubes: {
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_1 + 1
 		ldy Tiles.CEMENT_NEW_RIGHT_1 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_2 + 1
 		ldy Tiles.CEMENT_NEW_RIGHT_2 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		
 		//Add Cement to Hopper1
 		lda #1
@@ -476,12 +476,12 @@ Tubes: {
 		lda Tiles.CEMENT_NEW_LEFT_1 + 0
 		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
 		ldy Tiles.CEMENT_NEW_LEFT_1 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.CEMENT_NEW_LEFT_2 + 0
 		ldx Tiles.CEMENT_NEW_LEFT_2 + 1
 		ldy Tiles.CEMENT_NEW_LEFT_2 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		rts
 	}
 
@@ -490,12 +490,12 @@ Tubes: {
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
 		ldy Tiles.CEMENT_NEW_LEFT_1 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_LEFT_2 + 1
 		ldy Tiles.CEMENT_NEW_LEFT_2 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		
 		//Add Cement to Hopper1
 		lda #1
@@ -515,20 +515,20 @@ Tubes: {
 		lda Tiles.Cements.FRAMES + 0
 		ldx leftXIndex
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.Cements.FRAMES + 1
 		ldx leftXIndex
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.Cements.FRAMES + 2
 		ldx leftXIndex
 		inx
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		rts
 	}
@@ -542,20 +542,20 @@ Tubes: {
 		lda Tiles.HOPPER_LEFT_EMPTY
 		ldx leftXIndex
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.EMPTY
 		ldx leftXIndex
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.HOPPER_RIGHT_EMPTY
 		ldx leftXIndex
 		inx
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		rts
 	}

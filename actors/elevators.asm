@@ -91,20 +91,20 @@ ELEVATORS: {
 		lda Tiles.LIFTS_CHAR_TOP + 0
 		ldx leftXIndex
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.LIFTS_CHAR_TOP + 1	
 		ldx leftXIndex
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		
 		lda Tiles.LIFTS_CHAR_TOP + 1	
 		ldx leftXIndex
 		inx
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.LIFTS_CHAR_TOP + 2	
 		ldx leftXIndex
@@ -112,7 +112,7 @@ ELEVATORS: {
 		inx
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		rts
 
 	}
@@ -132,20 +132,20 @@ ELEVATORS: {
 		lda Tiles.LIFTS_CHAR + 0
 		ldx leftXIndex
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.LIFTS_CHAR + 1	
 		ldx leftXIndex
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		
 		lda Tiles.LIFTS_CHAR + 1	
 		ldx leftXIndex
 		inx
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.LIFTS_CHAR + 2	
 		ldx leftXIndex
@@ -153,7 +153,7 @@ ELEVATORS: {
 		inx
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		rts
 
 	}
@@ -171,20 +171,20 @@ ELEVATORS: {
 		lda EmptyTile
 		ldx leftXIndex
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda EmptyTile
 		ldx leftXIndex
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		
 		lda EmptyTile
 		ldx leftXIndex
 		inx
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda EmptyTile
 		ldx leftXIndex
@@ -192,7 +192,7 @@ ELEVATORS: {
 		inx
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		rts
 	}
 

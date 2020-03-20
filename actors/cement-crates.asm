@@ -36,7 +36,11 @@ CRATES: {
 		sta SPRITE_POINTERS + 2
 
 		lda VIC.SPRITE_ENABLE 
-		ora #%00000001
+		ora #%00000010
+		sta VIC.SPRITE_ENABLE
+
+		lda VIC.SPRITE_ENABLE 
+		ora #%00000100
 		sta VIC.SPRITE_ENABLE
 
 		lda #$00
@@ -110,7 +114,7 @@ CRATES: {
     	lda Tiles.CRATE_DOOR_1 + 0
     	ldx Tiles.CRATE_DOOR_1 + 1
     	ldy Tiles.CRATE_DOOR_1 + 2
-    	jsr MAPLOADER.SwitchCharAtXY
+    	jsr Map.SwitchCharAtXY
     	rts
     }
 
@@ -118,7 +122,7 @@ CRATES: {
     	lda Tiles.EMPTY
     	ldx Tiles.CRATE_DOOR_1 + 1
     	ldy Tiles.CRATE_DOOR_1 + 2
-    	jsr MAPLOADER.SwitchCharAtXY
+    	jsr Map.SwitchCharAtXY
     	rts
     }
 
@@ -127,7 +131,7 @@ CRATES: {
     	lda Tiles.CRATE_DOOR_2 + 0
     	ldx Tiles.CRATE_DOOR_2 + 1
     	ldy Tiles.CRATE_DOOR_2 + 2
-    	jsr MAPLOADER.SwitchCharAtXY
+    	jsr Map.SwitchCharAtXY
     	rts
     }
 
@@ -135,7 +139,7 @@ CRATES: {
     	lda Tiles.EMPTY
     	ldx Tiles.CRATE_DOOR_2 + 1
     	ldy Tiles.CRATE_DOOR_2 + 2
-    	jsr MAPLOADER.SwitchCharAtXY
+    	jsr Map.SwitchCharAtXY
     	rts
     }
 

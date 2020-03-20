@@ -600,18 +600,21 @@ Mixers: {
 
 	// Poured Cement initiated by Cement Crates
 	PourCement1: {
+		
+		
+
 		inc NumPoured1
 
 		//render the two poured cement chars
 		lda Tiles.CEMENT_NEW_LEFT_1 + 0
 		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
 		ldy Tiles.CEMENT_NEW_LEFT_1 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.CEMENT_NEW_LEFT_2 + 0
 		ldx Tiles.CEMENT_NEW_LEFT_2 + 1
 		ldy Tiles.CEMENT_NEW_LEFT_2 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		rts
 	}
 
@@ -625,12 +628,12 @@ Mixers: {
 		lda Tiles.CEMENT_NEW_RIGHT_1 + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_1 + 1
 		ldy Tiles.CEMENT_NEW_RIGHT_1 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.CEMENT_NEW_RIGHT_2 + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_2 + 1
 		ldy Tiles.CEMENT_NEW_RIGHT_2 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		rts
 	}
 
@@ -640,6 +643,8 @@ Mixers: {
 		lda Hopper1, y
 
 		beq !return+
+			jsr Score.onUpperMixer
+
 			lda #0
 			jsr PouredCement.ShowSprite	
 
@@ -661,7 +666,9 @@ Mixers: {
 		lda Hopper3, y
 
 		beq !return+
+			jsr Score.onUpperMixer
 			//show the pouring cement
+
 			lda #2
 			jsr PouredCement.ShowSprite
 
@@ -685,6 +692,7 @@ Mixers: {
 		lda Hopper2, y
 
 		beq !return+
+			jsr Score.onLowerMixer
 			//show poured cement at position 1
 			lda #1
 			jsr PouredCement.ShowSprite	
@@ -712,6 +720,7 @@ Mixers: {
 		lda Hopper4, y
 
 		beq !return+
+			jsr Score.onLowerMixer
 			//show poured cement at position 1
 			lda #3
 			jsr PouredCement.ShowSprite	
@@ -741,12 +750,12 @@ Mixers: {
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
 		ldy Tiles.CEMENT_NEW_LEFT_1 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_LEFT_2 + 1
 		ldy Tiles.CEMENT_NEW_LEFT_2 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		
 		//Add Cement to Hopper1
 		lda #1
@@ -782,12 +791,12 @@ Mixers: {
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_1 + 1
 		ldy Tiles.CEMENT_NEW_RIGHT_1 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_RIGHT_2 + 1
 		ldy Tiles.CEMENT_NEW_RIGHT_2 + 2
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 		
 		//Add Cement to Hopper1
 		lda #1
@@ -845,20 +854,20 @@ Mixers: {
 		lda Tiles.Cements.FRAMES + 0
 		ldx leftXIndex
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.Cements.FRAMES + 1
 		ldx leftXIndex
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.Cements.FRAMES + 2
 		ldx leftXIndex
 		inx
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		rts
 	}
@@ -872,20 +881,20 @@ Mixers: {
 		lda Tiles.HOPPER_LEFT_EMPTY
 		ldx leftXIndex
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.EMPTY
 		ldx leftXIndex
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		lda Tiles.HOPPER_RIGHT_EMPTY
 		ldx leftXIndex
 		inx
 		inx
 		ldy leftYIndex
-		jsr MAPLOADER.SwitchCharAtXY
+		jsr Map.SwitchCharAtXY
 
 		rts
 	}

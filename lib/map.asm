@@ -1,6 +1,6 @@
 //export from Charpad with 2x2 tileset
 
-MAPLOADER: {
+Map: {
 	TileScreenLocations: 
 		.byte 0,1,40,41
 	RowColourTable:
@@ -60,9 +60,6 @@ MAPLOADER: {
 		
 
 	Initialise: {
-
-		jsr DrawScore
-
 
 		lda Tiles.EMPTY
 		ldx Tiles.SWITCH_1_DOWN + 1

@@ -11,6 +11,7 @@ BasicUpstart2(Entry)
 #import "./actors/player.asm"
 #import "./actors/poured-cement.asm"
 #import "./game/constants.asm"
+#import "./game/score.asm"
 
 PerformFrameCodeFlag:
 	.byte $00  
@@ -36,13 +37,14 @@ Entry:
 	jsr VIC.SetupRegisters
 	jsr VIC.SetupColours
 
-	jsr MAPLOADER.DrawMap
+	jsr Map.DrawMap
     jsr ELEVATORS.Initialise
 	jsr CRATES.Initialise
     jsr PouredCement.Initialise
     jsr Mixers.Initialise
     jsr PLAYER.Initialise
     //jsr VIC.ColourLastRow
+    jsr Score.Reset
 	
 	
 NewGame: {
@@ -60,7 +62,8 @@ NewGame: {
     jsr CRATES.DrawSprite
     jsr PLAYER.DrawSprite
 
-    jsr MAPLOADER.Initialise
+    jsr Map.Initialise
+
 }
 
 //Main Game loop
@@ -186,8 +189,9 @@ FrameCode: {
         beq !next+
             jsr PLAYER.ResetTimers
             jsr PLAYER.TimerButton1Reset
-    !next:        
-     rts        
+    !next:
+    jsr Score.RenderScore        
+    rts        
 }
 
 Random: {

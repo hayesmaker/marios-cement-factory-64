@@ -264,26 +264,26 @@ PLAYER: {
             lda Tiles.HAND_1_UP + 0
             ldx Tiles.HAND_1_UP + 1
             ldy Tiles.HAND_1_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
             //hand switch
             lda Tiles.EMPTY + 0
             ldx Tiles.HAND_1_DOWN + 1
             ldy Tiles.HAND_1_DOWN + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
         !:
         cmp #$02
         bne !+
             lda Tiles.HAND_2_UP + 0
             ldx Tiles.HAND_2_UP + 1
             ldy Tiles.HAND_2_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
             //hand switch
             lda Tiles.EMPTY + 0
             ldx Tiles.HAND_2_DOWN + 1
             ldy Tiles.HAND_2_DOWN + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
         !:
         cmp #$03
@@ -291,13 +291,13 @@ PLAYER: {
             lda Tiles.HAND_3_UP + 0
             ldx Tiles.HAND_3_UP + 1
             ldy Tiles.HAND_3_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
             //hand switch
             lda Tiles.EMPTY + 0
             ldx Tiles.HAND_3_DOWN + 1
             ldy Tiles.HAND_3_DOWN + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
          !:
         cmp #$04
@@ -305,13 +305,13 @@ PLAYER: {
             lda Tiles.HAND_4_UP + 0
             ldx Tiles.HAND_4_UP + 1
             ldy Tiles.HAND_4_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
             //hand switch
             lda Tiles.EMPTY + 0
             ldx Tiles.HAND_4_DOWN + 1
             ldy Tiles.HAND_4_DOWN + 2
-            jsr MAPLOADER.SwitchCharAtXY   
+            jsr Map.SwitchCharAtXY   
         !:   
             //@todo: only switch up at the mixer player is at.
             jsr Switch1Up
@@ -326,31 +326,31 @@ PLAYER: {
         lda Tiles.SWITCH_1_UP + 0
         ldx Tiles.SWITCH_1_UP + 1
         ldy Tiles.SWITCH_1_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         
         //SWITCH_1_DOWN:
         lda Tiles.EMPTY
         ldx Tiles.SWITCH_1_DOWN + 1
         ldy Tiles.SWITCH_1_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
          //TRAP_1_OPEN
         lda Tiles.EMPTY
         ldx Tiles.TRAP_1_OPEN + 1
         ldy Tiles.TRAP_1_OPEN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         //TRAP_1_CLOSED
         lda Tiles.TRAP_1_CLOSED + 0
         ldx Tiles.TRAP_1_CLOSED + 1
         ldy Tiles.TRAP_1_CLOSED + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         lda Tiles.TRAP_1_CLOSED_2 + 0
         ldx Tiles.TRAP_1_CLOSED_2 + 1
         ldy Tiles.TRAP_1_CLOSED_2 + 2
 
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         rts
     }
@@ -360,31 +360,31 @@ PLAYER: {
         lda Tiles.SWITCH_2_UP + 0
         ldx Tiles.SWITCH_2_UP + 1
         ldy Tiles.SWITCH_2_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         
         //SWITCH_2_DOWN:
         lda Tiles.EMPTY
         ldx Tiles.SWITCH_2_DOWN + 1
         ldy Tiles.SWITCH_2_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
          //TRAP_1_OPEN
         lda Tiles.EMPTY
         ldx Tiles.TRAP_2_OPEN + 1
         ldy Tiles.TRAP_2_OPEN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         //TRAP_1_CLOSED
         lda Tiles.TRAP_2_CLOSED + 0
         ldx Tiles.TRAP_2_CLOSED + 1
         ldy Tiles.TRAP_2_CLOSED + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         lda Tiles.TRAP_2_CLOSED_2 + 0
         ldx Tiles.TRAP_2_CLOSED_2 + 1
         ldy Tiles.TRAP_2_CLOSED_2 + 2
 
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         rts
     }
@@ -394,31 +394,31 @@ PLAYER: {
         lda Tiles.SWITCH_4_UP + 0
         ldx Tiles.SWITCH_4_UP + 1
         ldy Tiles.SWITCH_4_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         
         //SWITCH_1_DOWN:
         lda Tiles.EMPTY
         ldx Tiles.SWITCH_4_DOWN + 1
         ldy Tiles.SWITCH_4_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
          //TRAP_1_OPEN
         lda Tiles.EMPTY
         ldx Tiles.TRAP_4_OPEN + 1
         ldy Tiles.TRAP_4_OPEN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         //TRAP_1_CLOSED
         lda Tiles.TRAP_4_CLOSED + 0
         ldx Tiles.TRAP_4_CLOSED + 1
         ldy Tiles.TRAP_4_CLOSED + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         lda Tiles.TRAP_4_CLOSED_2 + 0
         ldx Tiles.TRAP_4_CLOSED_2 + 1
         ldy Tiles.TRAP_4_CLOSED_2 + 2
 
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         rts
     }
@@ -428,31 +428,31 @@ PLAYER: {
         lda Tiles.SWITCH_3_UP + 0
         ldx Tiles.SWITCH_3_UP + 1
         ldy Tiles.SWITCH_3_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         
         //SWITCH_1_DOWN:
         lda Tiles.EMPTY
         ldx Tiles.SWITCH_3_DOWN + 1
         ldy Tiles.SWITCH_3_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
          //TRAP_1_OPEN
         lda Tiles.EMPTY
         ldx Tiles.TRAP_3_OPEN + 1
         ldy Tiles.TRAP_3_OPEN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         //TRAP_1_CLOSED
         lda Tiles.TRAP_3_CLOSED + 0
         ldx Tiles.TRAP_3_CLOSED + 1
         ldy Tiles.TRAP_3_CLOSED + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         lda Tiles.TRAP_3_CLOSED_2 + 0
         ldx Tiles.TRAP_3_CLOSED_2 + 1
         ldy Tiles.TRAP_3_CLOSED_2 + 2
 
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
 
         rts
     }
@@ -561,32 +561,32 @@ PLAYER: {
         lda Tiles.EMPTY
         ldx Tiles.HAND_1_UP + 1
         ldy Tiles.HAND_1_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //hand switch
         lda Tiles.HAND_1_DOWN + 0
         ldx Tiles.HAND_1_DOWN + 1
         ldy Tiles.HAND_1_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //SWITCH_1_UP:
         lda Tiles.EMPTY + 0
         ldx Tiles.SWITCH_1_UP + 1
         ldy Tiles.SWITCH_1_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //SWITCH_1_DOWN:
         lda Tiles.SWITCH_1_DOWN + 0
         ldx Tiles.SWITCH_1_DOWN + 1
         ldy Tiles.SWITCH_1_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //TRAP_1_OPEN
         lda Tiles.TRAP_1_OPEN + 0
         ldx Tiles.TRAP_1_OPEN + 1
         ldy Tiles.TRAP_1_OPEN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //TRAP_1_CLOSED
         lda Tiles.EMPTY + 0
         ldx Tiles.TRAP_1_CLOSED + 1
         ldy Tiles.TRAP_1_CLOSED + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         
         rts
     }
@@ -600,32 +600,32 @@ PLAYER: {
         lda Tiles.EMPTY
         ldx Tiles.HAND_2_UP + 1
         ldy Tiles.HAND_2_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //hand switch
         lda Tiles.HAND_2_DOWN + 0
         ldx Tiles.HAND_2_DOWN + 1
         ldy Tiles.HAND_2_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //REMOVE SWITCH_2_UP:
         lda Tiles.EMPTY + 0
         ldx Tiles.SWITCH_2_UP + 1
         ldy Tiles.SWITCH_2_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //DRAW SWITCH_2_DOWN:
         lda Tiles.SWITCH_2_DOWN + 0
         ldx Tiles.SWITCH_2_DOWN + 1
         ldy Tiles.SWITCH_2_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //TRAP_2_OPEN
         lda Tiles.TRAP_2_OPEN + 0
         ldx Tiles.TRAP_2_OPEN + 1
         ldy Tiles.TRAP_2_OPEN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //TRAP_2_CLOSED
         lda Tiles.EMPTY + 0
         ldx Tiles.TRAP_2_CLOSED + 1
         ldy Tiles.TRAP_2_CLOSED + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         rts
     }
 
@@ -638,32 +638,32 @@ PLAYER: {
         lda Tiles.EMPTY
         ldx Tiles.HAND_3_UP + 1
         ldy Tiles.HAND_3_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //hand switch
         lda Tiles.HAND_3_DOWN + 0
         ldx Tiles.HAND_3_DOWN + 1
         ldy Tiles.HAND_3_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //SWITCH_3_UP:
         lda Tiles.EMPTY + 0
         ldx Tiles.SWITCH_3_UP + 1
         ldy Tiles.SWITCH_3_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //SWITCH_3_DOWN:
         lda Tiles.SWITCH_3_DOWN + 0
         ldx Tiles.SWITCH_3_DOWN + 1
         ldy Tiles.SWITCH_3_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //TRAP_3_OPEN
         lda Tiles.TRAP_3_OPEN + 0
         ldx Tiles.TRAP_3_OPEN + 1
         ldy Tiles.TRAP_3_OPEN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //TRAP_3_CLOSED
         lda Tiles.EMPTY + 0
         ldx Tiles.TRAP_3_CLOSED + 1
         ldy Tiles.TRAP_3_CLOSED + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         rts
     }
 
@@ -676,32 +676,32 @@ PLAYER: {
         lda Tiles.EMPTY
         ldx Tiles.HAND_4_UP + 1
         ldy Tiles.HAND_4_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //hand switch
         lda Tiles.HAND_4_DOWN + 0
         ldx Tiles.HAND_4_DOWN + 1
         ldy Tiles.HAND_4_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //SWITCH_1_UP:
         lda Tiles.EMPTY + 0
         ldx Tiles.SWITCH_4_UP + 1
         ldy Tiles.SWITCH_4_UP + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //SWITCH_1_DOWN:
         lda Tiles.SWITCH_4_DOWN + 0
         ldx Tiles.SWITCH_4_DOWN + 1
         ldy Tiles.SWITCH_4_DOWN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //TRAP_1_OPEN
         lda Tiles.TRAP_4_OPEN + 0
         ldx Tiles.TRAP_4_OPEN + 1
         ldy Tiles.TRAP_4_OPEN + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         //TRAP_1_CLOSED
         lda Tiles.EMPTY + 0
         ldx Tiles.TRAP_4_CLOSED + 1
         ldy Tiles.TRAP_4_CLOSED + 2
-        jsr MAPLOADER.SwitchCharAtXY
+        jsr Map.SwitchCharAtXY
         rts
     }
 
@@ -724,12 +724,12 @@ PLAYER: {
             lda Tiles.EMPTY
             ldx Tiles.HAND_1_UP + 1
             ldy Tiles.HAND_1_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
             lda Tiles.EMPTY
             ldx Tiles.HAND_1_DOWN + 1
             ldy Tiles.HAND_1_DOWN + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
         rts    
     }
@@ -742,7 +742,7 @@ PLAYER: {
             lda Tiles.HAND_1_UP + 0
             ldx Tiles.HAND_1_UP + 1
             ldy Tiles.HAND_1_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
         !return:    
         rts    
     }
@@ -753,12 +753,12 @@ PLAYER: {
             lda Tiles.EMPTY
             ldx Tiles.HAND_2_UP + 1
             ldy Tiles.HAND_2_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
             lda Tiles.EMPTY
             ldx Tiles.HAND_2_DOWN + 1
             ldy Tiles.HAND_2_DOWN + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
         rts    
     }
@@ -771,7 +771,7 @@ PLAYER: {
             lda Tiles.HAND_2_UP + 0
             ldx Tiles.HAND_2_UP + 1
             ldy Tiles.HAND_2_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
         !return:    
         rts    
     }
@@ -782,12 +782,12 @@ PLAYER: {
             lda Tiles.EMPTY
             ldx Tiles.HAND_3_UP + 1
             ldy Tiles.HAND_3_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
             lda Tiles.EMPTY
             ldx Tiles.HAND_3_DOWN + 1
             ldy Tiles.HAND_3_DOWN + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
         rts    
     }
@@ -800,7 +800,7 @@ PLAYER: {
             lda Tiles.HAND_3_UP + 0
             ldx Tiles.HAND_3_UP + 1
             ldy Tiles.HAND_3_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
         !return:    
         rts    
     }
@@ -810,12 +810,12 @@ PLAYER: {
             lda Tiles.EMPTY
             ldx Tiles.HAND_4_UP + 1
             ldy Tiles.HAND_4_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
             lda Tiles.EMPTY
             ldx Tiles.HAND_4_DOWN + 1
             ldy Tiles.HAND_4_DOWN + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
 
         rts    
     }
@@ -828,7 +828,7 @@ PLAYER: {
             lda Tiles.HAND_4_UP + 0
             ldx Tiles.HAND_4_UP + 1
             ldy Tiles.HAND_4_UP + 2
-            jsr MAPLOADER.SwitchCharAtXY
+            jsr Map.SwitchCharAtXY
         !return:    
         rts    
     }
