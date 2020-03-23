@@ -1,6 +1,6 @@
 ELEVATORS: {
 	//getLength: [ _Positions_L_end - Positions_L ]    6
-	Data_L: //0 - - - 4 - - - 8 - - -12 - - -16 - - -20 - - - - - 
+	Data_L: //0 - - -[1 2 3]- 8 9 - -12 - - -16 - - -20 - - - - - 
 		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0
 	_Data_L_End:
 
@@ -9,7 +9,7 @@ ELEVATORS: {
 
 	PosIndex_L:
 		.byte 0
-	//todo: make this local var
+	//todo: make this local var?
 	DrawLoopIndex:
 		.byte 0
 	StoreYPos:
@@ -23,7 +23,7 @@ ELEVATORS: {
 		.byte 0
 	PosIndex_R:
 		.byte 0
-	//todo: make this local var
+	//todo: make this local var?
 	DrawLoopIndex_R:
 	.byte 0
 	StoreYPos_R:
@@ -81,18 +81,12 @@ ELEVATORS: {
 	AddTopLiftXY: {
 		.label leftXIndex = TEMP1
 		.label leftYIndex = TEMP2
-		//.label whichTile = TEMP3
-		//.label EmptyTile = TEMP3
-		//53 //54 //55
 		stx leftXIndex
 		sty leftYIndex
-		//sta whichTile
-
 		lda Tiles.LIFTS_CHAR_TOP + 0
 		ldx leftXIndex
 		ldy leftYIndex
 		jsr Map.SwitchCharAtXY
-
 		lda Tiles.LIFTS_CHAR_TOP + 1	
 		ldx leftXIndex
 		inx
@@ -120,14 +114,8 @@ ELEVATORS: {
 	AddLiftXY: {
 		.label leftXIndex = TEMP1
 		.label leftYIndex = TEMP2
-		//.label whichTile = TEMP3
-		//.label EmptyTile = TEMP3
-		//53 //54 //55
 		stx leftXIndex
 		sty leftYIndex
-		
-		
-		//sta whichTile
 
 		lda Tiles.LIFTS_CHAR + 0
 		ldx leftXIndex
@@ -197,9 +185,6 @@ ELEVATORS: {
 	}
 
     Update1: {
-    	//.label LeftIndex = TEMP1
-    	//jsr PLAYER.CheckMovement
-
     	ldy #0
 
     	!Loop:
@@ -228,33 +213,27 @@ ELEVATORS: {
 	    		ldy StoreYPos
 	    		lda StoreYPos
 	    		cmp #4
-	    		beq !+
+	    		beq !drawTopCharLift+
+	    		cmp #19
+	    		beq	!drawTopCharLift+
 
 	    		jsr AddLiftXY
 	    		jmp !end+
-	    	!:
-	    		jsr AddTopLiftXY	
+	    	!drawTopCharLift:
+	    		jsr AddTopLiftXY
 	    	
 	    	!end:
 	    	ldy DrawLoopIndex
 			iny
 			cpy #5
 			bmi !Loop-
-		
 			ldx LeftDataIndex
 			inx
-
 			cpx #21
 			bne !return+
-
 			ldx #4
-
 		!return:
-
 			stx LeftDataIndex
-
-			//jsr PLAYER.CheckMovement
-
 			rts
 
 	}
@@ -290,13 +269,16 @@ ELEVATORS: {
 
 	    		ldy StoreYPos_R
 	    		lda StoreYPos_R
+	    		
 	    		cmp #4
-	    		beq !+
+	    		beq !drawTopCharLift+
+	    		cmp #19
+	    		beq !drawTopCharLift+
 
 	    		jsr AddLiftXY
 	    		jmp !end+
-	    	!:
-	    		jsr AddTopLiftXY	
+	    	!drawTopCharLift:
+	    		jsr AddTopLiftXY
 	    	
 	    	!end:
 	    	ldy DrawLoopIndex_R

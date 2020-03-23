@@ -22,14 +22,14 @@ Map: {
 		sty numberYPos
 		asl 
 		tay 
-		lda Numberwang, y
+		lda Ui.NUMBER_WANG
 		iny
 		sty numberYIndex
 		ldy numberYPos
 		jsr SwitchCharAtXY
 
 		ldy numberYIndex
-		lda Numberwang, y
+		lda Ui.NUMBER_WANG + 1
 		ldy numberYPos
 		iny
 		jsr SwitchCharAtXY

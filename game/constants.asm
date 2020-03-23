@@ -1,8 +1,11 @@
 
 //todo: Convert to HEX
 
-Numberwang: 
-	.byte $60, $61
+Ui: {
+	NUMBER_WANG: 
+		.byte $60 //First char index for 0
+} 
+	
 
 Tiles: {
 	EMPTY:

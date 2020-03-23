@@ -1,3 +1,6 @@
+DebugLift:
+	.byte $00
+
 Score:{
 
 	currentScore: .byte $00, $00
@@ -49,6 +52,15 @@ Score:{
 		rts
 	}
 
+	//DebugLift
+	DebugLift: {
+		lda DebugLift
+		sta currentScore
+
+
+		rts
+	}
+
 	/**
 	* Ensure scoreToAdd is set before calling
 	*/
@@ -72,7 +84,7 @@ Score:{
 		and #$0f
 		asl 
 		clc
-		adc #$60
+		adc Ui.NUMBER_WANG //#$60
 		sta SCREEN_RAM + 133
 		clc
 		adc #$01
@@ -85,7 +97,7 @@ Score:{
 		lsr 
 		asl
 		clc
-		adc #$60
+		adc Ui.NUMBER_WANG
 		sta SCREEN_RAM + 132
 		clc
 		adc #$01
@@ -95,7 +107,7 @@ Score:{
 		and #$0f
 		asl 
 		clc
-		adc #$60
+		adc Ui.NUMBER_WANG
 		sta SCREEN_RAM + 131
 		clc
 		adc #$01

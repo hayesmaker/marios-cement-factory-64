@@ -13,6 +13,19 @@ BasicUpstart2(Entry)
 #import "./game/constants.asm"
 #import "./game/score.asm"
 
+/*
+        Sprites MAP
+        ************
+        0: Player - Squashed0  00000001   11111110
+        1: Cement-Crates0      00000010   11111101
+        2: Cement-Crates1      00000100   11111011
+        3: Poured-Cement0      00001000   11110111
+        4: *                   00010000   11101111
+        5: Squashed1           00100000   11011111
+        6: *
+        7: *
+*/
+
 PerformFrameCodeFlag:
 	.byte $00  
 						// current, currentMax, startValue
@@ -182,7 +195,6 @@ GameTick: {
 ** Game Code you want Executed once per frame
 **/
 FrameCode: {
-
     lda PushButtonTimer + 1
     bne !next+
         lda PushButtonTimer + 0
@@ -190,6 +202,7 @@ FrameCode: {
             jsr PLAYER.ResetTimers
             jsr PLAYER.TimerButton1Reset
     !next:
+    //jsr Score.DebugLift
     jsr Score.RenderScore        
     rts        
 }

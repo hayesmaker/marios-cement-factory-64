@@ -1,11 +1,11 @@
 PLAYER: {
 	
 	Player_X: //0    1    2    3    4    5
-		.byte 104, 132, 156, 190, 215, 238
+		.byte 104, 130, 156, 190, 215, 238
 	Player_X_MB:
 		.byte 0, 0, 0, 0, 0, 0            	
 	Player_Y:
-		.byte 60, 88, 120, 152, 184
+		.byte 60, 88, 119, 153, 179
 		
 	Player_PosX_Index:
 		.byte 0
@@ -14,6 +14,11 @@ PLAYER: {
 
 	DefaultFrame:
 		.byte $41, $41
+
+    SquashedFramehLow:
+        .byte $54, $55        
+    SquashedFrameHigh:
+        .byte $52, $53        
 
 	DebounceFlag:
 		.byte $00
@@ -24,6 +29,9 @@ PLAYER: {
         .byte 0
     ShouldTakeLiftDown:
         .byte 0
+
+    IsPlayerDeath:
+        .byte $00    
 
     //player state
     CanOpen:
@@ -61,9 +69,15 @@ PLAYER: {
 		sta DefaultFrame + 0
 		sta SPRITE_POINTERS + 0
 
+        //player sprite enable    
 		lda VIC.SPRITE_ENABLE 
 		ora #%00000001
 		sta VIC.SPRITE_ENABLE
+
+        //player crushed sprite enable
+        lda VIC.SPRITE_ENABLE
+        ora #%00100000
+        sta VIC.SPRITE_ENABLE
 
 		lda #$00
 		sta VIC.SPRITE_MULTICOLOR
@@ -87,7 +101,7 @@ PLAYER: {
         lda Player_X, y
         sta VIC.SPRITE_0_X
 
-        //crate 1 msb code
+        //enable sprite player msb
         lda VIC.SPRITE_MSB
         and #%11111110
         sta VIC.SPRITE_MSB
@@ -121,14 +135,14 @@ PLAYER: {
         cmp #2
         bne !return+
         
-        dey
+        dey 
         cpy Player_PosY_Index
         bne !return+
-
-        lda Player_PosY_Index
-        clc
-        adc #1 
-        sta Player_PosY_Index 
+        //Lift is Present
+            lda Player_PosY_Index
+            clc
+            adc #1 
+            sta Player_PosY_Index 
         
         !return:
         
@@ -174,9 +188,50 @@ PLAYER: {
 		jsr SetFrameNumber
 		jsr CheckCharUpdates
 		jsr DrawSprite
+        jsr CheckLiftDeath
         
         rts
 	}
+
+    CheckLiftDeath: {
+        lda Player_PosX_Index
+        cmp #2
+        beq !liftPossible+
+        // cmp #3
+        // beq !liftPossible+
+        jmp !return+
+        !liftPossible:
+            // lda IsPlayerDeath
+            // bne !return+
+            jsr CheckIfLiftPresent_Left
+        !return:
+        rts
+    }
+
+    CheckIfLiftPresent_Left: {
+
+        lda ELEVATORS.LeftDataIndex
+        clc
+        adc #3
+        sec 
+        sbc Player_PosY_Index
+        tay 
+        lda ELEVATORS.Data_L, y
+        bne !next+
+            //no lift here
+            inc $d020
+        !next:
+        rts
+    }
+
+    CheckIfLiftPresent_Right: {
+        lda ELEVATORS.RightDataIndex
+        //clc
+
+
+        !next:
+        rts
+    }
 
     /**
     * @subroutine CheckCharUpdates
