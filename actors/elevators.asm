@@ -16,7 +16,7 @@ ELEVATORS: {
 		.byte 0		
 	
 	Data_R:// - - - - -                                           - - - - -
-		.byte 1,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,1,0,0,0,1
+		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,1,0,0,0,1
 	_Data_R_End:
 
 	RightDataIndex:
@@ -185,8 +185,9 @@ ELEVATORS: {
 	}
 
     Update1: {
+    	lda PLAYER.IsPlayerDead
+    	bne !return+
     	ldy #0
-
     	!Loop:
 	    	sty DrawLoopIndex
 			lda Tiles.LIFTS_Y, y
@@ -242,9 +243,9 @@ ELEVATORS: {
 
 	Update2: {
     	//.label LeftIndex = TEMP1
-
+    	lda PLAYER.IsPlayerDead
+    	bne !return+
     	ldy #0
-
     	!Loop:
 	    	sty DrawLoopIndex_R
 			lda Tiles.LIFTS_Y, y

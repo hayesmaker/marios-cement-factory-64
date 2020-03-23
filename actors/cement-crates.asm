@@ -145,6 +145,8 @@ CRATES: {
 
 
 	Update1: {
+		lda PLAYER.IsPlayerDead
+    	bne !return+
 		ldx PositionsTableIndex1
 		inx
 		stx PositionsTableIndex1
@@ -160,11 +162,13 @@ CRATES: {
 		jsr CheckIsOpen1
 		jsr CheckPourCement1
 		jsr DrawSprite
-
+		!return:
 		rts
 	}
 
 	Update2: {
+		lda PLAYER.IsPlayerDead
+    	bne !return+
 		ldx PositionsTableIndex2
 		inx
 		stx PositionsTableIndex2
@@ -180,6 +184,7 @@ CRATES: {
 		jsr CheckIsOpen2
 		jsr CheckPourCement2
 		jsr DrawSprite
+		!return:
 		rts
 	}
 

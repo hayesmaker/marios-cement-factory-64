@@ -32,6 +32,9 @@ PerformFrameCodeFlag:
 GameTimerTick:			.byte 25, 25, 25
                         //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
 PushButtonTimer:        .byte 0, 10, 10
+FallGuyTimer:           .byte 0, 50, 50
+
+
 GameCounter:			.byte $00
 MaxTickStates:          .byte $07
 TickState:              .byte $00
@@ -66,8 +69,18 @@ NewGame: {
 
     lda GameTimerTick + 2
     sta GameTimerTick + 0
+    
+    lda #0
+    sta FallGuyTimer + 0
 
-    jsr PLAYER.ResetTimers
+    lda FallGuyTimer + 2
+    sta FallGuyTimer + 1
+
+    lda #0
+    sta PushButtonTimer + 0
+
+    lda PushButtonTimer + 2
+    sta PushButtonTimer + 1
 
     lda MaxTickStates
     sta TickState
@@ -195,6 +208,12 @@ GameTick: {
 ** Game Code you want Executed once per frame
 **/
 FrameCode: {
+    lda FallGuyTimer + 1
+    bne !next+
+        lda FallGuyTimer + 0
+        beq !next+
+            jsr PLAYER.NextFall
+    !next:
     lda PushButtonTimer + 1
     bne !next+
         lda PushButtonTimer + 0

@@ -4,8 +4,8 @@ PLAYER: {
 		.byte 104, 130, 156, 190, 215, 238
 	Player_X_MB:
 		.byte 0, 0, 0, 0, 0, 0            	
-	Player_Y:
-		.byte 60, 88, 119, 153, 179
+	Player_Y:                        //squashed 
+		.byte 60, 88, 119, 153, 179, 208
 		
 	Player_PosX_Index:
 		.byte 0
@@ -15,7 +15,7 @@ PLAYER: {
 	DefaultFrame:
 		.byte $41, $41
 
-    SquashedFramehLow:
+    SquashedFrameLow:
         .byte $54, $55        
     SquashedFrameHigh:
         .byte $52, $53        
@@ -30,7 +30,7 @@ PLAYER: {
     ShouldTakeLiftDown:
         .byte 0
 
-    IsPlayerDeath:
+    IsPlayerDead:
         .byte $00    
 
     //player state
@@ -46,7 +46,8 @@ PLAYER: {
         .byte $41, $42, $43, $44, $45, $46, $00, $00
         .byte $47, $48, $49, $4a, $4b, $4c, $00, $00
         .byte $00, $4d, $4e, $4f, $00, $00, $00, $00
-        .byte $00, $00, $ff, $ff, $00, $00, $00, $00
+        .byte $00, $00, $54, $54, $00, $00, $00, $00
+        //.byte $00, $00, $54, $54, $00, $00, $00, $00
 
     ActionTable: 
         .byte $00, $00, $00, $00, $00, $00, $00, $00
@@ -64,6 +65,7 @@ PLAYER: {
 	Initialise: {
 		lda #$00
 		sta VIC.SPRITE_COLOR_0
+        sta VIC.SPRITE_COLOR_5
 
 		lda DefaultFrame + 1
 		sta DefaultFrame + 0
@@ -101,17 +103,19 @@ PLAYER: {
         lda Player_X, y
         sta VIC.SPRITE_0_X
 
-        //enable sprite player msb
+        //block 1 enable sprite player msb
         lda VIC.SPRITE_MSB
         and #%11111110
         sta VIC.SPRITE_MSB
 
+        //block 2 //todo: andymagicknight gonna review this later
         ldy Player_PosX_Index
         lda Player_X_MB, y
         beq !+
         lda VIC.SPRITE_MSB
         ora #%00000001
         sta VIC.SPRITE_MSB
+        //end block 2
     !:
         ldy Player_PosY_Index
         lda Player_Y, y
@@ -123,6 +127,25 @@ PLAYER: {
         tay
         lda FramesTable, y
         sta SPRITE_POINTERS + 0
+
+        rts
+    }
+
+    DrawSpriteSquashed: {
+        lda #180
+        sta VIC.SPRITE_5_X
+
+        //enable sprite player msb
+        lda VIC.SPRITE_MSB
+        and #%11011111
+        sta VIC.SPRITE_MSB
+    !:
+        ldy Player_PosY_Index
+        lda Player_Y, y
+        sta VIC.SPRITE_5_Y
+
+        lda SquashedFrameLow + 1
+        sta SPRITE_POINTERS + 5
 
         rts
     }
@@ -194,16 +217,24 @@ PLAYER: {
 	}
 
     CheckLiftDeath: {
+        //CHECK IF ALREADY DEAD
+        lda IsPlayerDead
+        bne !return+
+        // CHECK IF IN LIFT ZONE
         lda Player_PosX_Index
         cmp #2
         beq !liftPossible+
+        cmp #3
+        beq !liftPossible2+
         // cmp #3
         // beq !liftPossible+
         jmp !return+
         !liftPossible:
-            // lda IsPlayerDeath
-            // bne !return+
             jsr CheckIfLiftPresent_Left
+            jmp !return+
+        !liftPossible2:
+            jsr CheckIfLiftPresent_Right
+
         !return:
         rts
     }
@@ -219,19 +250,72 @@ PLAYER: {
         lda ELEVATORS.Data_L, y
         bne !next+
             //no lift here
-            inc $d020
+            jsr PlayerFall
         !next:
         rts
     }
 
     CheckIfLiftPresent_Right: {
         lda ELEVATORS.RightDataIndex
-        //clc
-
-
+        clc
+        adc Player_PosY_Index
+        tay
+        dey 
+        lda ELEVATORS.Data_R, y
+        bne !next+
+            //no lift
+            
         !next:
         rts
     }
+
+    PlayerFall: {
+        //start fall timer
+        lda #1
+        sta FallGuyTimer + 0
+        lda FallGuyTimer + 2
+        sta FallGuyTimer + 1
+        //disable control
+        lda #1
+        sta IsPlayerDead
+
+        rts
+    }
+
+    NextFall: {
+        //todo start fall
+        ldy Player_PosY_Index
+        iny 
+        sty Player_PosY_Index
+
+        lda Player_PosY_Index
+        cmp #5
+        bne !skip+
+            //todo: check may not need this
+            lda #0
+            sta FallGuyTimer + 0
+            jsr DrawSpriteSquashed 
+            //jmp !return+
+         !skip:
+            //reset timer
+            lda FallGuyTimer + 2
+            sta FallGuyTimer + 1
+        !return:    
+        rts
+    }
+
+    BlinkPlayerOff: {
+        
+        rts
+    }
+
+    BlinkPlayerOn: {
+
+
+        rts
+    }
+
+
 
     /**
     * @subroutine CheckCharUpdates
@@ -512,6 +596,10 @@ PLAYER: {
         rts
     }
 
+    // Exit: {
+
+    // }
+
 
     PlayerControl: {
         .label JOY_PORT_2 = $dc00
@@ -519,6 +607,10 @@ PLAYER: {
         .label JOY_RT = %01000
         .label JOY_FIRE = %10000
 
+        lda IsPlayerDead //0 / 1
+        beq !control+
+            jmp !end+
+        !control:
         lda JOY_PORT_2
         sta JOY_ZP
 

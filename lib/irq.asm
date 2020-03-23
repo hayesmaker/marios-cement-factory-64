@@ -32,6 +32,7 @@ IRQ: {
 			inc GameCounter
 			dec GameTimerTick
 			dec PushButtonTimer + 1
+			dec FallGuyTimer + 1
 			//inc $d020
 			//dec $d020
 			
