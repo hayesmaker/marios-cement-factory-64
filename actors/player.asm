@@ -32,6 +32,8 @@ PLAYER: {
 
     IsPlayerDead:
         .byte $00
+    AddMissFlag:
+        .byte $00    
 
     FallCountIndex:
         .byte $00        
@@ -95,6 +97,9 @@ PLAYER: {
 
 		ldy #1
 		sty Player_PosX_Index
+
+        lda #0
+        sta AddMissFlag
 		
 		rts
 	}
@@ -157,8 +162,8 @@ PLAYER: {
 
     MoveWithLiftY1: {
         //accumulator passed in from Elevators (DrawLoopIndex)
-        lda IsPlayerDead
-        bne !return+
+        // lda IsPlayerDead
+        // bne !return+
 
         tay
         
@@ -182,8 +187,8 @@ PLAYER: {
 
 
     MoveWithLiftY2: {
-        lda IsPlayerDead
-        bne !return+
+        // lda IsPlayerDead
+        // bne !return+
 
         //accumulator passed in from Elevators (DrawLoopIndex)
         tay
@@ -223,9 +228,25 @@ PLAYER: {
 		jsr CheckCharUpdates
 		jsr DrawSprite
         jsr CheckLiftDeath
+        jsr CheckLoseLife
         
         rts
 	}
+
+    CheckLoseLife: {
+        lda IsPlayerDead
+        beq !return+
+        lda AddMissFlag
+        bne !return+
+        lda Player_PosY_Index
+        cmp #5
+        bne !return+
+            lda #1
+            sta AddMissFlag
+            jsr Lives.LoseLife
+        !return:
+        rts
+    }
 
     CheckLiftDeath: {
         //CHECK IF ALREADY DEAD
@@ -304,6 +325,7 @@ PLAYER: {
         bne !skip+
             lda #0
             sta FallGuyTimer + 0
+            jsr Respawn
             jmp !return+
         !skip:
         //reset timer for next tick
@@ -319,32 +341,58 @@ PLAYER: {
             sty Player_PosY_Index
         !checkBlink:
             lda FallCountIndex
+            cmp #7
+            bne !skip+
+                jsr BlinkPlayerOn
+        !skip:
+            lda FallCountIndex
+            cmp #6
+            bne !skip+
+                jsr BlinkPlayerOff
+        !skip: 
+            lda FallCountIndex
             cmp #5
             bne !skip+
                 jsr BlinkPlayerOn
-
         !skip:
             lda FallCountIndex
             cmp #4
             bne !skip+
                 jsr BlinkPlayerOff
-        !skip: 
+        !skip:
             lda FallCountIndex
             cmp #3
             bne !skip+
-                jsr BlinkPlayerOn
+                jsr BlinkPlayerOn        
         !skip:
             lda FallCountIndex
             cmp #2
             bne !skip+
-                jsr BlinkPlayerOff
+                jsr BlinkPlayerOff 
         !skip:
             lda FallCountIndex
             cmp #1
-            bne !skip+
-                jsr BlinkPlayerOn
-        !skip:        
+            bne !return+
+                jsr BlinkPlayerOn               
         !return:    
+        rts
+    }
+
+    Respawn: {
+        lda #0
+        sta IsPlayerDead
+
+        lda #0
+        sta AddMissFlag
+
+        ldy #2
+        sty Player_PosY_Index
+
+        ldy #1
+        sty Player_PosX_Index
+
+        jsr HidesSquashSprite
+
         rts
     }
 
@@ -375,6 +423,13 @@ PLAYER: {
         
         lda VIC.SPRITE_ENABLE 
         and #%11011110
+        sta VIC.SPRITE_ENABLE
+        rts
+    }
+
+    HidesSquashSprite: {
+        lda VIC.SPRITE_ENABLE 
+        and #%11011111
         sta VIC.SPRITE_ENABLE
         rts
     }

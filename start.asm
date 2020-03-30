@@ -12,6 +12,7 @@ BasicUpstart2(Entry)
 #import "./actors/poured-cement.asm"
 #import "./game/constants.asm"
 #import "./game/score.asm"
+#import "./game/lives.asm"
 
 /*
         Sprites MAP
@@ -32,7 +33,7 @@ PerformFrameCodeFlag:
 GameTimerTick:			.byte 25, 25, 25
                         //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
 PushButtonTimer:        .byte 0, 10, 10
-FallGuyTimer:           .byte 0, 50, 50
+FallGuyTimer:           .byte 0, 35, 35
 
 
 GameCounter:			.byte $00
@@ -54,6 +55,7 @@ Entry:
 	jsr VIC.SetupColours
 
 	jsr Map.DrawMap
+    jsr Lives.Initialise
     jsr ELEVATORS.Initialise
 	jsr CRATES.Initialise
     jsr PouredCement.Initialise
