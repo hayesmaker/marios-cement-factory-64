@@ -121,10 +121,12 @@ PLAYER: {
         //end block 2
     !:
         ldy Player_PosY_Index
+        cpy #5
+        bne !skip+
+            jsr DrawSpriteSquashed
+        !skip:
         lda Player_Y, y
         sta VIC.SPRITE_0_Y
-
-
         //y * 8 + x = table index
         lda FramesTableIndex
         tay
@@ -299,48 +301,89 @@ PLAYER: {
         ldx FallCountIndex
         dex
         stx FallCountIndex
-        beq !end+
-
-        inc $d020
-        
+        bne !skip+
+            lda #0
+            sta FallGuyTimer + 0
+            jmp !return+
+        !skip:
         //reset timer for next tick
+        //@todo accelerate timer when player should blink
         lda FallGuyTimer + 2
         sta FallGuyTimer + 1
 
         //todo start fall
         ldy Player_PosY_Index
         cpy #5
-        beq !skip+
-
-        iny 
-        sty Player_PosY_Index
+        beq !checkBlink+
+            iny 
+            sty Player_PosY_Index
+        !checkBlink:
+            lda FallCountIndex
+            cmp #5
+            bne !skip+
+                jsr BlinkPlayerOn
 
         !skip:
-        lda Player_PosY_Index
-        cmp #5
-        bne !return+
-            //todo: check may not need this
-            
-            jsr DrawSpriteSquashed
-            jmp !return+
-            //jmp !return+
-            //reset timer
-        !end:
-            //endTimer
-            lda #0
-            sta FallGuyTimer + 0
-
+            lda FallCountIndex
+            cmp #4
+            bne !skip+
+                jsr BlinkPlayerOff
+        !skip: 
+            lda FallCountIndex
+            cmp #3
+            bne !skip+
+                jsr BlinkPlayerOn
+        !skip:
+            lda FallCountIndex
+            cmp #2
+            bne !skip+
+                jsr BlinkPlayerOff
+        !skip:
+            lda FallCountIndex
+            cmp #1
+            bne !skip+
+                jsr BlinkPlayerOn
+        !skip:        
         !return:    
         rts
     }
 
+    /*
+    HideSprite: {
+        lda VIC.SPRITE_ENABLE 
+        and #%11110111
+        sta VIC.SPRITE_ENABLE
+        rts
+    }
+    
+    ShowSprite: {
+        //set accumulator
+        //to position index
+        sta PositionFrameIndex  
+
+        lda VIC.SPRITE_ENABLE 
+        ora #%00001000
+        sta VIC.SPRITE_ENABLE
+
+        jsr DrawSprite
+
+        rts
+    }
+    */
+
     BlinkPlayerOff: {
         
+        lda VIC.SPRITE_ENABLE 
+        and #%11011110
+        sta VIC.SPRITE_ENABLE
         rts
     }
 
     BlinkPlayerOn: {
-
+        
+        lda VIC.SPRITE_ENABLE 
+        ora #%00100001
+        sta VIC.SPRITE_ENABLE
 
         rts
     }
