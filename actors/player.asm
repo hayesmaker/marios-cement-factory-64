@@ -31,7 +31,10 @@ PLAYER: {
         .byte 0
 
     IsPlayerDead:
-        .byte $00    
+        .byte $00
+
+    FallCountIndex:
+        .byte $00        
 
     //player state
     CanOpen:
@@ -152,6 +155,9 @@ PLAYER: {
 
     MoveWithLiftY1: {
         //accumulator passed in from Elevators (DrawLoopIndex)
+        lda IsPlayerDead
+        bne !return+
+
         tay
         
         lda Player_PosX_Index
@@ -174,6 +180,9 @@ PLAYER: {
 
 
     MoveWithLiftY2: {
+        lda IsPlayerDead
+        bne !return+
+
         //accumulator passed in from Elevators (DrawLoopIndex)
         tay
         
@@ -279,27 +288,48 @@ PLAYER: {
         lda #1
         sta IsPlayerDead
 
+        lda #10
+        sta FallCountIndex
+
         rts
     }
 
     NextFall: {
+        //
+        ldx FallCountIndex
+        dex
+        stx FallCountIndex
+        beq !end+
+
+        inc $d020
+        
+        //reset timer for next tick
+        lda FallGuyTimer + 2
+        sta FallGuyTimer + 1
+
         //todo start fall
         ldy Player_PosY_Index
+        cpy #5
+        beq !skip+
+
         iny 
         sty Player_PosY_Index
 
+        !skip:
         lda Player_PosY_Index
         cmp #5
-        bne !skip+
+        bne !return+
             //todo: check may not need this
+            
+            jsr DrawSpriteSquashed
+            jmp !return+
+            //jmp !return+
+            //reset timer
+        !end:
+            //endTimer
             lda #0
             sta FallGuyTimer + 0
-            jsr DrawSpriteSquashed 
-            //jmp !return+
-         !skip:
-            //reset timer
-            lda FallGuyTimer + 2
-            sta FallGuyTimer + 1
+
         !return:    
         rts
     }
