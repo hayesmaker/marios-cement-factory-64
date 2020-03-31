@@ -42,6 +42,7 @@ TickState:              .byte $00
 
 Entry:
 
+
 	jsr IRQ.Setup
 	//bank out BASIC & Kernal ROM
 	lda $01    
@@ -91,7 +92,6 @@ NewGame: {
     jsr PLAYER.DrawSprite
 
     jsr Map.Initialise
-
 }
 
 //Main Game loop

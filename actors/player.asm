@@ -161,12 +161,10 @@ PLAYER: {
     }
 
     MoveWithLiftY1: {
-        //accumulator passed in from Elevators (DrawLoopIndex)
-        // lda IsPlayerDead
-        // bne !return+
+        //y regsiter passed in from Elevators (DrawLoopIndex)
+        lda IsPlayerDead
+        bne !return+
 
-        tay
-        
         lda Player_PosX_Index
         cmp #2
         bne !return+
@@ -187,12 +185,9 @@ PLAYER: {
 
 
     MoveWithLiftY2: {
-        // lda IsPlayerDead
-        // bne !return+
-
-        //accumulator passed in from Elevators (DrawLoopIndex)
-        tay
-        
+        lda IsPlayerDead
+        bne !return+
+        //y register passed in from Elevators (DrawLoopIndex)
         lda Player_PosX_Index
         cmp #3
         bne !return+
@@ -241,10 +236,19 @@ PLAYER: {
         lda Player_PosY_Index
         cmp #5
         bne !return+
-            lda #1
-            sta AddMissFlag
-            jsr Lives.LoseLife
+            jsr LoseLife
         !return:
+        rts
+    }
+
+    LoseLife: {
+        lda #1
+        sta AddMissFlag
+        jsr Mixers.ClearTopMixers
+        jsr Mixers.ClearPouredCementsTop
+        jsr Lives.LoseLife
+        jsr Score.DisableBonus
+
         rts
     }
 
@@ -296,6 +300,7 @@ PLAYER: {
         lda ELEVATORS.Data_R, y
         bne !next+
             //no lift
+            jsr PlayerFall
             
         !next:
         rts

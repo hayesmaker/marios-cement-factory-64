@@ -178,33 +178,82 @@ Mixers: {
 				//sta TwoStep6
 				jsr AddCement6
 		!next:
+		!return:
 		rts
 
 	}
 
 
 	Update1: {
+		lda PLAYER.IsPlayerDead
+		bne !skip+
 		jsr UpdateMixer1
+		!skip:
 		jsr DrawTubes1
 		rts		
 	}
 
 	Update2: {
+		lda PLAYER.IsPlayerDead
+		bne !skip+
 		jsr UpdateMixer2
+		!skip:
 		jsr DrawTubes2
 		rts		
 	}
 
 	Update3: {
+		lda PLAYER.IsPlayerDead
+		bne !skip+
 		jsr UpdateMixer3
+		!skip:
 		jsr DrawTubes3
 		rts		
 	}
 
 	Update4: {
+		lda PLAYER.IsPlayerDead
+		bne !skip+
 		jsr UpdateMixer4
+		!skip:
 		jsr DrawTubes4
 		rts		
+	}
+
+	ClearTopMixers: {
+		jsr ClearTopLeft
+		jsr ClearTopRight
+		rts
+	}
+
+	ClearTopLeft: {
+		ldy #0
+		lda #0
+		sta Hopper1, y
+
+		ldy #1
+		lda #0
+		sta Hopper1, y
+
+		ldy #2
+		lda #0
+		sta Hopper1, y
+		rts
+	}
+
+	ClearTopRight: {
+		ldy #0
+		lda #0
+		sta Hopper3, y
+
+		ldy #1
+		lda #0
+		sta Hopper3, y
+
+		ldy #2
+		lda #0
+		sta Hopper3, y
+		rts
 	}
 
 
@@ -598,11 +647,36 @@ Mixers: {
 		rts
 	}
 
+	ClearPouredCementsTop: {
+		lda #0
+		sta NumPoured1
+		sta NumPoured3
+
+		lda Tiles.EMPTY + 0
+		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
+		ldy Tiles.CEMENT_NEW_LEFT_1 + 2
+		jsr Map.SwitchCharAtXY
+
+		lda Tiles.EMPTY + 0
+		ldx Tiles.CEMENT_NEW_LEFT_2 + 1
+		ldy Tiles.CEMENT_NEW_LEFT_2 + 2
+		jsr Map.SwitchCharAtXY
+
+		lda Tiles.EMPTY + 0
+		ldx Tiles.CEMENT_NEW_RIGHT_1 + 1
+		ldy Tiles.CEMENT_NEW_RIGHT_1 + 2
+		jsr Map.SwitchCharAtXY
+
+		lda Tiles.EMPTY + 0
+		ldx Tiles.CEMENT_NEW_RIGHT_2 + 1
+		ldy Tiles.CEMENT_NEW_RIGHT_2 + 2
+		jsr Map.SwitchCharAtXY
+
+		rts
+	}
+
 	// Poured Cement initiated by Cement Crates
 	PourCement1: {
-		
-		
-
 		inc NumPoured1
 
 		//render the two poured cement chars
@@ -618,11 +692,8 @@ Mixers: {
 		rts
 	}
 
+	// Poured Cement initiated by Cement Crates
 	PourCement3: {
-		lda #1
-		ldy #2
-		sta CementsPoured, y
-
 		inc NumPoured3
 
 		lda Tiles.CEMENT_NEW_RIGHT_1 + 0

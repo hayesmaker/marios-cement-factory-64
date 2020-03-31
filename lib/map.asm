@@ -13,6 +13,9 @@ Map: {
 	numberYIndex:
 		.byte $00
 
+	RowLoopIndex:
+		.byte $00		
+
 	/**
 	Set A to Required number
 	Set Y to Required Y Pos Index
@@ -196,6 +199,19 @@ Map: {
 		ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
 		ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
 		jsr SwitchCharAtXY
+
+
+		lda #39
+		sta RowLoopIndex
+		!Loop:
+			lda Tiles.EMPTY
+			ldx RowLoopIndex
+			ldy #24
+			jsr SwitchCharAtXY
+
+			dec RowLoopIndex
+			bpl !Loop-	
+
 
 		rts
 	}

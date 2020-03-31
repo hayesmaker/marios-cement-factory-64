@@ -185,8 +185,8 @@ ELEVATORS: {
 	}
 
     Update1: {
-    	// lda PLAYER.IsPlayerDead
-    	// bne !return+
+    	lda PLAYER.IsPlayerDead
+    	bne !return+
     	ldy #0
     	!Loop:
 	    	sty DrawLoopIndex
@@ -208,7 +208,7 @@ ELEVATORS: {
 	    		jsr RemoveLiftXY
 	    		jmp !end+
 	    	!add:
-	    		lda DrawLoopIndex
+	    		ldy DrawLoopIndex
 	    		jsr PLAYER.MoveWithLiftY1
 
 	    		ldy StoreYPos
@@ -243,8 +243,8 @@ ELEVATORS: {
 
 	Update2: {
     	//.label LeftIndex = TEMP1
-    	// lda PLAYER.IsPlayerDead
-    	// bne !return+
+    	lda PLAYER.IsPlayerDead
+    	bne !return+
     	ldy #0
     	!Loop:
 	    	sty DrawLoopIndex_R
@@ -265,7 +265,7 @@ ELEVATORS: {
 	    		jmp !end+
 	    	!add:
 
-	    		lda DrawLoopIndex_R
+	    		ldy DrawLoopIndex_R
 	    		jsr PLAYER.MoveWithLiftY2
 
 	    		ldy StoreYPos_R
