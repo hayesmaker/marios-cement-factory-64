@@ -4,8 +4,8 @@ PLAYER: {
 		.byte 104, 130, 156, 190, 215, 238
 	Player_X_MB:
 		.byte 0, 0, 0, 0, 0, 0            	
-	Player_Y:                        //squashed 
-		.byte 60, 88, 119, 153, 179, 208
+	Player_Y: //*                    //* //* = dead 
+		.byte 70, 88, 119, 153, 179, 208
 		
 	Player_PosX_Index:
 		.byte 0
@@ -36,7 +36,9 @@ PLAYER: {
         .byte $00    
 
     FallCountIndex:
-        .byte $00        
+        .byte $00
+    CrushedSpriteShown:
+        .byte $00     
 
     //player state
     CanOpen:
@@ -46,7 +48,7 @@ PLAYER: {
     FramesTableIndex:
         .byte $00
     FramesTable: 
-        .byte $00, $00, $ff, $ff, $00, $00, $00, $00
+        .byte $00, $00, $52, $53, $00, $00, $00, $00
         .byte $00, $00, $50, $51, $00, $00, $00, $00
         .byte $41, $42, $43, $44, $45, $46, $00, $00
         .byte $47, $48, $49, $4a, $4b, $4c, $00, $00
@@ -100,11 +102,14 @@ PLAYER: {
 
         lda #0
         sta AddMissFlag
+        sta CrushedSpriteShown
 		
 		rts
 	}
 
     DrawSprite: {
+        lda CrushedSpriteShown
+        bne !return+
         //x position index: Player_PosX_Index
         //x pixel coords table: Player_X
         ldy Player_PosX_Index
@@ -115,20 +120,28 @@ PLAYER: {
         lda VIC.SPRITE_MSB
         and #%11111110
         sta VIC.SPRITE_MSB
-
-        //block 2 //todo: andymagicknight gonna review this later
-        ldy Player_PosX_Index
-        lda Player_X_MB, y
-        beq !+
-        lda VIC.SPRITE_MSB
-        ora #%00000001
-        sta VIC.SPRITE_MSB
-        //end block 2
-    !:
+        //check if player is crushed at top
+        lda Player_PosY_Index
+        bne !skip+
+            //inc $d020
+            lda CrushedSpriteShown
+            bne !skip+
+                lda #1
+                sta CrushedSpriteShown
+                jsr DrawSpriteCrushedTop
+                jmp !return+
+        !skip:
+        //check if player is crushed at bottom
         ldy Player_PosY_Index
         cpy #5
         bne !skip+
-            jsr DrawSpriteSquashed
+            lda CrushedSpriteShown
+            bne !skip+
+                lda #1
+                sta CrushedSpriteShown
+                jsr DrawSpriteFallen
+                jmp !return+
+
         !skip:
         lda Player_Y, y
         sta VIC.SPRITE_0_Y
@@ -138,25 +151,60 @@ PLAYER: {
         lda FramesTable, y
         sta SPRITE_POINTERS + 0
 
+        !return:
         rts
     }
 
-    DrawSpriteSquashed: {
-        lda #180
+    DrawSpriteFallen: {
+        lda #184
+        sta VIC.SPRITE_0_X
+        //Player on right - show front half
+        lda #160
         sta VIC.SPRITE_5_X
 
-        //enable sprite player msb
-        lda VIC.SPRITE_MSB
-        and #%11011111
-        sta VIC.SPRITE_MSB
-    !:
+        //show crushed front half sprite
+        lda VIC.SPRITE_ENABLE 
+        ora #%00100001
+        sta VIC.SPRITE_ENABLE
+
         ldy Player_PosY_Index
         lda Player_Y, y
         sta VIC.SPRITE_5_Y
+        sta VIC.SPRITE_0_Y
 
-        lda SquashedFrameLow + 1
+        lda SquashedFrameLow + 0
         sta SPRITE_POINTERS + 5
 
+        lda SquashedFrameLow + 1
+        sta SPRITE_POINTERS + 0
+
+        rts
+    }
+
+    DrawSpriteCrushedTop: {
+        //inc $d020
+        ldy Player_PosY_Index
+        lda Player_Y, y
+        sta VIC.SPRITE_5_Y
+        sta VIC.SPRITE_0_Y
+
+        lda #184
+        sta VIC.SPRITE_5_X
+        //Player on right - show front half
+        lda #160
+        sta VIC.SPRITE_0_X
+
+        //show crushed front half sprite
+        lda VIC.SPRITE_ENABLE 
+        ora #%00100001
+        sta VIC.SPRITE_ENABLE
+
+        lda SquashedFrameHigh + 1
+        sta SPRITE_POINTERS + 5
+
+        lda SquashedFrameHigh + 0
+        sta SPRITE_POINTERS + 0
+        !return:
         rts
     }
 
@@ -233,10 +281,15 @@ PLAYER: {
         beq !return+
         lda AddMissFlag
         bne !return+
+
         lda Player_PosY_Index
-        cmp #5
-        bne !return+
+        bne !next+
             jsr LoseLife
+        !next:
+        cmp #5
+        bne !next+
+            jsr LoseLife
+        !next:
         !return:
         rts
     }
@@ -257,6 +310,13 @@ PLAYER: {
         lda IsPlayerDead
         bne !return+
         // CHECK IF IN LIFT ZONE
+
+        lda Player_PosY_Index
+        bne !skip+
+            //crush player top
+            jsr PlayerFall
+        !skip:
+
         lda Player_PosX_Index
         cmp #2
         beq !liftPossible+
@@ -340,10 +400,24 @@ PLAYER: {
 
         //todo start fall
         ldy Player_PosY_Index
+        cpy #0
+        beq !crushDeath+
         cpy #5
         beq !checkBlink+
             iny 
             sty Player_PosY_Index
+            jmp !checkBlink+
+        !crushDeath:
+            lda FallCountIndex
+            cmp #9
+            bne !skip+
+                jsr BlinkPlayerOn
+        !skip:
+            lda FallCountIndex
+            cmp #8
+            bne !skip+
+                jsr BlinkPlayerOff
+        !skip:
         !checkBlink:
             lda FallCountIndex
             cmp #7
@@ -386,9 +460,8 @@ PLAYER: {
     Respawn: {
         lda #0
         sta IsPlayerDead
-
-        lda #0
         sta AddMissFlag
+        sta CrushedSpriteShown
 
         ldy #2
         sty Player_PosY_Index
