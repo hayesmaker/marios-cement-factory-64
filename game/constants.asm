@@ -125,6 +125,135 @@ Tiles: {
 	CEMENT_SPILL_3_LEFT_3:
 		.byte 90, 11, 16
 
+
+	//right hand tiles
+	CEMENT_SPILL_1_RIGHT_1:
+		.byte 91, 29, 9
+	CEMENT_SPILL_1_RIGHT_2:
+		.byte 92, 30, 9
+
+	CEMENT_SPILL_2_RIGHT_1:
+		.byte 93,29,12		
+	CEMENT_SPILL_2_RIGHT_2:
+		.byte 94,30,12	
+	CEMENT_SPILL_2_RIGHT_3:
+		.byte 95,30,13
+
+	CEMENT_SPILL_3_RIGHT_1:
+		.byte 88,28,16
+	CEMENT_SPILL_3_RIGHT_2:
+		.byte 89,29,16
+	CEMENT_SPILL_3_RIGHT_3:
+		.byte 90, 30, 16
+	//
+
+	//@todo implement driver disappearing from this
+	DRIVER_LEFT_1:
+		.byte 137, 9, 17
+
+	DRIVER_LEFT_2:
+		.byte 138, 10, 17
+	
+	DRIVER_LEFT_3:
+		.byte 139, 11, 17
+
+	DRIVER_LEFT_4:
+		.byte 141, 9, 18
+
+	DRIVER_LEFT_5:
+		.byte 140, 10, 18
+	
+	DRVER_DEAD_LEFT_1:
+		.byte 135, 10, 19
+
+	DRIVER_DEAD_LEFT_2:
+		.byte 136, 11, 19
+
+	DRVER_DEAD_LEFT_3:
+		.byte 125, 9, 20
+
+	DRIVER_DEAD_LEFT_4:
+		.byte 126, 10, 20
+
+	DRVER_DEAD_LEFT_5:
+		.byte 127, 11, 20
+
+	DRIVER_DEAD_LEFT_6:
+		.byte 128, 11, 20
+
+	DRVER_DEAD_LEFT_7:
+		.byte 129, 11, 20
+
+	DRIVER_DEAD_LEFT_8:
+		.byte 130, 9, 21
+
+	DRIVER_DEAD_LEFT_9:
+			.byte 131, 11, 21
+
+	DRIVER_DEAD_LEFT_10:
+			.byte 132, 11, 21
+
+	DRIVER_DEAD_LEFT_11:
+			.byte 133, 12, 21
+
+	DRIVER_DEAD_LEFT_11:
+		.byte 134, 13, 21
+	/*//*/ //END DRIVER LEFT
+
+	//@todo implement driver right frames:
+	//@todo change these values (they are currently the left vals)
+	DRIVER_RIGHT_1:
+		.byte 137, 9, 17
+
+	DRIVER_RIGHT_2:
+		.byte 138, 10, 17
+	
+	DRIVER_RIGHT_3:
+		.byte 139, 11, 17
+
+	DRIVER_RIGHT_4:
+		.byte 141, 9, 18
+
+	DRIVER_RIGHT_5:
+		.byte 140, 10, 18
+	
+	DRVER_DEAD_RIGHT_1:
+		.byte 135, 10, 19
+
+	DRIVER_DEAD_RIGHT_2:
+		.byte 136, 11, 19
+
+	DRVER_DEAD_RIGHT_3:
+		.byte 125, 9, 20
+
+	DRIVER_DEAD_RIGHT_4:
+		.byte 126, 10, 20
+
+	DRVER_DEAD_RIGHT_5:
+		.byte 127, 11, 20
+
+	DRIVER_DEAD_RIGHT_6:
+		.byte 128, 11, 20
+
+	DRVER_DEAD_RIGHT_7:
+		.byte 129, 11, 20
+
+	DRIVER_DEAD_RIGHT_8:
+		.byte 130, 9, 21
+
+	DRIVER_DEAD_RIGHT_9:
+			.byte 131, 11, 21
+
+	DRIVER_DEAD_RIGHT_10:
+			.byte 132, 11, 21
+
+	DRIVER_DEAD_RIGHT_11:
+			.byte 133, 12, 21
+
+	DRIVER_DEAD_RIGHT_11:
+		.byte 134, 13, 21
+
+
 	HOPPER_LEFT_EMPTY:
 		.byte 73
 	HOPPER_RIGHT_EMPTY:

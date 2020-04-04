@@ -158,8 +158,6 @@ Map: {
 		jsr SwitchCharAtXY
 
 
-
-
 		lda Tiles.EMPTY
 		ldx Tiles.CEMENT_SPILL_1_LEFT_1 + 1
 		ldy Tiles.CEMENT_SPILL_1_LEFT_1 + 2
@@ -198,6 +196,56 @@ Map: {
 		lda Tiles.EMPTY
 		ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
 		ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
+		ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_1_RIGHT_1 + 1
+		ldy Tiles.CEMENT_SPILL_1_RIGHT_1 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_1_RIGHT_2 + 1
+		ldy Tiles.CEMENT_SPILL_1_RIGHT_2 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_2_RIGHT_1 + 1
+		ldy Tiles.CEMENT_SPILL_2_RIGHT_1 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_2_RIGHT_2 + 1
+		ldy Tiles.CEMENT_SPILL_2_RIGHT_2 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_2_RIGHT_3 + 1
+		ldy Tiles.CEMENT_SPILL_2_RIGHT_3 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_3_RIGHT_1 + 1
+		ldy Tiles.CEMENT_SPILL_3_RIGHT_1 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_3_RIGHT_2 + 1
+		ldy Tiles.CEMENT_SPILL_3_RIGHT_2 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_3_RIGHT_3 + 1
+		ldy Tiles.CEMENT_SPILL_3_RIGHT_3 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.CEMENT_SPILL_3_RIGHT_3 + 1
+		ldy Tiles.CEMENT_SPILL_3_RIGHT_3 + 2
 		jsr SwitchCharAtXY
 
 
