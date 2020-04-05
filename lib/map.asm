@@ -248,6 +248,127 @@ Map: {
 		ldy Tiles.CEMENT_SPILL_3_RIGHT_3 + 2
 		jsr SwitchCharAtXY
 
+		//driver left (dead)
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_1 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_1 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_2 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_2 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_3 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_3 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_4 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_4 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_5 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_5 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_6 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_6 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_7 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_7 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_8 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_8 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_9 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_9 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_10 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_10 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_11 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_11 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_LEFT_12 + 1
+		ldy Tiles.DRIVER_DEAD_LEFT_12 + 2
+		jsr SwitchCharAtXY
+
+		//driver right(dead)
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_1 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_1 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_2 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_2 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_3 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_3 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_4 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_4 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_5 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_5 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_6 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_6 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_7 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_7 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_8 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_8 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_9 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_9 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_10 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_10 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_11 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_11 + 2
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx Tiles.DRIVER_DEAD_RIGHT_12 + 1
+		ldy Tiles.DRIVER_DEAD_RIGHT_12 + 2
+		jsr SwitchCharAtXY
 
 		lda #39
 		sta RowLoopIndex

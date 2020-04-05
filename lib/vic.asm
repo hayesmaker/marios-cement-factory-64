@@ -91,49 +91,8 @@ VIC: {
 		jsr IRQ.Setup
 
 		rts
-
 	}
 
-	ColourLastRow: {
-		
-		.label COLOR_ADDRESS = VECTOR4
-		.label SCREEN_ADDRESS = VECTOR5
-
-		ldy #24
-		lda ScreenRowLSB, y
-		clc
-		adc #ZERO
-		sta SCREEN_ADDRESS
-		sta $d020
-		sta COLOR_ADDRESS
-
-		lda ScreenRowMSB, y
-		adc #ZERO
-		sta SCREEN_ADDRESS + 1
-
-		// Calculate colour ram address
-		adc #>[COLOR_RAM-SCREEN_RAM]
-		sta COLOR_ADDRESS +1
-
-		ldy #ZERO
-
-		Loop:	
-			//char index
-			lda #$02
-			sta (SCREEN_ADDRESS), y
-			lda #0
-			sta (COLOR_ADDRESS), y
-
-			cpy #39
-			beq Finish
-			iny
-			jmp Loop
-
-		Finish:
-
-			rts
-
-	}
 
 	SetupColours:
 

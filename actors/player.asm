@@ -1,7 +1,7 @@
 PLAYER: {
 	
 	Player_X: //0    1    2    3    4    5
-		.byte 104, 130, 156, 190, 215, 238
+		.byte 106, 130, 156, 190, 215, 238
 	Player_X_MB:
 		.byte 0, 0, 0, 0, 0, 0            	
 	Player_Y: //*                    //* //* = dead 
@@ -32,8 +32,8 @@ PLAYER: {
 
     IsPlayerDead:
         .byte $00
-    AddMissFlag:
-        .byte $00    
+    // AddMissFlag:
+    //     .byte $00    
 
     FallCountIndex:
         .byte $00
@@ -101,7 +101,7 @@ PLAYER: {
 		sty Player_PosX_Index
 
         lda #0
-        sta AddMissFlag
+        //sta AddMissFlag
         sta CrushedSpriteShown
 		
 		rts
@@ -271,36 +271,17 @@ PLAYER: {
 		jsr CheckCharUpdates
 		jsr DrawSprite
         jsr CheckLiftDeath
-        jsr CheckLoseLife
-        
         rts
 	}
 
-    CheckLoseLife: {
-        lda IsPlayerDead
-        beq !return+
-        lda AddMissFlag
-        bne !return+
-
-        lda Player_PosY_Index
-        bne !next+
-            jsr LoseLife
-        !next:
-        cmp #5
-        bne !next+
-            jsr LoseLife
-        !next:
-        !return:
-        rts
-    }
-
     LoseLife: {
-        lda #1
-        sta AddMissFlag
+        // lda #1
+        // sta AddMissFlag
         jsr Mixers.ClearTopMixers
         jsr Mixers.ClearPouredCementsTop
         jsr Lives.LoseLife
         jsr Score.DisableBonus
+        jsr Respawn
 
         rts
     }
@@ -390,7 +371,8 @@ PLAYER: {
         bne !skip+
             lda #0
             sta FallGuyTimer + 0
-            jsr Respawn
+            jsr LoseLife
+            //jsr Respawn
             jmp !return+
         !skip:
         //reset timer for next tick
@@ -459,17 +441,67 @@ PLAYER: {
 
     Respawn: {
         lda #0
-        sta IsPlayerDead
-        sta AddMissFlag
+        // sta AddMissFlag
         sta CrushedSpriteShown
 
         ldy #2
         sty Player_PosY_Index
-
         ldy #1
         sty Player_PosX_Index
 
+        jsr SetFrameNumber
         jsr HidesSquashSprite
+        jsr HideHandChars
+
+        lda #0
+        sta IsPlayerDead
+
+        rts
+    }
+
+    HideHandChars: {
+
+        //left
+        lda Tiles.EMPTY
+        ldx Tiles.HAND_1_UP + 1
+        ldy Tiles.HAND_1_UP + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.HAND_1_DOWN + 1
+        ldy Tiles.HAND_1_DOWN + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.HAND_2_UP + 1
+        ldy Tiles.HAND_2_UP + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.HAND_2_DOWN + 1
+        ldy Tiles.HAND_2_DOWN + 2
+        jsr Map.SwitchCharAtXY
+
+        //right
+        lda Tiles.EMPTY
+        ldx Tiles.HAND_3_UP + 1
+        ldy Tiles.HAND_3_UP + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.HAND_3_DOWN + 1
+        ldy Tiles.HAND_3_DOWN + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.HAND_4_UP + 1
+        ldy Tiles.HAND_4_UP + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.HAND_4_DOWN + 1
+        ldy Tiles.HAND_4_DOWN + 2
+        jsr Map.SwitchCharAtXY
 
         rts
     }

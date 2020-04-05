@@ -36,6 +36,7 @@ GameTimerTick:			.byte 25, 25, 25
                         //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
 PushButtonTimer:        .byte 0, 10, 10
 FallGuyTimer:           .byte 0, 35, 35
+CementSpillTimer:       .byte 0, 35, 35
 
 
 GameCounter:			.byte $00
@@ -75,17 +76,21 @@ NewGame: {
     lda GameTimerTick + 2
     sta GameTimerTick + 0
     
+    //Init Timers
     lda #0
     sta FallGuyTimer + 0
-
     lda FallGuyTimer + 2
     sta FallGuyTimer + 1
 
     lda #0
     sta PushButtonTimer + 0
-
     lda PushButtonTimer + 2
     sta PushButtonTimer + 1
+
+    lda #0
+    sta CementSpillTimer + 0
+    lda CementSpillTimer + 2
+    sta CementSpillTimer + 1
 
     lda MaxTickStates
     sta TickState
@@ -112,7 +117,10 @@ NewGame: {
 
 GameTick: {
     //every frame
-
+    lda PLAYER.IsPlayerDead
+    beq !skip+
+        jmp !end+
+    !skip:
     //Check GameTimerTick and Do a GameTick onComplete
     lda GameTimerTick
     beq !doTick+
@@ -154,7 +162,6 @@ GameTick: {
 
     lda TickState
     beq !tick7+
-
 
 //MAIN GAME ACTIONS ON TICKS
 !tick0: 
@@ -202,7 +209,7 @@ GameTick: {
         
     jmp !end+
     //jsr ELEVATORS.Update2
-!:
+!:  
     dec TickState
 !end:    
     rts
@@ -212,6 +219,12 @@ GameTick: {
 ** Game Code you want Executed once per frame
 **/
 FrameCode: {
+    lda CementSpillTimer + 1
+    bne !next+
+        lda CementSpillTimer + 0
+        beq !next+
+            jsr PouredCement.NextSpill
+    !next:        
     lda FallGuyTimer + 1
     bne !next+
         lda FallGuyTimer + 0

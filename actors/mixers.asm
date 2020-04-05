@@ -74,6 +74,11 @@ Mixers: {
 	}
 
 	Update: {
+		lda PLAYER.IsPlayerDead
+    	beq !skip+
+    		jmp !return+
+    	!skip:
+
 		inc TwoStep1
 		lda TwoStep1
 		cmp #2
@@ -112,70 +117,154 @@ Mixers: {
 		beq !next+
 			inc PourTick1
 			lda PourTick1
+			//increase number to change pour delay
 			cmp #3
 			bne !next+
 				lda #0
 				sta PourTick1
 				sta TwoStep1
+
+				ldy #0
+				lda Hopper1, y
+				beq !skip+
+					ldy #1
+					lda Hopper1,y
+					beq !skip+
+						ldy #2
+						lda Hopper1,y
+						beq !skip+							
+							//do cement crash
+							lda #0
+							sta NumPoured1							
+							lda #1
+							sta PouredCement.HopperIndex
+							jsr PouredCement.SpillCement
+							
+							jmp !draw+
+				!skip:
 				jsr AddCement1
+				!draw:
 				jsr DrawTubes1
 		!next:
 		lda NumPoured2
 		beq !next+
 			inc PourTick2
 			lda PourTick2
+			//increase number to change pour delay
 			cmp #3
 			bne !next+
 				lda #0
 				sta PourTick2
 				sta TwoStep2
+
+				ldy #0
+				lda Hopper2, y
+				beq !skip+
+					ldy #1
+					lda Hopper2,y
+					beq !skip+
+						ldy #2
+						lda Hopper2,y
+						beq !skip+
+							//do cement crash
+							lda #0
+							sta NumPoured2
+							lda #2
+							sta PouredCement.HopperIndex
+							jsr PouredCement.SpillCement
+							
+							jmp !draw+
+				!skip:
 				jsr AddCement2
+				!draw:
 				jsr DrawTubes2
 		!next: 
 		lda NumPoured3
 		beq !next+
 			inc PourTick3
 			lda PourTick3
+			//increase number to change pour delay
 			cmp #3
 			bne !next+
 				lda #0
 				sta PourTick3
 				sta TwoStep3
+
+				ldy #0
+				lda Hopper3, y
+				beq !skip+
+					ldy #1
+					lda Hopper3,y
+					beq !skip+
+						ldy #2
+						lda Hopper3,y
+						beq !skip+
+							//do cement crash
+							lda #0
+							sta NumPoured3
+							lda #3
+							sta PouredCement.HopperIndex
+							jsr PouredCement.SpillCement
+							
+							jmp !draw+
+				!skip:
 				jsr AddCement3
+				!draw:
 				jsr DrawTubes3
 		!next:				
 		lda NumPoured4
 		beq !next+
 			inc PourTick4
 			lda PourTick4
+			//increase number to change pour delay
 			cmp #3
 			bne !next+
 				lda #0
 				sta PourTick4
 				sta TwoStep4
+
+				ldy #0
+				lda Hopper4, y
+				beq !skip+
+					ldy #1
+					lda Hopper4,y
+					beq !skip+
+						ldy #2
+						lda Hopper4,y
+						beq !skip+							
+							//do cement crash
+							lda #0
+							sta NumPoured4
+							lda #4
+							sta PouredCement.HopperIndex
+							jsr PouredCement.SpillCement
+
+							jmp !draw+
+				!skip:
 				jsr AddCement4
+				!draw:
 				jsr DrawTubes4
 		!next:
 		lda NumPoured5
 		beq !next+
 			inc PourTick5
 			lda PourTick5
+			//increase number to change pour delay
 			cmp #3
 			bne !next+
 				lda #0
 				sta PourTick5
-				//sta TwoStep5
 				jsr AddCement5
 		!next:
 		lda NumPoured6
 		beq !next+
 			inc PourTick6
 			lda PourTick6
+			//increase number to change pour delay
 			cmp #3
 			bne !next+
 				lda #0
 				sta PourTick5
-				//sta TwoStep6
 				jsr AddCement6
 		!next:
 		!return:
@@ -223,6 +312,8 @@ Mixers: {
 	ClearTopMixers: {
 		jsr ClearTopLeft
 		jsr ClearTopRight
+		jsr DrawTubes1
+		jsr DrawTubes3
 		rts
 	}
 

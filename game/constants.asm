@@ -163,32 +163,32 @@ Tiles: {
 	DRIVER_LEFT_5:
 		.byte 140, 10, 18
 	
-	DRVER_DEAD_LEFT_1:
+	DRIVER_DEAD_LEFT_1:
 		.byte 135, 10, 19
 
 	DRIVER_DEAD_LEFT_2:
 		.byte 136, 11, 19
 
-	DRVER_DEAD_LEFT_3:
+	DRIVER_DEAD_LEFT_3:
 		.byte 125, 9, 20
 
 	DRIVER_DEAD_LEFT_4:
 		.byte 126, 10, 20
 
-	DRVER_DEAD_LEFT_5:
+	DRIVER_DEAD_LEFT_5:
 		.byte 127, 11, 20
 
 	DRIVER_DEAD_LEFT_6:
-		.byte 128, 11, 20
+		.byte 128, 12, 20
 
-	DRVER_DEAD_LEFT_7:
-		.byte 129, 11, 20
+	DRIVER_DEAD_LEFT_7:
+		.byte 129, 13, 20
 
 	DRIVER_DEAD_LEFT_8:
 		.byte 130, 9, 21
 
 	DRIVER_DEAD_LEFT_9:
-			.byte 131, 11, 21
+			.byte 131, 10, 21
 
 	DRIVER_DEAD_LEFT_10:
 			.byte 132, 11, 21
@@ -196,62 +196,62 @@ Tiles: {
 	DRIVER_DEAD_LEFT_11:
 			.byte 133, 12, 21
 
-	DRIVER_DEAD_LEFT_11:
+	DRIVER_DEAD_LEFT_12:
 		.byte 134, 13, 21
 	/*//*/ //END DRIVER LEFT
 
 	//@todo implement driver right frames:
 	//@todo change these values (they are currently the left vals)
 	DRIVER_RIGHT_1:
-		.byte 137, 9, 17
+		.byte 157, 28, 17
 
 	DRIVER_RIGHT_2:
-		.byte 138, 10, 17
+		.byte 156, 29, 17
 	
 	DRIVER_RIGHT_3:
-		.byte 139, 11, 17
+		.byte 155, 30, 17
 
 	DRIVER_RIGHT_4:
-		.byte 141, 9, 18
+		.byte 158, 29, 18
 
 	DRIVER_RIGHT_5:
-		.byte 140, 10, 18
+		.byte 159, 30, 18
 	
-	DRVER_DEAD_RIGHT_1:
-		.byte 135, 10, 19
+	DRIVER_DEAD_RIGHT_1:
+		.byte 154, 28, 19
 
 	DRIVER_DEAD_RIGHT_2:
-		.byte 136, 11, 19
+		.byte 153, 29, 19
 
-	DRVER_DEAD_RIGHT_3:
-		.byte 125, 9, 20
+	DRIVER_DEAD_RIGHT_3:
+		.byte 147, 26, 20
 
 	DRIVER_DEAD_RIGHT_4:
-		.byte 126, 10, 20
+		.byte 146, 27, 20
 
-	DRVER_DEAD_RIGHT_5:
-		.byte 127, 11, 20
+	DRIVER_DEAD_RIGHT_5:
+		.byte 145, 28, 20
 
 	DRIVER_DEAD_RIGHT_6:
-		.byte 128, 11, 20
+		.byte 144, 29, 20
 
-	DRVER_DEAD_RIGHT_7:
-		.byte 129, 11, 20
+	DRIVER_DEAD_RIGHT_7:
+		.byte 143, 30, 20
 
 	DRIVER_DEAD_RIGHT_8:
-		.byte 130, 9, 21
+		.byte 152, 26, 21
 
 	DRIVER_DEAD_RIGHT_9:
-			.byte 131, 11, 21
+			.byte 151, 27, 21
 
 	DRIVER_DEAD_RIGHT_10:
-			.byte 132, 11, 21
+			.byte 150, 28, 21
 
 	DRIVER_DEAD_RIGHT_11:
-			.byte 133, 12, 21
+			.byte 149, 29, 21
 
-	DRIVER_DEAD_RIGHT_11:
-		.byte 134, 13, 21
+	DRIVER_DEAD_RIGHT_12:
+		.byte 148, 30, 21
 
 
 	HOPPER_LEFT_EMPTY:
