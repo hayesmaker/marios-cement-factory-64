@@ -92,6 +92,7 @@ PouredCement: {
         rts
     }
 
+    /* cHAR GRAPHICS CEMENT SPILLS AMINS */
     SpillCement: {
         lda #1
         sta CementSpillTimer + 0
@@ -100,12 +101,33 @@ PouredCement: {
         //disable control
         lda #1
         sta PLAYER.IsPlayerDead
-
-        
-
-        lda #10
+        lda HopperIndex
+        cmp #1
+        bne !skip+
+            jsr HidePour
+            jsr ShowSpill1
+            lda #10
+            jmp !return+
+        !skip:
+        cmp #2
+        bne !skip+
+            //todo do spill from mixer 2
+            lda #9
+        !skip:
+        cmp #3
+        bne !skip+
+            jsr HidePour
+            jsr ShowSpill1
+            lda #10
+            jmp !return+
+        !skip:
+        cmp #4
+        bne !return+
+            //@todo do hide pour jsr HidePour
+            lda #9
+            jsr ShowSpill2
+        !return:        
         sta SpillCountIndex
-
         rts
     }
 
@@ -115,9 +137,12 @@ PouredCement: {
         dex
         stx SpillCountIndex
         bne !skip+
+            jsr HideDeadDriver
             lda #0
             sta CementSpillTimer + 0
             jsr ShowDrivers
+            jsr RemoveDeadDriverRight
+            jsr RemoveDeadDriverLeft
             jsr PLAYER.LoseLife
             jmp !return+
         !skip:
@@ -129,41 +154,40 @@ PouredCement: {
         lda SpillCountIndex
         cmp #9
         bne !skip+
-            jsr HidePour
-            jsr ShowSpill1
+            jsr ShowSpill2
         !skip:
         cmp #8
         bne !skip+
-            jsr ShowSpill2
+            jsr ShowSpill3
         !skip:
         cmp #7
         bne !skip+
-            jsr ShowSpill3
+           jsr HideDriver
+           jsr ShowDeadDriver
         !skip:
         cmp #6
         bne !skip+
-            jsr HideDriver
-            jsr ShowDeadDriver
+            jsr HideDeadDriver
         !skip:
         cmp #5
         bne !skip+
-            jsr HideDeadDriver
+            jsr ShowDeadDriver
         !skip:
         cmp #4
         bne !skip+
-            jsr ShowDeadDriver
+            jsr HideDeadDriver
         !skip:            
         cmp #3
         bne !skip+
-            jsr HideDeadDriver
+            jsr ShowDeadDriver
         !skip:        
         cmp #2
         bne !skip+
-            jsr ShowDeadDriver
+            jsr HideDeadDriver
         !skip:
         cmp #1
         bne !skip+
-            jsr HideDeadDriver
+            jsr ShowDeadDriver
         !skip:
         !return:
         rts
@@ -188,6 +212,10 @@ PouredCement: {
             lda Tiles.EMPTY + 0
             ldx Tiles.CEMENT_NEW_RIGHT_1 + 1
             ldy Tiles.CEMENT_NEW_RIGHT_1 + 2
+
+            lda Tiles.EMPTY + 0
+            ldx Tiles.CEMENT_NEW_RIGHT_2 + 1
+            ldy Tiles.CEMENT_NEW_RIGHT_2 + 2
             jsr Map.SwitchCharAtXY
         !skip:
         rts
@@ -211,11 +239,77 @@ PouredCement: {
             ldy Tiles.CEMENT_SPILL_1_LEFT_2 + 2
             jsr Map.SwitchCharAtXY
         !skip:
-        cmp #2
+        cmp #3
         bne !skip+
+            lda Tiles.CEMENT_SPILL_1_RIGHT_1 + 0
+            ldx Tiles.CEMENT_SPILL_1_RIGHT_1 + 1
+            ldy Tiles.CEMENT_SPILL_1_RIGHT_1 + 2
+            jsr Map.SwitchCharAtXY
 
+            lda Tiles.CEMENT_SPILL_1_RIGHT_2 + 0
+            ldx Tiles.CEMENT_SPILL_1_RIGHT_2 + 1
+            ldy Tiles.CEMENT_SPILL_1_RIGHT_2 + 2
+            jsr Map.SwitchCharAtXY
 
         !skip:
+
+        rts
+    }
+
+
+    //@todo replace with macro
+    ShowLeftSpill2: {
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_1_LEFT_1 + 1
+        ldy Tiles.CEMENT_SPILL_1_LEFT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_1_LEFT_2 + 1
+        ldy Tiles.CEMENT_SPILL_1_LEFT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_2_LEFT_1 + 0
+        ldx Tiles.CEMENT_SPILL_2_LEFT_1 + 1
+        ldy Tiles.CEMENT_SPILL_2_LEFT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_2_LEFT_2 + 0
+        ldx Tiles.CEMENT_SPILL_2_LEFT_2 + 1
+        ldy Tiles.CEMENT_SPILL_2_LEFT_2 + 2
+
+        lda Tiles.CEMENT_SPILL_2_LEFT_3 + 0
+        ldx Tiles.CEMENT_SPILL_2_LEFT_3 + 1
+        ldy Tiles.CEMENT_SPILL_2_LEFT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        rts
+    }
+
+    ShowRightSpill2: {
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_1_RIGHT_1 + 1
+        ldy Tiles.CEMENT_SPILL_1_RIGHT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_1_RIGHT_2 + 1
+        ldy Tiles.CEMENT_SPILL_1_RIGHT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_2_RIGHT_1 + 0
+        ldx Tiles.CEMENT_SPILL_2_RIGHT_1 + 1
+        ldy Tiles.CEMENT_SPILL_2_RIGHT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_2_RIGHT_2 + 0
+        ldx Tiles.CEMENT_SPILL_2_RIGHT_2 + 1
+        ldy Tiles.CEMENT_SPILL_2_RIGHT_2 + 2
+
+        lda Tiles.CEMENT_SPILL_2_RIGHT_3 + 0
+        ldx Tiles.CEMENT_SPILL_2_RIGHT_3 + 1
+        ldy Tiles.CEMENT_SPILL_2_RIGHT_3 + 2
+        jsr Map.SwitchCharAtXY
 
         rts
     }
@@ -224,30 +318,100 @@ PouredCement: {
         lda HopperIndex
         cmp #1
         bne !skip+
-            lda Tiles.EMPTY
-            ldx Tiles.CEMENT_SPILL_1_LEFT_1 + 1
-            ldy Tiles.CEMENT_SPILL_1_LEFT_1 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.EMPTY
-            ldx Tiles.CEMENT_SPILL_1_LEFT_2 + 1
-            ldy Tiles.CEMENT_SPILL_1_LEFT_2 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.CEMENT_SPILL_2_LEFT_1 + 0
-            ldx Tiles.CEMENT_SPILL_2_LEFT_1 + 1
-            ldy Tiles.CEMENT_SPILL_2_LEFT_1 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.CEMENT_SPILL_2_LEFT_2 + 0
-            ldx Tiles.CEMENT_SPILL_2_LEFT_2 + 1
-            ldy Tiles.CEMENT_SPILL_2_LEFT_2 + 2
-
-            lda Tiles.CEMENT_SPILL_2_LEFT_3 + 0
-            ldx Tiles.CEMENT_SPILL_2_LEFT_3 + 1
-            ldy Tiles.CEMENT_SPILL_2_LEFT_3 + 2
-            jsr Map.SwitchCharAtXY
+            jsr ShowLeftSpill2
         !skip:
+        lda HopperIndex
+        cmp #2
+        bne !skip+
+            jsr ShowLeftSpill2
+        !skip:
+        lda HopperIndex
+        cmp #3 
+        bne !skip+
+            jsr ShowRightSpill2 
+        !skip:
+        lda HopperIndex
+        cmp #4
+        bne !skip+
+            jsr ShowRightSpill2
+        !skip:
+        rts
+    }
+
+    ShowLeftSpill3: {
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_2_LEFT_1 + 1
+        ldy Tiles.CEMENT_SPILL_2_LEFT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_2_LEFT_2 + 1
+        ldy Tiles.CEMENT_SPILL_2_LEFT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_2_LEFT_3 + 1
+        ldy Tiles.CEMENT_SPILL_2_LEFT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_3_LEFT_1 + 0
+        ldx Tiles.CEMENT_SPILL_3_LEFT_1 + 1
+        ldy Tiles.CEMENT_SPILL_3_LEFT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_3_LEFT_2 + 0
+        ldx Tiles.CEMENT_SPILL_3_LEFT_2 + 1
+        ldy Tiles.CEMENT_SPILL_3_LEFT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_3_LEFT_3 + 0
+        ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
+        ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_3_LEFT_3 + 0
+        ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
+        ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        rts
+    }
+
+    ShowRightSpill3: {
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_2_RIGHT_1 + 1
+        ldy Tiles.CEMENT_SPILL_2_RIGHT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_2_RIGHT_2 + 1
+        ldy Tiles.CEMENT_SPILL_2_RIGHT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_2_RIGHT_3 + 1
+        ldy Tiles.CEMENT_SPILL_2_RIGHT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_3_RIGHT_1 + 0
+        ldx Tiles.CEMENT_SPILL_3_RIGHT_1 + 1
+        ldy Tiles.CEMENT_SPILL_3_RIGHT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_3_RIGHT_2 + 0
+        ldx Tiles.CEMENT_SPILL_3_RIGHT_2 + 1
+        ldy Tiles.CEMENT_SPILL_3_RIGHT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_3_RIGHT_3 + 0
+        ldx Tiles.CEMENT_SPILL_3_RIGHT_3 + 1
+        ldy Tiles.CEMENT_SPILL_3_RIGHT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.CEMENT_SPILL_3_RIGHT_3 + 0
+        ldx Tiles.CEMENT_SPILL_3_RIGHT_3 + 1
+        ldy Tiles.CEMENT_SPILL_3_RIGHT_3 + 2
+        jsr Map.SwitchCharAtXY
 
         rts
     }
@@ -256,93 +420,143 @@ PouredCement: {
         lda HopperIndex
         cmp #1
         bne !skip+
-            lda Tiles.EMPTY
-            ldx Tiles.CEMENT_SPILL_2_LEFT_1 + 1
-            ldy Tiles.CEMENT_SPILL_2_LEFT_1 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.EMPTY
-            ldx Tiles.CEMENT_SPILL_2_LEFT_2 + 1
-            ldy Tiles.CEMENT_SPILL_2_LEFT_2 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.EMPTY
-            ldx Tiles.CEMENT_SPILL_2_LEFT_3 + 1
-            ldy Tiles.CEMENT_SPILL_2_LEFT_3 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.CEMENT_SPILL_3_LEFT_1 + 0
-            ldx Tiles.CEMENT_SPILL_3_LEFT_1 + 1
-            ldy Tiles.CEMENT_SPILL_3_LEFT_1 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.CEMENT_SPILL_3_LEFT_2 + 0
-            ldx Tiles.CEMENT_SPILL_3_LEFT_2 + 1
-            ldy Tiles.CEMENT_SPILL_3_LEFT_2 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.CEMENT_SPILL_3_LEFT_3 + 0
-            ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
-            ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.CEMENT_SPILL_3_LEFT_3 + 0
-            ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
-            ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
-            jsr Map.SwitchCharAtXY
+            jsr ShowLeftSpill3
         !skip:
-
+        lda HopperIndex
+        cmp #2
+        bne !skip+
+            jsr ShowLeftSpill3
+        !skip:
+        lda HopperIndex
+        cmp #3
+        bne !skip+
+            jsr ShowRightSpill3
+        !skip:
+        lda HopperIndex
+        cmp #4
+        bne !skip+
+            jsr ShowRightSpill3
+        !skip:
         rts
+    }
+
+    HideLeftDriver: {
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_3_LEFT_1 + 1
+        ldy Tiles.CEMENT_SPILL_3_LEFT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_3_LEFT_2 + 1
+        ldy Tiles.CEMENT_SPILL_3_LEFT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
+        ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
+        ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_LEFT_1 + 1
+        ldy Tiles.DRIVER_LEFT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_LEFT_2 + 1
+        ldy Tiles.DRIVER_LEFT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_LEFT_3 + 1
+        ldy Tiles.DRIVER_LEFT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_LEFT_4 + 1
+        ldy Tiles.DRIVER_LEFT_4 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_LEFT_5 + 1
+        ldy Tiles.DRIVER_LEFT_5 + 2
+        jsr Map.SwitchCharAtXY
+        rts
+    }
+
+    HideRightDriver: {
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_3_RIGHT_1 + 1
+        ldy Tiles.CEMENT_SPILL_3_RIGHT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_3_RIGHT_2 + 1
+        ldy Tiles.CEMENT_SPILL_3_RIGHT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_3_RIGHT_3 + 1
+        ldy Tiles.CEMENT_SPILL_3_RIGHT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.CEMENT_SPILL_3_RIGHT_3 + 1
+        ldy Tiles.CEMENT_SPILL_3_RIGHT_3 + 2
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_RIGHT_1 + 1
+        ldy Tiles.DRIVER_RIGHT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_RIGHT_2 + 1
+        ldy Tiles.DRIVER_RIGHT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_RIGHT_3 + 1
+        ldy Tiles.DRIVER_RIGHT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_LEFT_4 + 1
+        ldy Tiles.DRIVER_LEFT_4 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_LEFT_5 + 1
+        ldy Tiles.DRIVER_LEFT_5 + 2
+        jsr Map.SwitchCharAtXY
+        rts
+        
     }
 
     HideDriver: {
         lda HopperIndex
         cmp #1
         bne !skip+
-            lda Tiles.EMPTY
-            ldx Tiles.CEMENT_SPILL_3_LEFT_1 + 1
-            ldy Tiles.CEMENT_SPILL_3_LEFT_1 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.EMPTY
-            ldx Tiles.CEMENT_SPILL_3_LEFT_2 + 1
-            ldy Tiles.CEMENT_SPILL_3_LEFT_2 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.EMPTY
-            ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
-            ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.EMPTY
-            ldx Tiles.CEMENT_SPILL_3_LEFT_3 + 1
-            ldy Tiles.CEMENT_SPILL_3_LEFT_3 + 2
-
-            lda Tiles.EMPTY
-            ldx Tiles.DRIVER_LEFT_1 + 1
-            ldy Tiles.DRIVER_LEFT_1 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.EMPTY
-            ldx Tiles.DRIVER_LEFT_2 + 1
-            ldy Tiles.DRIVER_LEFT_2 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.EMPTY
-            ldx Tiles.DRIVER_LEFT_3 + 1
-            ldy Tiles.DRIVER_LEFT_3 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.EMPTY
-            ldx Tiles.DRIVER_LEFT_4 + 1
-            ldy Tiles.DRIVER_LEFT_4 + 2
-            jsr Map.SwitchCharAtXY
-
-            lda Tiles.EMPTY
-            ldx Tiles.DRIVER_LEFT_5 + 1
-            ldy Tiles.DRIVER_LEFT_5 + 2
-            jsr Map.SwitchCharAtXY
+            jsr HideLeftDriver
+        !skip:
+        lda HopperIndex
+        cmp #2
+        bne !skip+
+            jsr HideLeftDriver
+        !skip:
+        lda HopperIndex
+        cmp #3
+        bne !skip+
+            jsr HideRightDriver
         !skip:    
+        lda HopperIndex
+        cmp #4
+        bne !skip+
+            jsr HideRightDriver
+        !skip:
         rts
     }
 
@@ -351,8 +565,22 @@ PouredCement: {
         cmp #1
         bne !skip+
             jsr DrawDeadDriverLeft
-        !skip: 
-
+        !skip:
+        lda HopperIndex
+        cmp #2
+        bne !skip+
+            jsr DrawDeadDriverLeft
+        !skip:
+        lda HopperIndex
+        cmp #3
+        bne !skip+
+            jsr DrawDeadDriverRight
+        !skip:
+        lda HopperIndex
+        cmp #4
+        bne !skip+
+            jsr DrawDeadDriverRight
+        !skip:
         rts
     }
 
@@ -451,18 +679,102 @@ PouredCement: {
         rts
     }
 
-    HideDeadDriver: {
-        lda HopperIndex
-        cmp #1
-        bne !skip+
-            jsr RemoveDriverLeft
-        !skip:
 
+
+    DrawDeadDriverRight: {
+
+        lda Tiles.DRIVER_DEAD_RIGHT_1 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_1 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_DEAD_RIGHT_2 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_2 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_DEAD_RIGHT_3 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_3 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_DEAD_RIGHT_4 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_4 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_4 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_DEAD_RIGHT_5 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_5 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_5 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_DEAD_RIGHT_6 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_6 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_6 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_DEAD_RIGHT_7 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_7 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_7 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_DEAD_RIGHT_8 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_8 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_8 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_DEAD_RIGHT_9 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_9 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_9 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_DEAD_RIGHT_10 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_10 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_10 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_DEAD_RIGHT_11 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_11 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_11 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_DEAD_RIGHT_12 + 0
+        ldx Tiles.DRIVER_DEAD_RIGHT_12 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_12 + 2
+        jsr Map.SwitchCharAtXY
 
         rts
     }
 
-    RemoveDriverLeft: {
+
+
+    HideDeadDriver: {
+        lda HopperIndex
+        cmp #1
+        bne !skip+
+            jsr RemoveDeadDriverLeft
+        !skip:
+        lda HopperIndex
+        cmp #2
+        bne !skip+
+            jsr RemoveDeadDriverLeft
+        !skip:
+        lda HopperIndex
+        cmp #3
+        bne !skip+
+            //hide right dead driver
+            jsr RemoveDeadDriverRight
+        !skip:
+        lda HopperIndex
+        cmp #4
+        bne !skip+
+            //hide right dead driver
+            jsr RemoveDeadDriverRight
+        !skip:
+        rts
+    }
+
+    RemoveDeadDriverLeft: {
         lda Tiles.EMPTY
         ldx Tiles.DRIVER_DEAD_LEFT_1 + 1
         ldy Tiles.DRIVER_DEAD_LEFT_1 + 2
@@ -521,6 +833,72 @@ PouredCement: {
         lda Tiles.EMPTY
         ldx Tiles.DRIVER_DEAD_LEFT_12 + 1
         ldy Tiles.DRIVER_DEAD_LEFT_12 + 2
+        jsr Map.SwitchCharAtXY
+
+        rts
+    }
+
+
+    //@todo call right dead driver chars
+    RemoveDeadDriverRight: {
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_1 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_2 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_3 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_4 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_4 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_5 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_5 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_6 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_6 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_7 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_7 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_8 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_8 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_9 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_9 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_10 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_10 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_11 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_11 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.EMPTY
+        ldx Tiles.DRIVER_DEAD_RIGHT_12 + 1
+        ldy Tiles.DRIVER_DEAD_RIGHT_12 + 2
         jsr Map.SwitchCharAtXY
 
         rts
