@@ -124,6 +124,7 @@ Mixers: {
 				sta PourTick1
 				sta TwoStep1
 
+				//@todo use 1 condition instead of 3
 				ldy #0
 				lda Hopper1, y
 				beq !skip+

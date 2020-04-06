@@ -111,7 +111,8 @@ PouredCement: {
         !skip:
         cmp #2
         bne !skip+
-            //todo do spill from mixer 2
+            jsr HideSprite
+            jsr ShowSpill2
             lda #9
         !skip:
         cmp #3
@@ -123,9 +124,9 @@ PouredCement: {
         !skip:
         cmp #4
         bne !return+
-            //@todo do hide pour jsr HidePour
-            lda #9
+            jsr HideSprite
             jsr ShowSpill2
+            lda #9
         !return:        
         sta SpillCountIndex
         rts
@@ -156,35 +157,43 @@ PouredCement: {
         bne !skip+
             jsr ShowSpill2
         !skip:
+        lda SpillCountIndex
         cmp #8
         bne !skip+
             jsr ShowSpill3
         !skip:
+        lda SpillCountIndex
         cmp #7
         bne !skip+
            jsr HideDriver
            jsr ShowDeadDriver
         !skip:
+        lda SpillCountIndex
         cmp #6
         bne !skip+
             jsr HideDeadDriver
         !skip:
+        lda SpillCountIndex
         cmp #5
         bne !skip+
             jsr ShowDeadDriver
         !skip:
+        lda SpillCountIndex
         cmp #4
         bne !skip+
             jsr HideDeadDriver
         !skip:            
+        lda SpillCountIndex
         cmp #3
         bne !skip+
             jsr ShowDeadDriver
-        !skip:        
+        !skip:
+        lda SpillCountIndex        
         cmp #2
         bne !skip+
             jsr HideDeadDriver
         !skip:
+        lda SpillCountIndex
         cmp #1
         bne !skip+
             jsr ShowDeadDriver
@@ -207,13 +216,15 @@ PouredCement: {
             ldy Tiles.CEMENT_NEW_LEFT_2 + 2
             jsr Map.SwitchCharAtXY
         !skip:
+        lda HopperIndex
         cmp #3
         bne !skip+
-            lda Tiles.EMPTY + 0
+            lda Tiles.EMPTY
             ldx Tiles.CEMENT_NEW_RIGHT_1 + 1
             ldy Tiles.CEMENT_NEW_RIGHT_1 + 2
+            jsr Map.SwitchCharAtXY
 
-            lda Tiles.EMPTY + 0
+            lda Tiles.EMPTY
             ldx Tiles.CEMENT_NEW_RIGHT_2 + 1
             ldy Tiles.CEMENT_NEW_RIGHT_2 + 2
             jsr Map.SwitchCharAtXY
@@ -305,6 +316,7 @@ PouredCement: {
         lda Tiles.CEMENT_SPILL_2_RIGHT_2 + 0
         ldx Tiles.CEMENT_SPILL_2_RIGHT_2 + 1
         ldy Tiles.CEMENT_SPILL_2_RIGHT_2 + 2
+        jsr Map.SwitchCharAtXY
 
         lda Tiles.CEMENT_SPILL_2_RIGHT_3 + 0
         ldx Tiles.CEMENT_SPILL_2_RIGHT_3 + 1
@@ -505,10 +517,6 @@ PouredCement: {
         jsr Map.SwitchCharAtXY
 
         lda Tiles.EMPTY
-        ldx Tiles.CEMENT_SPILL_3_RIGHT_3 + 1
-        ldy Tiles.CEMENT_SPILL_3_RIGHT_3 + 2
-
-        lda Tiles.EMPTY
         ldx Tiles.DRIVER_RIGHT_1 + 1
         ldy Tiles.DRIVER_RIGHT_1 + 2
         jsr Map.SwitchCharAtXY
@@ -524,13 +532,13 @@ PouredCement: {
         jsr Map.SwitchCharAtXY
 
         lda Tiles.EMPTY
-        ldx Tiles.DRIVER_LEFT_4 + 1
-        ldy Tiles.DRIVER_LEFT_4 + 2
+        ldx Tiles.DRIVER_RIGHT_4 + 1
+        ldy Tiles.DRIVER_RIGHT_4 + 2
         jsr Map.SwitchCharAtXY
 
         lda Tiles.EMPTY
-        ldx Tiles.DRIVER_LEFT_5 + 1
-        ldy Tiles.DRIVER_LEFT_5 + 2
+        ldx Tiles.DRIVER_RIGHT_5 + 1
+        ldy Tiles.DRIVER_RIGHT_5 + 2
         jsr Map.SwitchCharAtXY
         rts
         

@@ -36,7 +36,7 @@ GameTimerTick:			.byte 25, 25, 25
                         //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
 PushButtonTimer:        .byte 0, 10, 10
 FallGuyTimer:           .byte 0, 35, 35
-CementSpillTimer:       .byte 0, 35, 35
+CementSpillTimer:       .byte 0, 50, 50
 
 
 GameCounter:			.byte $00
