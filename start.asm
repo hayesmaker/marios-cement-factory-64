@@ -1,7 +1,58 @@
 //VPTV
+BasicUpstart2(main)
 
-BasicUpstart2(Entry)
+.const KOALA_TEMPLATE = "C64FILE, Bitmap=$0000, ScreenRam=$1f40, ColorRam=$2328, BackgroundColor=$2710"
+.var picture = LoadBinary("marios-cement (6).kla", KOALA_TEMPLATE)
+/**
+    IN TITLE
+**/
+main:
+* = * ""
+        lda #%00111000    // $38
+        sta $d018
+        lda #%11011000    // $d8
+        sta $d016
+        lda #%00111011    // $3b
+        sta $d011
+        lda #0
+        sta $d020   // border
+        lda #picture.getBackgroundColor()
+        sta $d021   // background
+        ldx #0
+!loop:
+        .for (var i=0; i<4; i++) {
+           lda colorRam+i*$100,x
+           sta $d800+i*$100,x
+        }
+        inx
+        bne !loop-
+        lda #$10
+        bit $dc00
+        bne *-3
+                lda $d011
+                and #%11011111
+                sta $d011
+        jmp Entry
 
+*=$0c00;            .fill picture.getScreenRamSize(), picture.getScreenRam(i)
+*=$1c00; colorRam:  .fill picture.getColorRamSize(), picture.getColorRam(i)
+*=$2000;            .fill picture.getBitmapSize(), picture.getBitmap(i)
+
+/**
+    IN GAME
+
+    /*
+        Sprites MAP
+        ************
+        0: Player - Squashed0  00000001   11111110
+        1: Cement-Crates0      00000010   11111101
+        2: Cement-Crates1      00000100   11111011
+        3: Poured-Cement0      00001000   11110111
+        4: *                   00010000   11101111
+        5: Squashed1           00100000   11011111
+        6: *
+        7: *
+*/
 #import "./lib/zeropage.asm"
 #import "./lib/labels.asm"
 #import "./lib/vic.asm"
@@ -15,19 +66,6 @@ BasicUpstart2(Entry)
 #import "./game/constants.asm"
 #import "./game/score.asm"
 #import "./game/lives.asm"
-
-/*
-        Sprites MAP
-        ************
-        0: Player - Squashed0  00000001   11111110
-        1: Cement-Crates0      00000010   11111101
-        2: Cement-Crates1      00000100   11111011
-        3: Poured-Cement0      00001000   11110111
-        4: *                   00010000   11101111
-        5: Squashed1           00100000   11011111
-        6: *
-        7: *
-*/
 
 PerformFrameCodeFlag:
 	.byte $00  
