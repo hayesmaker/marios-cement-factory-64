@@ -5,7 +5,7 @@
 * = $d000 "Sprites"
 	.import binary "../assets/sprites/sprites.bin"
 
-* = $8000 "Map data"
+* = $b000 "Map data"
 MAP_TILES: 
 	.import binary "../assets/maps/mcf-bg - Tiles.bin"
 

@@ -3,6 +3,9 @@ BasicUpstart2(main)
 
 .const KOALA_TEMPLATE = "C64FILE, Bitmap=$0000, ScreenRam=$1f40, ColorRam=$2328, BackgroundColor=$2710"
 .var picture = LoadBinary("marios-cement (6).kla", KOALA_TEMPLATE)
+
+#import "./lib/title-screen.asm"
+
 /**
     IN TITLE
 **/
@@ -14,6 +17,9 @@ main:
         sta $d016
         lda #%00111011    // $3b
         sta $d011
+        lda #%00000010
+        sta $dd00
+
         lda #0
         sta $d020   // border
         lda #picture.getBackgroundColor()
@@ -26,6 +32,24 @@ main:
         }
         inx
         bne !loop-
+
+        //init title screen sprite
+        jsr Titles.Initialise
+
+        //Main Game loop
+       !TitleLoop:
+        lda #$ff
+        cmp $d012
+        bne *-3
+
+
+        //DO MUSIC
+
+        //Do OTHER STUFF
+        jsr Titles.Update
+        jmp !TitleLoop-
+        //inc $d020
+        /*
         lda #$10
         bit $dc00
         bne *-3
@@ -33,10 +57,15 @@ main:
                 and #%11011111
                 sta $d011
         jmp Entry
+        */
 
-*=$0c00;            .fill picture.getScreenRamSize(), picture.getScreenRam(i)
-*=$1c00; colorRam:  .fill picture.getColorRamSize(), picture.getColorRam(i)
-*=$2000;            .fill picture.getBitmapSize(), picture.getBitmap(i)
+        
+
+*=$4c00;            .fill picture.getScreenRamSize(), picture.getScreenRam(i)
+*=$5000;            .import binary "./assets/sprites/titles.bin"
+*=$5c00; colorRam:  .fill picture.getColorRamSize(), picture.getColorRam(i)
+*=$6000;            .fill picture.getBitmapSize(), picture.getBitmap(i)
+
 
 /**
     IN GAME
