@@ -29,16 +29,16 @@ IRQ: {
 	MainIRQ: {
 		
 		:StoreState()
-			inc GameCounter
-			dec GameTimerTick
-			dec PushButtonTimer + 1
-			dec FallGuyTimer + 1
-			dec CementSpillTimer + 1
+			inc Game.GameCounter
+			dec Game.GameTimerTick
+			dec Game.PushButtonTimer + 1
+			dec Game.FallGuyTimer + 1
+			dec Game.CementSpillTimer + 1
 			//inc $d020
 			//dec $d020
 			
 			lda #$01
-			sta PerformFrameCodeFlag
+			sta Game.PerformFrameCodeFlag
 			asl VIC.INTERRUPT_STATUS
 		:RestoreState()	
 		

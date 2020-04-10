@@ -350,9 +350,9 @@ PLAYER: {
     PlayerFall: {
         //start fall timer
         lda #1
-        sta FallGuyTimer + 0
-        lda FallGuyTimer + 2
-        sta FallGuyTimer + 1
+        sta Game.FallGuyTimer + 0
+        lda Game.FallGuyTimer + 2
+        sta Game.FallGuyTimer + 1
         //disable control
         lda #1
         sta IsPlayerDead
@@ -370,15 +370,15 @@ PLAYER: {
         stx FallCountIndex
         bne !skip+
             lda #0
-            sta FallGuyTimer + 0
+            sta Game.FallGuyTimer + 0
             jsr LoseLife
             //jsr Respawn
             jmp !return+
         !skip:
         //reset timer for next tick
         //@todo accelerate timer when player should blink
-        lda FallGuyTimer + 2
-        sta FallGuyTimer + 1
+        lda Game.FallGuyTimer + 2
+        sta Game.FallGuyTimer + 1
 
         //todo start fall
         ldy Player_PosY_Index
@@ -620,10 +620,10 @@ PLAYER: {
 
     ResetTimers: {
         lda #0
-        sta PushButtonTimer + 0
+        sta Game.PushButtonTimer + 0
 
-        lda PushButtonTimer + 2
-        sta PushButtonTimer + 1
+        lda Game.PushButtonTimer + 2
+        sta Game.PushButtonTimer + 1
 
         //jsr Switch1Up
 
@@ -942,7 +942,7 @@ PLAYER: {
         jsr Mixers.PlayerDrop2
 
         lda #ONE
-        sta PushButtonTimer + 0
+        sta Game.PushButtonTimer + 0
         lda Tiles.EMPTY
         ldx Tiles.HAND_1_UP + 1
         ldy Tiles.HAND_1_UP + 2
@@ -981,7 +981,7 @@ PLAYER: {
         jsr Mixers.PlayerDrop5
 
         lda #ONE
-        sta PushButtonTimer + 0
+        sta Game.PushButtonTimer + 0
         lda Tiles.EMPTY
         ldx Tiles.HAND_2_UP + 1
         ldy Tiles.HAND_2_UP + 2
@@ -1019,7 +1019,7 @@ PLAYER: {
         jsr Mixers.PlayerDrop4
         
         lda #ONE
-        sta PushButtonTimer + 0
+        sta Game.PushButtonTimer + 0
         lda Tiles.EMPTY
         ldx Tiles.HAND_3_UP + 1
         ldy Tiles.HAND_3_UP + 2
@@ -1057,7 +1057,7 @@ PLAYER: {
         jsr Mixers.PlayerDrop6
 
         lda #ONE
-        sta PushButtonTimer + 0
+        sta Game.PushButtonTimer + 0
         lda Tiles.EMPTY
         ldx Tiles.HAND_4_UP + 1
         ldy Tiles.HAND_4_UP + 2
@@ -1120,7 +1120,7 @@ PLAYER: {
     }
 
     CharsPosition01: {
-            lda PushButtonTimer + 0
+            lda Game.PushButtonTimer + 0
             bne !return+
             //inc $d020
             //add hand
@@ -1149,7 +1149,7 @@ PLAYER: {
     }
 
     CharsPosition02: {
-            lda PushButtonTimer + 0
+            lda Game.PushButtonTimer + 0
             bne !return+
             //inc $d020
             //add hand
@@ -1178,7 +1178,7 @@ PLAYER: {
     }
 
     CharsPosition03: {
-            lda PushButtonTimer + 0
+            lda Game.PushButtonTimer + 0
             bne !return+
             //inc $d020
             //add hand
@@ -1206,7 +1206,7 @@ PLAYER: {
     }
 
     CharsPosition04: {
-            lda PushButtonTimer + 0
+            lda Game.PushButtonTimer + 0
             bne !return+
             //inc $d020
             //add hand

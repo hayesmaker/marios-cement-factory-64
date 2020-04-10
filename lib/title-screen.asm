@@ -156,6 +156,8 @@ TitleScreen: {
         lda SelectorTableIndex
         cmp #PLAY_SELECTED
         bne !skip+
+            lda #0
+            sta Titles.STATE_IN_PROGRESS
         	//jsr Entry
         !skip:
         cmp #GAME_MODE_SELECTED

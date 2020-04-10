@@ -95,9 +95,9 @@ PouredCement: {
     /* cHAR GRAPHICS CEMENT SPILLS AMINS */
     SpillCement: {
         lda #1
-        sta CementSpillTimer + 0
-        lda CementSpillTimer + 2
-        sta CementSpillTimer + 1
+        sta Game.CementSpillTimer + 0
+        lda Game.CementSpillTimer + 2
+        sta Game.CementSpillTimer + 1
         //disable control
         lda #1
         sta PLAYER.IsPlayerDead
@@ -140,7 +140,7 @@ PouredCement: {
         bne !skip+
             jsr HideDeadDriver
             lda #0
-            sta CementSpillTimer + 0
+            sta Game.CementSpillTimer + 0
             jsr ShowDrivers
             jsr RemoveDeadDriverRight
             jsr RemoveDeadDriverLeft
@@ -149,8 +149,8 @@ PouredCement: {
         !skip:
         //reset timer for next tick
         //@todo accelerate timer when player should blink
-        lda CementSpillTimer + 2
-        sta CementSpillTimer + 1
+        lda Game.CementSpillTimer + 2
+        sta Game.CementSpillTimer + 1
         //todo start fall
         lda SpillCountIndex
         cmp #9
