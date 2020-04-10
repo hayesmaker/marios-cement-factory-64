@@ -2,7 +2,7 @@
 BasicUpstart2(main)
 
 .const KOALA_TEMPLATE = "C64FILE, Bitmap=$0000, ScreenRam=$1f40, ColorRam=$2328, BackgroundColor=$2710"
-.var picture = LoadBinary("marios-cement (6).kla", KOALA_TEMPLATE)
+.var picture = LoadBinary("./assets/maps/titles.kla", KOALA_TEMPLATE)
 
 #import "./lib/title-screen.asm"
 
@@ -34,7 +34,7 @@ main:
         bne !loop-
 
         //init title screen sprite
-        jsr Titles.Initialise
+        jsr TitleScreen.Initialise
 
         //Main Game loop
        !TitleLoop:
@@ -46,7 +46,7 @@ main:
         //DO MUSIC
 
         //Do OTHER STUFF
-        jsr Titles.Update
+        jsr TitleScreen.Update
         jmp !TitleLoop-
         //inc $d020
         /*
@@ -95,6 +95,7 @@ main:
 #import "./game/constants.asm"
 #import "./game/score.asm"
 #import "./game/lives.asm"
+
 
 PerformFrameCodeFlag:
 	.byte $00  
