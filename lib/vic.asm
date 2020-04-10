@@ -1,5 +1,4 @@
 VIC: {
-
 	ScreenRowLSB:
 		.fill 25, <[SCREEN_RAM + i * $28]
 	ScreenRowMSB:
@@ -89,6 +88,11 @@ VIC: {
 		sta SCREEN_CONTROL_2
 
 		jsr IRQ.Setup
+
+		rts
+	}
+
+	StartGameFade: {
 
 		rts
 	}

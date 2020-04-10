@@ -36,6 +36,9 @@ Titles: {
         .byte $03,$03,$03,$03,$01   
 
 	entry: {
+        lda #1
+        sta STATE_IN_PROGRESS
+
         lda #%00111000    // $38
         sta $d018
         lda #%11011000    // $d8

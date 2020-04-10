@@ -50,9 +50,11 @@ Lives: {
 
 		inc LivesLost
 		lda LivesLost
-		cmp #3
+		cmp #3 //#3
 		bne !skip+
 			inc $d020
+			lda #0
+			sta Game.STATE_IN_PROGRESS
 			//GAME OVER
 		!skip:
 		rts

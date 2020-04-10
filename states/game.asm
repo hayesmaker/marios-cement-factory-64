@@ -9,14 +9,19 @@ Game: {
 
 	PerformFrameCodeFlag:
 	.byte $00  
+	
+	FadeIndex:
+		.byte $00, $07
+	FadeToLightGrey:
+		.byte $00, $06, $0b, $04, $0c, $0f, $0f, $0f
+	FadeTimer:				.byte 0, 200, 200
+
 							// current, currentMax, startValue
 	GameTimerTick:			.byte 25, 25, 25
 	                        //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
 	PushButtonTimer:        .byte 0, 10, 10
 	FallGuyTimer:           .byte 0, 35, 35
 	CementSpillTimer:       .byte 0, 50, 50
-
-
 	GameCounter:			.byte $00
 	MaxTickStates:          .byte $07
 	TickState:              .byte $00
@@ -36,8 +41,6 @@ Game: {
         rts
     seed:
         .byte $62
-
-
     init:
         lda #$ff
         sta $dc05
@@ -54,14 +57,20 @@ Game: {
 	}
 
 	
-	entry: {
+	entry: {	
+	 	lda #1
+        sta STATE_IN_PROGRESS	
 		//Reset Sprites
 		//Multicolor mode sprites (1 for on 0 for hi-res)
 		lda #%00000000
 		sta $d01c 
 		//double width
 		lda #%00000000
-		sta $D01D   
+		sta $D01D
+
+		lda #$00
+		sta $d020 
+		sta $d021  
 		//inc $d020
 		//Turn off bitmap mode
 		lda $d011
@@ -78,8 +87,6 @@ Game: {
 		jsr Random.init
 
 		jsr VIC.SetupRegisters
-		jsr VIC.SetupColours
-
 		jsr Map.DrawMap
 	    jsr Lives.Initialise
 	    jsr ELEVATORS.Initialise
@@ -87,10 +94,11 @@ Game: {
 	    jsr PouredCement.Initialise
 	    jsr Mixers.Initialise
 	    jsr PLAYER.Initialise
-	    //jsr VIC.ColourLastRow
 	    jsr Score.Reset
 
 	    NewGame: {
+	    	jsr VIC.SetupColours
+
 		    lda #$00
 		    sta GameCounter
 
@@ -123,10 +131,15 @@ Game: {
 		}
 
 		//Main Game loop
-		!Loop:
+		!Loop:		
 			lda PerformFrameCodeFlag
 			beq !Loop-
 			dec PerformFrameCodeFlag
+
+			lda STATE_IN_PROGRESS
+			bne !skip+				
+				jmp !exitGame+
+			!skip:
 
 			//do Frame Code
 			inc ZP_COUNTER
@@ -215,7 +228,6 @@ Game: {
 		    jsr Mixers.Update
 		    
 		    jmp !+
-
 		!tick6: 
 		    //jsr Mixers.Update
 
@@ -239,7 +251,7 @@ Game: {
 		/**
 		** Game Code you want Executed once per frame
 		**/
-		FrameCode: {
+		FrameCode: {		
 		    lda CementSpillTimer + 1
 		    bne !next+
 		        lda CementSpillTimer + 0
@@ -264,30 +276,8 @@ Game: {
 		    rts        
 		}
 
-
-		// jsr IRQ.Setup
-		// //bank out BASIC & Kernal ROM
-		// lda $01    
-		// and #%11111000
-		// ora #%00000101
-		// sta $01
-
-		// jsr Random.init
-
-		// jsr VIC.SetupRegisters
-		// jsr VIC.SetupColours
-
-		// jsr Map.DrawMap
-	 //    jsr Lives.Initialise
-	 //    jsr ELEVATORS.Initialise
-		// jsr CRATES.Initialise
-	 //    jsr PouredCement.Initialise
-	 //    jsr Mixers.Initialise
-	 //    jsr PLAYER.Initialise
-	 //    //jsr VIC.ColourLastRow
-	 //    jsr Score.Reset
-
-	   
+		!exitGame:
+	   	rts
 	}
 
 }

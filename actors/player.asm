@@ -103,6 +103,8 @@ PLAYER: {
         lda #0
         //sta AddMissFlag
         sta CrushedSpriteShown
+
+        jsr HidesSquashSprite
 		
 		rts
 	}
@@ -277,11 +279,16 @@ PLAYER: {
     LoseLife: {
         // lda #1
         // sta AddMissFlag
+        jsr HidesSquashSprite
+        jsr HideHandChars
+
         jsr Mixers.ClearTopMixers
         jsr Mixers.ClearPouredCementsTop
-        jsr Lives.LoseLife
-        jsr Score.DisableBonus
         jsr Respawn
+        jsr Score.DisableBonus
+        jsr Lives.LoseLife
+        
+        
 
         rts
     }
@@ -371,8 +378,7 @@ PLAYER: {
         bne !skip+
             lda #0
             sta Game.FallGuyTimer + 0
-            jsr LoseLife
-            //jsr Respawn
+            jsr LoseLife            
             jmp !return+
         !skip:
         //reset timer for next tick
@@ -450,8 +456,7 @@ PLAYER: {
         sty Player_PosX_Index
 
         jsr SetFrameNumber
-        jsr HidesSquashSprite
-        jsr HideHandChars
+        
 
         lda #0
         sta IsPlayerDead
