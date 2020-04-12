@@ -123,6 +123,13 @@ TitleScreen: {
 		rts
 	}
 
+    DisableSprites: {
+        lda VIC.SPRITE_ENABLE 
+        and #%11111000
+        sta VIC.SPRITE_ENABLE
+        rts        
+    }
+
 
 	Control: {
         .label JOY_PORT_2 = $dc00
@@ -156,6 +163,7 @@ TitleScreen: {
         lda SelectorTableIndex
         cmp #PLAY_SELECTED
         bne !skip+
+            jsr DisableSprites
             lda #0
             sta Titles.STATE_IN_PROGRESS
         	//jsr Entry
