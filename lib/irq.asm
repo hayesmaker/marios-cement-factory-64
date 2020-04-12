@@ -1,24 +1,38 @@
 IRQ: {
 	Setup: {
-		sei
-		lda VIC.INTERRUPT_CONTROL
-		ora #%00000001
-		sta VIC.INTERRUPT_CONTROL
+		sei	
+
+		//disable CIA Interrupts 
+		lda #$7f
+		sta $dc0d
+		sta $dd0d
+
+		lda $dc0d                                          // read interupts to clear them
+        lda $dd0d
+
+		// enable vbl interrupt
+//		lda VIC.INTERRUPT_CONTROL
+//		ora #%00000001
+//		sta VIC.INTERRUPT_CONTROL
+
+		lda #1
+		sta $d01a
 
 		//routine called when interrupt triggers
-		lda #<Titles
-		ldx #>Titles
+		lda #<TitlesIRQHandler
+		ldx #>TitlesIRQHandler
 		sta $fffe //0314
 		stx $ffff //0315
 
-		lda #$ff
+		lda #$00
 		sta VIC.RASTER_Y
-		lda VIC.SCREEN_CONTROL_1
-		and #%01111111
-		sta VIC.SCREEN_CONTROL_1
+//		lda VIC.SCREEN_CONTROL_1
+//		and #%01111111
+//		sta VIC.SCREEN_CONTROL_1
 		
 		asl VIC.INTERRUPT_STATUS
 		cli
+
 		rts
 	}
 
@@ -34,11 +48,11 @@ IRQ: {
 		rts
 	}
 
-	Titles: {
+	TitlesIRQHandler: {
 		
 		:StoreState()
 			jsr music_play
-			asl VIC.INTERRUPT_STATUS
+			lsr VIC.INTERRUPT_STATUS     // ********************
 		:RestoreState()	
 		
 		rti
@@ -58,7 +72,7 @@ IRQ: {
 			sta Game.PerformFrameCodeFlag
 
 			jsr music_play
-			asl VIC.INTERRUPT_STATUS
+			lsr VIC.INTERRUPT_STATUS      // **********************8
 		:RestoreState()	
 		
 		rti

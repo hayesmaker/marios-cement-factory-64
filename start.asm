@@ -27,10 +27,13 @@ BasicUpstart2(main)
 
 * = * "Main" 
 main: 
-	//disable CIA Interrupts 
-	lda #$7f
-	sta $dc0d
-	sta $dd0d
+
+	//bank out BASIC and Kernal
+  lda $01
+  and #%11111000
+  ora #%000101
+  sta $01
+
 
 	!stateLoop:
 		jsr Titles.entry
