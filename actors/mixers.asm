@@ -47,7 +47,7 @@ Mixers: {
 
 
 	
-	Initialise: {
+	Initialise: {		
 		lda #$00
 
 		sta NumPoured1
@@ -69,6 +69,18 @@ Mixers: {
 		sta TwoStep3
 		sta TwoStep4
 
+		//Clear Mixer Data
+		ldy #2
+		!loop:
+			lda #0
+			sta Hopper1, y
+			sta Hopper2, y
+			sta Hopper3, y
+			sta Hopper4, y
+			dey
+			tya 
+			bpl !loop-
+		//Clear Mixer graphics
 		jsr ClearMixers
 		rts
 	}
