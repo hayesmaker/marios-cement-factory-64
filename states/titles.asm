@@ -39,6 +39,13 @@ Titles: {
         lda #1
         sta STATE_IN_PROGRESS
 
+        sei
+        lda #$00
+        jsr music_init
+        cli
+
+        jsr IRQ.Setup
+
         lda #%00111000    // $38
         sta $d018
         lda #%11011000    // $d8

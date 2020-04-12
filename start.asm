@@ -1,8 +1,13 @@
 BasicUpstart2(main)
 
+*=$1000 "music"
+.label music_init =*
+.label music_play =*+3
+.import binary "./assets/sound/MariosFactory_00ch3_01ch2_02ch0_v8_1000.bin"
+* = * "KoalaImage" 
 .const KOALA_TEMPLATE = "C64FILE, Bitmap=$0000, ScreenRam=$1f40, ColorRam=$2328, BackgroundColor=$2710"
 .var picture = LoadBinary("./assets/maps/titles.kla", KOALA_TEMPLATE)
-
+* = * "End of KoalaImage" 
 #import "./lib/title-screen.asm"
 #import "./states/titles.asm"
 #import "./states/game.asm"
@@ -20,15 +25,18 @@ BasicUpstart2(main)
 #import "./game/score.asm"
 #import "./game/lives.asm"
 
+* = * "Main" 
 main: 
+	//disable CIA Interrupts 
+	lda #$7f
+	sta $dc0d
+	sta $dd0d
+
 	!stateLoop:
-		//inc $d020
 		jsr Titles.entry
 		jsr Game.entry
 		
 	jmp !stateLoop-
-
-
 
 *=$4c00;            .fill picture.getScreenRamSize(), picture.getScreenRam(i)
 *=$5000;            .import binary "./assets/sprites/titles.bin"

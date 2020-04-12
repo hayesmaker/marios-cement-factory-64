@@ -70,6 +70,7 @@ Mixers: {
 		sta TwoStep4
 
 		//Clear Mixer Data
+		lda #0
 		ldy #2
 		!loop:
 			lda #0
@@ -78,7 +79,6 @@ Mixers: {
 			sta Hopper3, y
 			sta Hopper4, y
 			dey
-			tya 
 			bpl !loop-
 		//Clear Mixer graphics
 		jsr ClearMixers

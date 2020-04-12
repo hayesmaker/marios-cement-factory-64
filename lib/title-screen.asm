@@ -34,7 +34,7 @@ TitleScreen: {
     	.byte $03,$03,$03,$03,$01	
 
 	Initialise: {
-
+        //start musak        
 		lda #RED
 		sta VIC.SPRITE_COLOR_0
 		sta VIC.SPRITE_COLOR_1

@@ -57,9 +57,14 @@ Game: {
 	}
 
 	
-	entry: {	
+	entry: {		
 	 	lda #1
         sta STATE_IN_PROGRESS	
+
+        sei
+        lda #$01
+        jsr music_init
+        cli
 		//Reset Sprites
 		//Multicolor mode sprites (1 for on 0 for hi-res)
 		lda #%00000000
@@ -68,6 +73,7 @@ Game: {
 		lda #%00000000
 		sta $D01D
 
+		//border & background colour
 		lda #$00
 		sta $d020 
 		sta $d021  
@@ -77,16 +83,15 @@ Game: {
         and #%11011111
         sta $d011
 
-		jsr IRQ.Setup
+       
 		//bank out BASIC & Kernal ROM
 		lda $01    
 		and #%11111000
 		ora #%00000101
 		sta $01
+		jsr VIC.SetupRegisters	
 
 		jsr Random.init
-
-		jsr VIC.SetupRegisters
 		jsr Map.DrawMap
 	    jsr Lives.Initialise
 	    jsr ELEVATORS.Initialise

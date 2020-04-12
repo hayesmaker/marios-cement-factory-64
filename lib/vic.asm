@@ -87,7 +87,7 @@ VIC: {
 		ora #%00010000
 		sta SCREEN_CONTROL_2
 
-		jsr IRQ.Setup
+		jsr IRQ.SwitchToGame
 
 		rts
 	}

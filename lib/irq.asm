@@ -1,17 +1,13 @@
 IRQ: {
 	Setup: {
 		sei
-		lda #$7f
-		sta $dc0d
-		sta $dd0d
-
 		lda VIC.INTERRUPT_CONTROL
 		ora #%00000001
 		sta VIC.INTERRUPT_CONTROL
 
 		//routine called when interrupt triggers
-		lda #<MainIRQ
-		ldx #>MainIRQ
+		lda #<Titles
+		ldx #>Titles
 		sta $fffe //0314
 		stx $ffff //0315
 
@@ -26,6 +22,28 @@ IRQ: {
 		rts
 	}
 
+	SwitchToGame: {
+		sei
+		//routine called when interrupt triggers
+		lda #<MainIRQ
+		ldx #>MainIRQ
+		sta $fffe //0314
+		stx $ffff //0315
+
+		cli
+		rts
+	}
+
+	Titles: {
+		
+		:StoreState()
+			jsr music_play
+			asl VIC.INTERRUPT_STATUS
+		:RestoreState()	
+		
+		rti
+	}
+
 	MainIRQ: {
 		
 		:StoreState()
@@ -35,10 +53,11 @@ IRQ: {
 			dec Game.FallGuyTimer + 1
 			dec Game.CementSpillTimer + 1
 			//inc $d020
-			//dec $d020
-			
+			//dec $d021
 			lda #$01
 			sta Game.PerformFrameCodeFlag
+
+			jsr music_play
 			asl VIC.INTERRUPT_STATUS
 		:RestoreState()	
 		

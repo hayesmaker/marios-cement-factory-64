@@ -385,24 +385,6 @@ Map: {
 		rts
 	}
 
-	ColorByXY: {
-		//pass in x and y (as col & row)
-		.label zpCharIndex = TEMP2
-		tya
-		asl
-		tay
-		lda RowColourTable, y
-		sta zpCharIndex
-		lda RowColourTable + 1, y
-		sta zpCharIndex + 1
-
-		txa
-		tay
-		lda #15
-		sta (zpCharIndex),y
-		rts
-	}
-
 	SwitchCharAtXY: {
 		//pass in a, x, y
 		//(char tile index, screenX, screenY)
