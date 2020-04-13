@@ -31,7 +31,11 @@ TitleScreen: {
     SelectorTable:
     	.byte 154, 170, 186, 202, 218
     SelectorTableWidth:
-    	.byte $03,$03,$03,$03,$01	
+    	.byte $03,$03,$03,$03,$01
+
+    /*
+        
+    */    
 
 	Initialise: {
         //start musak        
@@ -172,11 +176,15 @@ TitleScreen: {
         bne !skip+
         	lda GameMode
         	bne !+
+                //menu blink sprite enable    
+                lda VIC.SPRITE_ENABLE 
+                ora #%00000100
+                sta VIC.SPRITE_ENABLE
         		lda #GAME_B
         		jmp !setGameMode+
         	!:
         		lda #GAME_A
-        	!setGameMode:
+        	!setGameMode:                
         		sta GameMode
         		jsr DrawSprite
         !skip:
@@ -203,7 +211,6 @@ TitleScreen: {
     	bne !+
     	inc DebounceFlag
     	//do up
-
     	lda SelectorTableIndex
     	beq !+
     	dec SelectorTableIndex

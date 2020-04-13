@@ -56,6 +56,13 @@ Game: {
         rts
 	}
 
+	teardown: {
+        // lda VIC.SPRITE_ENABLE 
+        // and #%00000011
+        // sta VIC.SPRITE_ENABLE
+        rts        
+	}
+
 	
 	entry: {		
 	 	lda #1
@@ -211,6 +218,11 @@ Game: {
 		!tick1:
 		    jsr ELEVATORS.Update2
 		    jsr Mixers.Update
+		    //play SOUND1
+	        lda #<SOUND_TICK
+	        ldy #>SOUND_TICK
+	        ldx #14 //or 7 or 14
+	        jsr $1006
 		    //
 		    jmp !+
 		!tick2:
@@ -221,6 +233,11 @@ Game: {
 		    jsr ELEVATORS.Update1
 		    jsr Mixers.Update
 		    //jsr ELEVATORS.Update2
+		    //play SOUND1
+	        lda #<SOUND_TICK
+	        ldy #>SOUND_TICK
+	        ldx #14 //or 7 or 14
+	        jsr $1006
 		    jmp !+
 		!tick4:
 		    jsr CRATES.Update2
@@ -231,6 +248,12 @@ Game: {
 		!tick5:
 		    jsr ELEVATORS.Update2    
 		    jsr Mixers.Update
+
+		    //play SOUND1
+	        lda #<SOUND_TICK
+	        ldy #>SOUND_TICK
+	        ldx #14 //or 7 or 14
+	        jsr $1006
 		    
 		    jmp !+
 		!tick6: 
@@ -244,6 +267,12 @@ Game: {
 
 		    jsr ELEVATORS.Update1
 		    jsr Mixers.Update
+
+		    //play SOUND1
+	        lda #<SOUND_TICK
+	        ldy #>SOUND_TICK
+	        ldx #14 //or 7 or 14
+	        jsr $1006
 		        
 		    jmp !end+
 		    //jsr ELEVATORS.Update2
@@ -282,6 +311,7 @@ Game: {
 		}
 
 		!exitGame:
+		jsr teardown
 	   	rts
 	}
 

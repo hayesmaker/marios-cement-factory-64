@@ -65,6 +65,7 @@ Score:{
 	* Ensure scoreToAdd is set before calling
 	*/
 	AddPoints: {
+		jsr Sounds.SFX_SCORE
 		sed
 		lda currentScore
 		clc
@@ -74,6 +75,9 @@ Score:{
 		adc #0
 		sta currentScore+1
 		cld
+
+		
+
 		rts
 	}
 

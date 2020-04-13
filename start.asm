@@ -4,10 +4,26 @@ BasicUpstart2(main)
 .label music_init =*
 .label music_play =*+3
 .import binary "./assets/sound/MariosFactory_00ch3_01ch2_02ch0_v8_1000.bin"
+//tick: shuffle //sfx_shuffle
+//move: jump //sfx_bnce
+//death:sfx_boom //sfx_crunch
+SOUND_FALL:
+.import binary "./assets/sound/sfx/sfx_boom"
+SOUND_MOVE:
+.import binary "./assets/sound/sfx/sfx_bnce"
+SOUND_TICK: 
+.import binary "./assets/sound/sfx/shuffle"
+SOUND_CRUNCH:
+.import binary "./assets/sound/sfx/sfx_crunch"
+SOUND_SCORE:
+.import binary "./assets/sound/sfx/die"
+
+
 * = * "KoalaImage" 
 .const KOALA_TEMPLATE = "C64FILE, Bitmap=$0000, ScreenRam=$1f40, ColorRam=$2328, BackgroundColor=$2710"
 .var picture = LoadBinary("./assets/maps/titles.kla", KOALA_TEMPLATE)
-* = * "End of KoalaImage" 
+* = * "End of KoalaImage"
+#import "./game/sounds.asm" 
 #import "./lib/title-screen.asm"
 #import "./states/titles.asm"
 #import "./states/game.asm"

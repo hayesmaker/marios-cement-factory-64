@@ -394,6 +394,7 @@ PLAYER: {
         beq !checkBlink+
             iny 
             sty Player_PosY_Index
+            jsr Sounds.SFX_FALL
             jmp !checkBlink+
         !crushDeath:
             lda FallCountIndex
@@ -550,7 +551,7 @@ PLAYER: {
     }
 
     BlinkPlayerOn: {
-        
+        jsr Sounds.SFX_SPLAT
         lda VIC.SPRITE_ENABLE 
         ora #%00100001
         sta VIC.SPRITE_ENABLE
@@ -839,11 +840,6 @@ PLAYER: {
         rts
     }
 
-    // Exit: {
-
-    // }
-
-
     PlayerControl: {
         .label JOY_PORT_2 = $dc00
         .label JOY_LT = %00100
@@ -1098,6 +1094,7 @@ PLAYER: {
     DoLeft: {
         dex
         stx Player_PosX_Index       
+        jsr Sounds.SFX_MOVE
         //jsr ResetTimers
         rts
 
@@ -1106,6 +1103,7 @@ PLAYER: {
     DoRight: {
         inx 
         stx Player_PosX_Index
+        jsr Sounds.SFX_MOVE
         rts
     }
 
@@ -1222,5 +1220,4 @@ PLAYER: {
         !return:    
         rts    
     }
-
 }
