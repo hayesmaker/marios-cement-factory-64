@@ -42,6 +42,36 @@ Lives: {
 		rts
 	}
 
+	AddLife: {
+		ldy LivesLost
+		dey
+		ldx LifePosX, y
+		jsr RemoveMiss
+
+		ldx LivesLost
+		dex
+		stx LivesLost
+		bne !skip+
+
+			lda Tiles.EMPTY
+			ldx #30
+			ldy #4
+			jsr Map.SwitchCharAtXY
+
+			lda Tiles.EMPTY
+			ldx #31
+			ldy #4
+			jsr Map.SwitchCharAtXY
+
+			lda Tiles.EMPTY
+			ldx #32
+			ldy #4
+			jsr Map.SwitchCharAtXY
+
+		!skip:
+		rts
+	}
+
 	LoseLife: {
 
 		ldy LivesLost
@@ -112,6 +142,8 @@ Lives: {
 
 		rts
 	}
+
+
 
 	RemoveMiss: {
 		stx xPosition

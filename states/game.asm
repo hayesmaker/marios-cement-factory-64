@@ -22,6 +22,7 @@ Game: {
 	PushButtonTimer:        .byte 0, 10, 10
 	FallGuyTimer:           .byte 0, 35, 35
 	CementSpillTimer:       .byte 0, 50, 50
+	ScoreBlinkingTimer: 	.byte 0, 25, 25
 	GameCounter:			.byte $00
 	MaxTickStates:          .byte $07
 	TickState:              .byte $00
@@ -132,6 +133,11 @@ Game: {
 		    sta CementSpillTimer + 0
 		    lda CementSpillTimer + 2
 		    sta CementSpillTimer + 1
+
+		    lda #0
+		    sta ScoreBlinkingTimer + 0
+		    lda ScoreBlinkingTimer + 2
+		    sta ScoreBlinkingTimer + 1
 
 		    lda MaxTickStates
 		    sta TickState
@@ -306,6 +312,14 @@ Game: {
 		            jsr PLAYER.TimerButton1Reset
 		    !next:
 		    //jsr Score.DebugLift
+		    lda ScoreBlinkingTimer + 1
+		    bne !next+
+		    	lda ScoreBlinkingTimer + 0
+		    	beq !next+
+		    		jsr Score.ToggleScore
+		    		lda ScoreBlinkingTimer + 2
+		    		sta ScoreBlinkingTimer + 1
+		    !next:	
 		    jsr Score.RenderScore        
 		    rts        
 		}

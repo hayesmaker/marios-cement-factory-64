@@ -66,6 +66,7 @@ IRQ: {
 			dec Game.PushButtonTimer + 1
 			dec Game.FallGuyTimer + 1
 			dec Game.CementSpillTimer + 1
+			dec Game.ScoreBlinkingTimer + 1
 			//inc $d020
 			//dec $d021
 			lda #$01
