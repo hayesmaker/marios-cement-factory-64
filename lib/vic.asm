@@ -68,8 +68,8 @@ VIC: {
 
 	SetupRegisters: {
 
-		lda #ALL_ON
-		sta SPRITE_ENABLE
+		// lda #ALL_ON
+		// sta SPRITE_ENABLE
 		//sta VIC.SPRITE_MULTICOLOR
 
 		//Set VIC BANK 3, last two bits = 00

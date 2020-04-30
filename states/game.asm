@@ -17,7 +17,7 @@ Game: {
 	FadeTimer:				.byte 0, 200, 200
 
 							// current, currentMax, startValue
-	GameTimerTick:			.byte 25, 25, 25
+	GameTimerTick:			.byte 20, 20, 20
 	                        //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
 	PushButtonTimer:        .byte 0, 10, 10
 	FallGuyTimer:           .byte 0, 35, 35
@@ -178,6 +178,7 @@ Game: {
 		    beq !doTick+
 		        jmp !end+
 		    !doTick:
+		    //inc $d020
 		    //every 50 frames (1 tick = 1 second)
 		    lda GameTimerTick + 1
 		    sta GameTimerTick

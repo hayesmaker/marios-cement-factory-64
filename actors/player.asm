@@ -84,9 +84,9 @@ PLAYER: {
 		sta VIC.SPRITE_ENABLE
 
         //player crushed sprite enable
-        lda VIC.SPRITE_ENABLE
-        ora #%00100000
-        sta VIC.SPRITE_ENABLE
+        //lda VIC.SPRITE_ENABLE
+        //ora #%00100000
+        //sta VIC.SPRITE_ENABLE
 
 		lda #$00
 		sta VIC.SPRITE_MULTICOLOR
@@ -458,6 +458,8 @@ PLAYER: {
 
         jsr SetFrameNumber
         
+        lda Game.GameTimerTick + 1
+        sta Game.GameTimerTick
 
         lda #0
         sta IsPlayerDead

@@ -7,7 +7,13 @@ TitleScreen: {
 	.label GAME_B = $01
 	.label PLAY_SELECTED = $04
 	.label GAME_MODE_SELECTED = $03
+    // 02 = HI-SCORE
+    // 01 = CREDITS
+    .label OPTIONS_SELECTED = $00
 
+
+    InTitleScreen:
+        .byte $00
 	GameMode:
 		.byte GAME_A
 
@@ -38,6 +44,8 @@ TitleScreen: {
     */    
 
 	Initialise: {
+        lda #1
+        sta InTitleScreen
         //start musak        
 		lda #RED
 		sta VIC.SPRITE_COLOR_0
@@ -107,8 +115,12 @@ TitleScreen: {
 
 	Update: {
 		jsr Control
-		jsr Blink
-		jsr DrawSprite
+
+        lda InTitleScreen
+        beq !skip+
+    		jsr Blink
+    		jsr DrawSprite
+        !skip:
 		rts
 	}
 
@@ -189,6 +201,13 @@ TitleScreen: {
         		jsr DrawSprite
         !skip:
         //DO OTHER STUFF ON FIRE
+        cmp #OPTIONS_SELECTED
+        bne !skip+
+            lda #0
+            sta InTitleScreen 
+            jsr Options.init
+
+        !skip:
 
         //Always call when fire pressed:
         inc DebounceFireFlag

@@ -11,7 +11,7 @@ Titles: {
         .byte $01
 
     GameMode:
-        .byte GAME_A
+        .byte GAME_A    
 
     FlashCounter:
         .byte $00
@@ -46,6 +46,7 @@ Titles: {
 
         jsr IRQ.Setup
      
+        //bitmap mode?
         lda #%00111000    // $38
         sta $d018
         lda #%11011000    // $d8
@@ -88,5 +89,12 @@ Titles: {
         !end: 
         rts
 	}
+
+    showOptions: {
+        //inc $d020
+        
+
+        rts
+    }
 
 }

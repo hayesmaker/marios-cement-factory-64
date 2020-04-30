@@ -23,8 +23,13 @@ SOUND_SCORE:
 .const KOALA_TEMPLATE = "C64FILE, Bitmap=$0000, ScreenRam=$1f40, ColorRam=$2328, BackgroundColor=$2710"
 .var picture = LoadBinary("./assets/maps/titles.kla", KOALA_TEMPLATE)
 * = * "End of KoalaImage"
+
+* = $2000 "UI-Charset"
+    .import binary "./assets/maps/thereyabloodygo.bin"
+
 #import "./game/sounds.asm" 
 #import "./lib/title-screen.asm"
+#import "./lib/options-screen.asm"
 #import "./states/titles.asm"
 #import "./states/game.asm"
 #import "./lib/zeropage.asm"
@@ -77,3 +82,4 @@ MAP:
 	.import binary "./assets/maps/mcf-bg - Map (20x13).bin"
 * = $f000 "Charset"
 	.import binary "./assets/maps/mcf-bg - Chars.bin"
+

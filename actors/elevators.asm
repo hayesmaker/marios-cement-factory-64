@@ -185,8 +185,6 @@ ELEVATORS: {
 	}
 
     Update1: {
-    	lda PLAYER.IsPlayerDead
-    	bne !return+
     	ldy #0
     	!Loop:
 	    	sty DrawLoopIndex
@@ -242,9 +240,6 @@ ELEVATORS: {
 
 
 	Update2: {
-    	//.label LeftIndex = TEMP1
-    	lda PLAYER.IsPlayerDead
-    	bne !return+
     	ldy #0
     	!Loop:
 	    	sty DrawLoopIndex_R
