@@ -7,8 +7,8 @@ TitleScreen: {
 	.label GAME_B = $01
 	.label PLAY_SELECTED = $04
 	.label GAME_MODE_SELECTED = $03
-    // 02 = HI-SCORE
-    // 01 = CREDITS
+    .label HISCORE_SELECTED = $01
+    .label CREDITS_SELECTED = $02
     .label OPTIONS_SELECTED = $00
 
 
@@ -206,8 +206,24 @@ TitleScreen: {
             lda #0
             sta InTitleScreen 
             jsr Options.init
-
         !skip:
+        cmp #CREDITS_SELECTED
+        bne !skip+
+            lda #0
+            sta InTitleScreen
+            jsr Credits.init
+        !skip:
+        cmp #HISCORE_SELECTED
+        bne !skip+
+            lda #0
+            sta InTitleScreen
+            jsr HiScores.init
+        !skip:
+        /*
+        // 02 = HI-SCORE
+        // 01 = CREDITS
+        */
+        //cmp 
 
         //Always call when fire pressed:
         inc DebounceFireFlag

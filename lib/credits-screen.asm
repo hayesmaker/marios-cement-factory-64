@@ -1,12 +1,12 @@
-Options: {
+Credits: {
 	.encoding "screencode_upper"
-	MyLabel1: .text "                OPTIONS                 "
+	MyLabel1: .text "                CREDITS                 "
   .encoding "screencode_upper"
-  MyLabel2: .text "      MUSIC:          ON                "
+  MyLabel2: .text "      CODE     HAYESMAKER64             "
   .encoding "screencode_upper"
-  MyLabel3: .text "      SFX:            ON                "
+  MyLabel3: .text "      GFX      HAYESMAKER64             "
   .encoding "screencode_upper"
-  MyLabel4: .text "      RESET SCORES                      "
+  MyLabel4: .text "      SOUND    PHASE101                 "
 
 
 	init: {
@@ -74,9 +74,16 @@ Options: {
            inx 
            cpx #$28          //; finished when all 40 cols of a line are processed
            bne !loop_text-
-           rts
+           
+          // lda #$10
+          // bit $dc00
+          // bne *-3
 
-		rts
+          // inc $d020
+
+          rts
+
+    
 	}
 
 }

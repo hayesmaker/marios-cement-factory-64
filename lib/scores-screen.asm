@@ -1,12 +1,12 @@
-Options: {
+HiScores: {
 	.encoding "screencode_upper"
-	MyLabel1: .text "                OPTIONS                 "
+	MyLabel1: .text "             HIGH SCORES                "
   .encoding "screencode_upper"
-  MyLabel2: .text "      MUSIC:          ON                "
+  MyLabel2: .text "      HAYESMAKER          1000          "
   .encoding "screencode_upper"
-  MyLabel3: .text "      SFX:            ON                "
+  MyLabel3: .text "      HAYESMAKER           900          "
   .encoding "screencode_upper"
-  MyLabel4: .text "      RESET SCORES                      "
+  MyLabel4: .text "      HAYESMAKER           700          "
 
 
 	init: {

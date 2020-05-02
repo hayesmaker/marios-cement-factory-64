@@ -26,10 +26,12 @@ SOUND_SCORE:
 
 * = $2000 "UI-Charset"
     .import binary "./assets/maps/thereyabloodygo.bin"
-
+* = * "CODE"
 #import "./game/sounds.asm" 
 #import "./lib/title-screen.asm"
 #import "./lib/options-screen.asm"
+#import "./lib/credits-screen.asm"
+#import "./lib/scores-screen.asm"
 #import "./states/titles.asm"
 #import "./states/game.asm"
 #import "./lib/zeropage.asm"
