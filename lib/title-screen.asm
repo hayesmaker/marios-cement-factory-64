@@ -5,13 +5,19 @@ TitleScreen: {
 
 	.label GAME_A = $00
 	.label GAME_B = $01
-	.label PLAY_SELECTED = $04
+	
+    .label PLAY_SELECTED = $04
 	.label GAME_MODE_SELECTED = $03
     .label HISCORE_SELECTED = $01
     .label CREDITS_SELECTED = $02
     .label OPTIONS_SELECTED = $00
 
+    .label MAIN_MENU = $ff
 
+    SCREEN_MODE:
+        .byte MAIN_MENU
+
+    //@deprecated
     InTitleScreen:
         .byte $00
 	GameMode:
@@ -114,12 +120,19 @@ TitleScreen: {
 	}
 
 	Update: {
-		jsr Control
+        lda SCREEN_MODE
+        cmp #OPTIONS_SELECTED
+        bne !skip+
+            jsr Options.update
+        !skip:
+
+		
 
         lda InTitleScreen
         beq !skip+
     		jsr Blink
     		jsr DrawSprite
+            jsr Control
         !skip:
 		rts
 	}
@@ -186,7 +199,7 @@ TitleScreen: {
         !skip:
         cmp #GAME_MODE_SELECTED
         bne !skip+
-        	lda GameMode
+    	lda GameMode
         	bne !+
                 //menu blink sprite enable    
                 lda VIC.SPRITE_ENABLE 
@@ -203,18 +216,20 @@ TitleScreen: {
         //DO OTHER STUFF ON FIRE
         cmp #OPTIONS_SELECTED
         bne !skip+
-            lda #0
+            sta SCREEN_MODE
             sta InTitleScreen 
             jsr Options.init
         !skip:
         cmp #CREDITS_SELECTED
         bne !skip+
+            sta SCREEN_MODE
             lda #0
             sta InTitleScreen
             jsr Credits.init
         !skip:
         cmp #HISCORE_SELECTED
         bne !skip+
+            sta SCREEN_MODE
             lda #0
             sta InTitleScreen
             jsr HiScores.init

@@ -30,7 +30,7 @@ PouredCement: {
         sta SpillCountIndex
 
 		lda $40
-		sta SPRITE_POINTERS + 3
+		sta Game.SPRITE_POINTERS + 3
 
 		lda VIC.SPRITE_ENABLE 
 		ora #%00001000
@@ -87,7 +87,7 @@ PouredCement: {
         sta VIC.SPRITE_3_Y
         //y * 8 + x = table index
         lda FRAME_ID
-        sta SPRITE_POINTERS + 3
+        sta Game.SPRITE_POINTERS + 3
 
         rts
     }

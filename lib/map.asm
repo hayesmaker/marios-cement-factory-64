@@ -3,10 +3,10 @@
 Map: {
 	TileScreenLocations: 
 		.byte 0,1,40,41
-	RowColourTable:
-		.fillword 25, VIC.COLOR_RAM + (i * 40)
+	// RowColourTable:
+	// 	.fillword 25, VIC.COLOR_RAM + (i * 40)
 	RowScreenTable:
-		.fillword 25, SCREEN_RAM + (i * 40)
+		.fillword 25, Game.SCREEN_RAM + (i * 40)
 
 	numberYPos:
 		.byte $00
@@ -431,11 +431,11 @@ Map: {
 		.label Row = TEMP1
 		.label Col = TEMP2
 
-		lda #<SCREEN_RAM
+		lda #<Game.SCREEN_RAM
 		sta Scr + 1
 		sta Color + 1
 
-		lda #>SCREEN_RAM
+		lda #>Game.SCREEN_RAM
 		sta Scr + 2
 
 		lda #>VIC.COLOR_RAM

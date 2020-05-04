@@ -2,10 +2,8 @@ Game: {
 	STATE_IN_PROGRESS:
         .byte $01
 
-	SCREEN_RAM:
-			.word $c000
-	SPRITE_POINTERS:
-			.word SCREEN_RAM + $3f8
+	.label SCREEN_RAM = $c000
+	.label SPRITE_POINTERS = SCREEN_RAM + $3f8
 
 	PerformFrameCodeFlag:
 	.byte $00  

@@ -144,7 +144,7 @@ Score:{
 		bne !draw+
 			lda Tiles.EMPTY
 		!draw:		
-		sta SCREEN_RAM + 133
+		sta Game.SCREEN_RAM + 133
 		clc
 		adc #$01
 		//score Blinking
@@ -152,7 +152,7 @@ Score:{
 		bne !draw+
 			lda Tiles.EMPTY
 		!draw:	
-		sta SCREEN_RAM + 133 + 40
+		sta Game.SCREEN_RAM + 133 + 40
 
 		lda currentScore
 		lsr
@@ -167,14 +167,14 @@ Score:{
 		bne !draw+
 			lda Tiles.EMPTY
 		!draw:		
-		sta SCREEN_RAM + 132
+		sta Game.SCREEN_RAM + 132
 		clc
 		adc #$01
 		ldx scoreToggledOn
 		bne !draw+
 			lda Tiles.EMPTY
 		!draw:		
-		sta SCREEN_RAM + 132 + 40
+		sta Game.SCREEN_RAM + 132 + 40
 		ldx scoreToggledOn
 		bne !draw+
 			lda Tiles.EMPTY
@@ -188,14 +188,14 @@ Score:{
 		bne !draw+
 			lda Tiles.EMPTY
 		!draw:	
-		sta SCREEN_RAM + 131
+		sta Game.SCREEN_RAM + 131
 		clc
 		adc #$01
 		ldx scoreToggledOn
 		bne !draw+
 			lda Tiles.EMPTY
 		!draw:	
-		sta SCREEN_RAM + 131 + 40
+		sta Game.SCREEN_RAM + 131 + 40
 		rts
 	}
 }

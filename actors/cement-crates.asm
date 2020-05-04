@@ -32,8 +32,8 @@ CRATES: {
 		sta VIC.SPRITE_COLOR_2
 
 		lda #$40
-		sta SPRITE_POINTERS + 1
-		sta SPRITE_POINTERS + 2
+		sta Game.SPRITE_POINTERS + 1
+		sta Game.SPRITE_POINTERS + 2
 
 		lda VIC.SPRITE_ENABLE 
 		ora #%00000010
@@ -99,13 +99,13 @@ CRATES: {
         lda PositionsTableIndex1
         tay
         lda FramesTable1, y
-        sta SPRITE_POINTERS + 1
+        sta Game.SPRITE_POINTERS + 1
 
         //Crate2
         lda PositionsTableIndex2
         tay
         lda FramesTable2, y
-        sta SPRITE_POINTERS + 2
+        sta Game.SPRITE_POINTERS + 2
 
         rts
     }

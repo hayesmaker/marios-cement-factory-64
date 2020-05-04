@@ -53,6 +53,7 @@ Titles: {
         sta $d016
         lda #%00111011    // $3b
         sta $d011
+        //vic bank?
         lda #%00000010
         sta $dd00
 

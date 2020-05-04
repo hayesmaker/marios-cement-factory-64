@@ -1,8 +1,8 @@
 VIC: {
-	ScreenRowLSB:
-		.fill 25, <[SCREEN_RAM + i * $28]
-	ScreenRowMSB:
-		.fill 25, >[SCREEN_RAM + i * $28]
+	// ScreenRowLSB:
+	// 	.fill 25, <[SCREEN_RAM + i * $28]
+	// ScreenRowMSB:
+	// 	.fill 25, >[SCREEN_RAM + i * $28]
 
 	.label SPRITE_0_X = $d000
 	.label SPRITE_0_Y = $d001

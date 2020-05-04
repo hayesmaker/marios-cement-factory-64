@@ -76,12 +76,17 @@ PLAYER: {
 
 		lda DefaultFrame + 1
 		sta DefaultFrame + 0
-		sta SPRITE_POINTERS + 0
+		sta Game.SPRITE_POINTERS + 0
 
         //player sprite enable    
 		lda VIC.SPRITE_ENABLE 
 		ora #%00000001
 		sta VIC.SPRITE_ENABLE
+
+        //block 1 enable sprite player msb
+        lda VIC.SPRITE_MSB
+        and #%11111110
+        sta VIC.SPRITE_MSB
 
         //player crushed sprite enable
         //lda VIC.SPRITE_ENABLE
@@ -118,10 +123,6 @@ PLAYER: {
         lda Player_X, y
         sta VIC.SPRITE_0_X
 
-        //block 1 enable sprite player msb
-        lda VIC.SPRITE_MSB
-        and #%11111110
-        sta VIC.SPRITE_MSB
         //check if player is crushed at top
         lda Player_PosY_Index
         bne !skip+
@@ -151,7 +152,7 @@ PLAYER: {
         lda FramesTableIndex
         tay
         lda FramesTable, y
-        sta SPRITE_POINTERS + 0
+        sta Game.SPRITE_POINTERS + 0
 
         !return:
         rts
@@ -175,10 +176,10 @@ PLAYER: {
         sta VIC.SPRITE_0_Y
 
         lda SquashedFrameLow + 0
-        sta SPRITE_POINTERS + 5
+        sta Game.SPRITE_POINTERS + 5
 
         lda SquashedFrameLow + 1
-        sta SPRITE_POINTERS + 0
+        sta Game.SPRITE_POINTERS + 0
 
         rts
     }
@@ -202,10 +203,10 @@ PLAYER: {
         sta VIC.SPRITE_ENABLE
 
         lda SquashedFrameHigh + 1
-        sta SPRITE_POINTERS + 5
+        sta Game.SPRITE_POINTERS + 5
 
         lda SquashedFrameHigh + 0
-        sta SPRITE_POINTERS + 0
+        sta Game.SPRITE_POINTERS + 0
         !return:
         rts
     }
