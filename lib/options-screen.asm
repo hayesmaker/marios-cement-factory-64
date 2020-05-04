@@ -1,23 +1,25 @@
 Options: {
 	.encoding "screencode_upper"
-	MyLabel1: .text "                OPTIONS                 "
+	MyLabel1: .text "OPTIONS0"
   .encoding "screencode_upper"
-  MyLabel2: .text "      MUSIC:          ON                "
+  MyLabel2: .text "MUSIC:          ON0"
   .encoding "screencode_upper"
-  MyLabel3: .text "      SFX:            ON                "
+  MyLabel3: .text "SFX:            ON0"
   .encoding "screencode_upper"
-  MyLabel4: .text "      RESET SCORES                      "
+  MyLabel4: .text "RESET SCORES0"
 
   .label screen_ram = $c000
   .label sprite_pointers = screen_ram + $3f8
 
+  // screenRowLSB: .fill 25, <[screen_ram + i * $28]
+  // screenRowMSB: .fill 25, >[screen_ram + i * $28]
 
   Player_X:
-    .byte 106
+    .byte 80
   Player_X_MB:
     .byte 0
   Player_Y: //*              
-    .byte 70, 88, 119
+    .byte 80, 88, 119
   Player_PosY_Index:
     .byte 0
   DefaultFrame:
@@ -34,6 +36,11 @@ Options: {
         lda DefaultFrame + 1
         sta DefaultFrame + 0
         sta sprite_pointers + 0
+
+         //  set sprites to single height an width
+        lda #$00
+        sta $d01d
+        sta $d017
 
         //player sprite enable    
         lda VIC.SPRITE_ENABLE 
@@ -100,29 +107,57 @@ Options: {
            cpx #$400
            bne !loop_colour-
 
-        ldx #0   
+        .label row1 = 1
+        .label row2 = 5
+        .label row3 = 8
+        .label row4 = 11
+
+        .label col1 = 15
+        .label col2 = 11
+        .label col3 = 11
+        .label col4 = 11
+
+        ldx #0
         !loop_text:  
            lda MyLabel1,x       //; read characters from line1 table of text..
-           sta $c028,x         //; ...and store in screen ram near the center 
-           
-           lda MyLabel2, x
-           sta $c0A0,x
+           cmp #$30
+           beq !next+
+           sta screen_ram + row1*$28 + col1, x 
+           inx
+           jmp !loop_text-
+        !next:
 
-           lda MyLabel3, x
-           sta $c0F0,x
+        ldx #0
+        !loop_text:
+          lda MyLabel2,x       //; read characters from line1 table of text..
+          cmp #$30
+          beq !next+
+          sta screen_ram + row2*$28 + col2, x 
+          inx
+          jmp !loop_text-           
+         !next:
 
-           lda MyLabel4, x
-           sta $c140, x
-           // lda line2,x      ; read characters from line1 table of text...
-           // sta $0478,x      ; ...and put 2 rows below line1
-           // lda line3,x      ; read characters from line1 table of text...
-           // sta $0770,x      ; ...and put 2 rows below line1
+         ldx #0
+         !loop_text:
+           lda MyLabel3,x       //; read characters from line1 table of text..
+           cmp #$30
+           beq !next+
+           sta screen_ram + row3*$28 + col3, x 
+           inx
+           jmp !loop_text-
+          !next:
+
+          ldx #0
+          !loop_text:
+           lda MyLabel4,x       //; read characters from line1 table of text..
+           cmp #$30
+           beq !next+
+           sta screen_ram + row4*$28 + col4, x 
            inx 
-           cpx #$28          //; finished when all 40 cols of a line are processed
-           bne !loop_text-
-           rts
-
-		rts
+           jmp !loop_text-
+           
+           !next:  
+        rts
 	}
 
   update: {
