@@ -39,14 +39,33 @@ Titles: {
         lda #1
         sta STATE_IN_PROGRESS
 
-
         lda #$00
         jsr music_init
 
 
         jsr IRQ.Setup
-     
-        //bitmap mode?
+        jsr drawScreen
+       
+        //Main Game loop
+        !TitleLoop:
+            lda STATE_IN_PROGRESS
+            beq !end+
+
+            lda #$ff
+            cmp $d012
+            bne *-3
+            //DO MUSIC
+
+            //Do OTHER STUFF
+            jsr TitleScreen.Update
+        jmp !TitleLoop-
+
+        !end: 
+        rts
+	}
+
+    drawScreen: {
+                //bitmap mode?
         lda #%00111000    // $38
         sta $d018
         lda #%11011000    // $d8
@@ -62,7 +81,7 @@ Titles: {
         lda #picture.getBackgroundColor()
         sta $d021   // background
         ldx #0
-!loop:
+        !loop:
         .for (var i=0; i<4; i++) {
            lda colorRam+i*$100,x
            sta $d800+i*$100,x
@@ -72,24 +91,9 @@ Titles: {
 
         //init title screen sprite
         jsr TitleScreen.Initialise
-       
-        //Main Game loop
-!TitleLoop:
-        lda STATE_IN_PROGRESS
-        beq !end+
 
-        lda #$ff
-        cmp $d012
-        bne *-3
-        //DO MUSIC
-
-        //Do OTHER STUFF
-        jsr TitleScreen.Update
-        jmp !TitleLoop-
-
-        !end: 
         rts
-	}
+    }
 
     showOptions: {
         //inc $d020

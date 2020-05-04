@@ -48,13 +48,19 @@ TitleScreen: {
     /*
         
     */    
-
+    //
 	Initialise: {
+
         lda #1
         sta InTitleScreen
+
+        lda #MAIN_MENU
+        sta SCREEN_MODE
+        
         //start musak        
-		lda #RED
+		lda #BLUE
 		sta VIC.SPRITE_COLOR_0
+        lda #YELLOW
 		sta VIC.SPRITE_COLOR_1
 		lda #YELLOW
 		sta VIC.SPRITE_COLOR_2
@@ -100,6 +106,15 @@ TitleScreen: {
    
 		rts
 	}
+
+    gotoMain: {
+        //double width
+        // lda #%00000011
+        // sta $D01D   
+        lda MAIN_MENU
+        sta SCREEN_MODE
+        rts
+    }
 
 	DrawSprite: {            
 		ldy SelectorTableIndex
@@ -261,6 +276,7 @@ TitleScreen: {
     	bne !+
     	inc DebounceFlag
     	//do up
+        //inc $d020
     	lda SelectorTableIndex
     	beq !+
     	dec SelectorTableIndex
@@ -272,6 +288,7 @@ TitleScreen: {
     	bne !+
     	inc DebounceFlag
     	//do down
+        //inc $d020
     	lda SelectorTableIndex
     	cmp #04
     	beq !+
