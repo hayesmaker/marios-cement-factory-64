@@ -58,9 +58,9 @@ TitleScreen: {
         sta SCREEN_MODE
         
         //start musak        
-		lda #BLUE
+		lda #RED
 		sta VIC.SPRITE_COLOR_0
-        lda #YELLOW
+        //lda #YELLOW
 		sta VIC.SPRITE_COLOR_1
 		lda #YELLOW
 		sta VIC.SPRITE_COLOR_2
@@ -157,7 +157,7 @@ TitleScreen: {
 		ldx #%00
 		inc FlashCounter
 		lda FlashCounter
-		and #%00010000
+		and #%10000000
 		beq !NoFlash+
 		ldx #%11
 		!NoFlash:

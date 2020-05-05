@@ -94,10 +94,10 @@ Options: {
         sta $d018
 
         //border & background colour
-        // lda #RED
-        // sta $d020   // border
-        // lda #RED
-        // sta $d021   // background
+        lda #RED
+        sta $d020   // border
+        lda #RED
+        sta $d021   // background
         //clear screen
         ldx #0
         lda #$20 //space character? (it said so on internet)
