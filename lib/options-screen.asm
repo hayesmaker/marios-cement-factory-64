@@ -59,14 +59,13 @@ Options: {
         sta $d017
 
         //player sprite enable
-        //only enables sprite 0, doesnt affect 1-7    
-        lda VIC.SPRITE_ENABLE 
-        ora #%00000001
+        //only enables sprite 0, doesnt affect 1-7     
+        lda #%00000001
         sta VIC.SPRITE_ENABLE
 
         //block 1 enable sprite player msb
         lda VIC.SPRITE_MSB
-        and #%11111110
+        and #%11111110  
         sta VIC.SPRITE_MSB
 
         lda #$00
@@ -102,16 +101,14 @@ Options: {
         ldx #0
         lda #$20 //space character? (it said so on internet)
         !loop:   
-        sta $c000,x
-        sta $c100,x
-        sta $c200,x
-        sta $c300,x
+        sta screen_ram,x
+        sta screen_ram + 255,x
+        sta screen_ram + 510,x
+        sta screen_ram + 765,x
         dex
         bne !loop-
         //clear screen chars
         
-        
-
         ldx #0
         !loop_colour:        	 
            lda #WHITE
@@ -238,7 +235,9 @@ Options: {
         //go to main menu
         lda #0
         sta shouldUpdate
-        jsr TitleScreen.gotoMain
+        //jsr TitleScreen.gotoMain
+        inc $d020
+
         jsr Titles.drawScreen
       !skip:
 

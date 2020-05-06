@@ -6,12 +6,12 @@ TitleScreen: {
 	.label GAME_A = $00
 	.label GAME_B = $01
 	
-    .label PLAY_SELECTED = $04
-	.label GAME_MODE_SELECTED = $03
+    .label OPTIONS_SELECTED = $00
     .label HISCORE_SELECTED = $01
     .label CREDITS_SELECTED = $02
-    .label OPTIONS_SELECTED = $00
-
+    .label GAME_MODE_SELECTED = $03
+    .label PLAY_SELECTED = $04
+	
     .label MAIN_MENU = $ff
 
     SCREEN_MODE:
@@ -107,16 +107,7 @@ TitleScreen: {
 		rts
 	}
 
-    gotoMain: {
-        //double width
-        // lda #%00000011
-        // sta $D01D   
-        lda MAIN_MENU
-        sta SCREEN_MODE
-        rts
-    }
-
-	DrawSprite: {            
+	DrawSprites: {            
 		ldy SelectorTableIndex
         lda SelectorTable, y
         sta VIC.SPRITE_0_Y
@@ -140,13 +131,19 @@ TitleScreen: {
         bne !skip+
             jsr Options.update
         !skip:
-
-		
-
+        lda SCREEN_MODE
+        cmp #CREDITS_SELECTED
+        bne !skip+
+            //jsr Credits.update
+        !skip:
+        cmp #HISCORE_SELECTED
+        bne !skip+
+            //jsr HiScores.update
+        !skip:        
         lda InTitleScreen
         beq !skip+
     		jsr Blink
-    		jsr DrawSprite
+    		jsr DrawSprites
             jsr Control
         !skip:
 		rts
@@ -157,7 +154,7 @@ TitleScreen: {
 		ldx #%00
 		inc FlashCounter
 		lda FlashCounter
-		and #%10000000
+		and #%00001000
 		beq !NoFlash+
 		ldx #%11
 		!NoFlash:
@@ -168,8 +165,7 @@ TitleScreen: {
 	}
 
     DisableSprites: {
-        lda VIC.SPRITE_ENABLE 
-        and #%11111000
+        lda #%00000000
         sta VIC.SPRITE_ENABLE
         rts        
     }
@@ -201,17 +197,18 @@ TitleScreen: {
         lda JOY_ZP
         and #JOY_FIRE
         bne !movement+
-        //doFire
-
-        //CHANGE GAME MODE
+        
+        //FIRE BUTTON DO CHANGES TO TITLE SCREEN
         lda SelectorTableIndex
         cmp #PLAY_SELECTED
         bne !skip+
+            //Start the game
             jsr DisableSprites
             lda #0
             sta Titles.STATE_IN_PROGRESS
         	//jsr Entry
         !skip:
+        lda SelectorTableIndex
         cmp #GAME_MODE_SELECTED
         bne !skip+
     	lda GameMode
@@ -226,7 +223,7 @@ TitleScreen: {
         		lda #GAME_A
         	!setGameMode:                
         		sta GameMode
-        		jsr DrawSprite
+        		jsr DrawSprites
         !skip:
         //DO OTHER STUFF ON FIRE
         cmp #OPTIONS_SELECTED

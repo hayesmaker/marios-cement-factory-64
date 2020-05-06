@@ -1,15 +1,31 @@
 HiScores: {
 	.encoding "screencode_upper"
-	MyLabel1: .text "             HIGH SCORES                "
+	MyLabel1: .text "HIGH SCORES@"
   .encoding "screencode_upper"
-  MyLabel2: .text "      HAYESMAKER          1000          "
+  MyLabel2: .text "HAYESMAKER          1000@"
   .encoding "screencode_upper"
-  MyLabel3: .text "      HAYESMAKER           900          "
+  MyLabel3: .text "HAYESMAKER           900@"
   .encoding "screencode_upper"
-  MyLabel4: .text "      HAYESMAKER           700          "
+  MyLabel4: .text "HAYESMAKER           700@"
 
+  .label screen_ram = $c000
+  .label sprite_pointers = screen_ram + $3f8
+
+ shouldUpdate:
+    .byte $00
+  DebounceFlag:
+    .byte $00
+  DebounceFireFlag:
+    .byte $00
 
 	init: {
+        lda #1
+        sta shouldUpdate
+        //init joystick
+        lda #$00
+        sta DebounceFireFlag
+        sta DebounceFlag
+
 
 		//Turn off bitmap mode
         lda $d011
@@ -17,9 +33,14 @@ HiScores: {
         sta $d011
 
         //VIC n stuff
-        lda #%00000011
+        //set last VIC bank (to allow charset)
+        lda #$00
         sta $dd00
-        lda #%00011000
+        /*
+        the fist 4 bits there : 0000 tell the vic the screen is at $c000
+        the last 4 : 1110 tell it the chars are found at $f800
+        */
+        lda #%00001110
         sta $d018
 
         //border & background colour
@@ -31,10 +52,10 @@ HiScores: {
         ldx #0
         lda #$20 //space character? (it said so on internet)
         !loop:   
-        sta $0400,x
-        sta $0500,x
-        sta $0600,x
-        sta $0700,x
+        sta screen_ram,x
+        sta screen_ram + 255,x
+        sta screen_ram + 510,x
+        sta screen_ram + 765,x
         dex
         bne !loop-
         //clear screen chars
@@ -54,29 +75,161 @@ HiScores: {
            cpx #$400
            bne !loop_colour-
 
-        ldx #0   
+       
+        .label row1 = 1
+        .label row2 = 5
+        .label row3 = 8
+        .label row4 = 11
+        .label row5 = 14
+
+        .label col1 = 15
+        .label col2 = 7
+        .label col3 = 7
+        .label col4 = 7
+        .label col5 = 7
+
+        
+        // inc $d021
+
+        // lda #'X'
+        // sta screen_ram
+
+        // inc $d800
+
+        ldx #0
         !loop_text:  
            lda MyLabel1,x       //; read characters from line1 table of text..
-           sta $0428,x         //; ...and store in screen ram near the center 
-           
-           lda MyLabel2, x
-           sta $04A0,x
+           beq !next+
+           sta screen_ram + row1*$28 + col1, x 
+           inx
+           jmp !loop_text-
+        !next:
 
-           lda MyLabel3, x
-           sta $04F0,x
+        ldx #0
+        !loop_text:
+          lda MyLabel2,x       //; read characters from line1 table of text.
+          beq !next+
+          sta screen_ram + row2*$28 + col2, x 
+          inx
+          jmp !loop_text-           
+         !next:
 
-           lda MyLabel4, x
-           sta $0540, x
-           // lda line2,x      ; read characters from line1 table of text...
-           // sta $0478,x      ; ...and put 2 rows below line1
-           // lda line3,x      ; read characters from line1 table of text...
-           // sta $0770,x      ; ...and put 2 rows below line1
+         ldx #0
+         !loop_text:
+           lda MyLabel3,x       //; read characters from line1 table of text..
+           beq !next+
+           sta screen_ram + row3*$28 + col3, x 
+           inx
+           jmp !loop_text-
+          !next:
+
+          ldx #0
+          !loop_text:
+           lda MyLabel4,x       //; read characters from line1 table of text..
+           beq !next+
+           sta screen_ram + row4*$28 + col4, x 
            inx 
-           cpx #$28          //; finished when all 40 cols of a line are processed
-           bne !loop_text-
-           rts
+           jmp !loop_text-
+           
+           !next:
 
 		rts
 	}
+
+  update: {
+    //inc $d020
+    jsr control
+    jsr drawSprites
+    rts
+  }
+
+  control: {
+    .label JOY_PORT_2 = $dc00
+    .label JOY_UP = %00001
+    .label JOY_DN = %00010
+    .label JOY_LT = %00100
+    .label JOY_RT = %01000
+    .label JOY_FIRE = %10000
+
+    lda JOY_PORT_2
+    sta JOY_ZP
+    lda JOY_ZP
+    and #JOY_FIRE
+    beq !fireButtonPressed+
+
+    lda #$00
+    sta DebounceFireFlag
+    jmp !movement+
+
+    !fireButtonPressed:
+    lda DebounceFireFlag
+    bne !movement+
+    !:
+    !Fire:
+    lda JOY_ZP
+    and #JOY_FIRE
+    bne !movement+
+    //doFire
+        lda #0
+        sta shouldUpdate
+        inc $d020
+        //jsr Titles.drawScreen
+      !skip:
+
+    inc DebounceFireFlag
+    !movement:   
+    //Check if we need debounce
+    lda DebounceFlag
+    beq !+
+    //Otherwise check if we can turn it off
+    lda JOY_ZP
+    and #[JOY_LT + JOY_RT + JOY_UP + JOY_DN]
+    cmp #[JOY_LT + JOY_RT + JOY_UP + JOY_DN]
+    bne !end+
+
+    lda #$00
+    sta DebounceFlag
+    !:
+    !Up: 
+    lda JOY_ZP
+    and #JOY_UP
+    bne !+
+    inc DebounceFlag
+    //do up
+    
+    !:
+    !Down:
+    lda JOY_ZP
+    and #JOY_DN
+    bne !+
+    inc DebounceFlag
+    //do down
+    
+    !:
+    !Left:
+    lda JOY_ZP
+    and #JOY_LT
+    bne !+
+    inc DebounceFlag
+    //move player left
+    
+    !:
+    !Right:
+
+    lda JOY_ZP
+    and #JOY_RT
+    bne !end+
+    inc DebounceFlag              
+    //move cursor right
+
+    !end:
+    rts
+    
+  }
+
+  drawSprites: {
+    
+    rts
+  }
 
 }

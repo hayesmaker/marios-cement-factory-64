@@ -42,7 +42,6 @@ Titles: {
         lda #$00
         jsr music_init
 
-
         jsr IRQ.Setup
         jsr drawScreen
        
@@ -91,13 +90,6 @@ Titles: {
 
         //init title screen sprite
         jsr TitleScreen.Initialise
-
-        rts
-    }
-
-    showOptions: {
-        //inc $d020
-        
 
         rts
     }
