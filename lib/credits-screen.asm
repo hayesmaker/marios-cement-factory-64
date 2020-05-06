@@ -1,12 +1,10 @@
 Credits: {
 	.encoding "screencode_upper"
 	MyLabel1: .text "CREDITS@"
-  .encoding "screencode_upper"
   MyLabel2: .text "CODE     HAYESMAKER64@"
-  .encoding "screencode_upper"
   MyLabel3: .text "GFX      HAYESMAKER64@"
-  .encoding "screencode_upper"
   MyLabel4: .text "SOUND    PHASE101@"
+  MyLabel5: .text "PRESS FIRE@"
 
   .label screen_ram = $c000
   .label sprite_pointers = screen_ram + $3f8
@@ -18,13 +16,13 @@ Credits: {
   DebounceFireFlag:
     .byte $00
 
-
 	init: {
         lda #1
         sta shouldUpdate
         //init joystick
-        lda #$00
+        lda #1
         sta DebounceFireFlag
+        lda #$00
         sta DebounceFlag
 
 		//Turn off bitmap mode
@@ -45,7 +43,7 @@ Credits: {
         sta $d018
 
         //border & background colour
-        lda #RED
+        lda #BLACK
         sta $d020   // border
         lda #RED
         sta $d021   // background
@@ -81,11 +79,13 @@ Credits: {
         .label row2 = 5
         .label row3 = 8
         .label row4 = 11
+        .label row5 = 20
 
         .label col1 = 15
         .label col2 = 7
         .label col3 = 7
         .label col4 = 7
+        .label col5 = 14
 
         ldx #0
         !loop_text:  
@@ -116,14 +116,21 @@ Credits: {
 
           ldx #0
           !loop_text:
-           lda MyLabel4,x       //; read characters from line1 table of text..
-           beq !next+
-           sta screen_ram + row4*$28 + col4, x 
-           inx 
-           jmp !loop_text-
-           
-           !next:  
+          lda MyLabel4,x       //; read characters from line1 table of text..
+          beq !next+
+          sta screen_ram + row4*$28 + col4, x 
+          inx 
+          jmp !loop_text-
+          !next:
 
+          ldx #0
+          !loop_text:
+          lda MyLabel5,x       //; read characters from line1 table of text..
+          beq !next+
+          sta screen_ram + row5*$28 + col5, x 
+          inx 
+          jmp !loop_text-
+          !next:  
 
           rts
 
@@ -131,13 +138,12 @@ Credits: {
 	}
 
   update: {
-    // jsr control
-    // jsr drawSprites
+    jsr control
+    jsr drawSprites
     rts
   }
 
   control: {
-    inc $d020
     .label JOY_PORT_2 = $dc00
     .label JOY_UP = %00001
     .label JOY_DN = %00010
@@ -160,16 +166,12 @@ Credits: {
     bne !movement+
     !:
     !Fire:
-    lda JOY_ZP
-    and #JOY_FIRE
-    bne !movement+
-    //doFire
+        //doFire
         lda #0
         sta shouldUpdate
-        //jsr TitleScreen.gotoMain
         jsr Titles.drawScreen
       !skip:
-
+    
     inc DebounceFireFlag
     !movement:   
     //Check if we need debounce

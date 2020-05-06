@@ -134,11 +134,11 @@ TitleScreen: {
         lda SCREEN_MODE
         cmp #CREDITS_SELECTED
         bne !skip+
-            //jsr Credits.update
+            jsr Credits.update
         !skip:
         cmp #HISCORE_SELECTED
         bne !skip+
-            //jsr HiScores.update
+            jsr HiScores.update
         !skip:        
         lda InTitleScreen
         beq !skip+
@@ -194,10 +194,6 @@ TitleScreen: {
        bne !movement+
     !:
     !Fire:
-        lda JOY_ZP
-        and #JOY_FIRE
-        bne !movement+
-        
         //FIRE BUTTON DO CHANGES TO TITLE SCREEN
         lda SelectorTableIndex
         cmp #PLAY_SELECTED

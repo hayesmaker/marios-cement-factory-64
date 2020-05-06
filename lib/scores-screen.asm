@@ -1,12 +1,11 @@
 HiScores: {
 	.encoding "screencode_upper"
 	MyLabel1: .text "HIGH SCORES@"
-  .encoding "screencode_upper"
   MyLabel2: .text "HAYESMAKER          1000@"
-  .encoding "screencode_upper"
   MyLabel3: .text "HAYESMAKER           900@"
-  .encoding "screencode_upper"
   MyLabel4: .text "HAYESMAKER           700@"
+  MyLabel5: .text "PRESS FIRE@"
+
 
   .label screen_ram = $c000
   .label sprite_pointers = screen_ram + $3f8
@@ -22,8 +21,9 @@ HiScores: {
         lda #1
         sta shouldUpdate
         //init joystick
-        lda #$00
+        lda #$01
         sta DebounceFireFlag
+        lda #$00
         sta DebounceFlag
 
 
@@ -44,7 +44,7 @@ HiScores: {
         sta $d018
 
         //border & background colour
-        lda #RED
+        lda #BLACK
         sta $d020   // border
         lda #RED
         sta $d021   // background
@@ -80,21 +80,13 @@ HiScores: {
         .label row2 = 5
         .label row3 = 8
         .label row4 = 11
-        .label row5 = 14
+        .label row5 = 20
 
         .label col1 = 15
         .label col2 = 7
         .label col3 = 7
         .label col4 = 7
-        .label col5 = 7
-
-        
-        // inc $d021
-
-        // lda #'X'
-        // sta screen_ram
-
-        // inc $d800
+        .label col5 = 14
 
         ldx #0
         !loop_text:  
@@ -128,6 +120,15 @@ HiScores: {
            lda MyLabel4,x       //; read characters from line1 table of text..
            beq !next+
            sta screen_ram + row4*$28 + col4, x 
+           inx 
+           jmp !loop_text-
+           !next:
+
+           ldx #0
+          !loop_text:
+           lda MyLabel5,x       //; read characters from line1 table of text..
+           beq !next+
+           sta screen_ram + row5*$28 + col5, x 
            inx 
            jmp !loop_text-
            
@@ -172,8 +173,8 @@ HiScores: {
     //doFire
         lda #0
         sta shouldUpdate
-        inc $d020
-        //jsr Titles.drawScreen
+        //inc $d020
+        jsr Titles.drawScreen
       !skip:
 
     inc DebounceFireFlag

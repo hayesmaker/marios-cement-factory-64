@@ -93,7 +93,7 @@ Options: {
         sta $d018
 
         //border & background colour
-        lda #RED
+        lda #BLACK
         sta $d020   // border
         lda #RED
         sta $d021   // background
@@ -225,9 +225,6 @@ Options: {
     bne !movement+
     !:
     !Fire:
-    lda JOY_ZP
-    and #JOY_FIRE
-    bne !movement+
     //doFire
       lda Player_PosY_Index
       cmp #3
@@ -235,9 +232,6 @@ Options: {
         //go to main menu
         lda #0
         sta shouldUpdate
-        //jsr TitleScreen.gotoMain
-        inc $d020
-
         jsr Titles.drawScreen
       !skip:
 
