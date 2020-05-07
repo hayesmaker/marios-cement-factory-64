@@ -129,7 +129,7 @@ TitleScreen: {
         lda SCREEN_MODE
         cmp #OPTIONS_SELECTED
         bne !skip+
-            jsr Options.update
+            jsr OptionsScreen.update
         !skip:
         lda SCREEN_MODE
         cmp #CREDITS_SELECTED
@@ -226,7 +226,7 @@ TitleScreen: {
         bne !skip+
             sta SCREEN_MODE
             sta InTitleScreen 
-            jsr Options.init
+            jsr OptionsScreen.init
         !skip:
         cmp #CREDITS_SELECTED
         bne !skip+

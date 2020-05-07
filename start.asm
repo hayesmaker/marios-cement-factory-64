@@ -2,8 +2,8 @@ BasicUpstart2(main)
 
 *=$1000 "music"
 .label music_init =*
-.label music_play =*+3
-.import binary "./assets/sound/MariosFactory_00ch3_01ch2_02ch0_v8_1000.bin"
+.label music_play =*+3	
+.import binary "./assets/sound/music.bin"
 //tick: shuffle //sfx_shuffle
 //move: jump //sfx_bnce
 //death:sfx_boom //sfx_crunch
@@ -45,6 +45,7 @@ SOUND_SCORE:
 #import "./game/constants.asm"
 #import "./game/score.asm"
 #import "./game/lives.asm"
+#import "./game/options.asm"
 
 * = * "Main" 
 main: 

@@ -39,9 +39,7 @@ Titles: {
         lda #1
         sta STATE_IN_PROGRESS
 
-        lda #$00
-        jsr music_init
-
+        jsr checkMusic
         jsr IRQ.Setup
         jsr drawScreen
        
@@ -91,6 +89,18 @@ Titles: {
         //init title screen sprite
         jsr TitleScreen.Initialise
 
+        rts
+    }
+
+    checkMusic: {
+        lda Options.isMusicOn
+        beq !noMusic+ 
+        lda #$00
+        jmp !set+
+        !noMusic:
+        lda #$03
+        !set:
+        jsr music_init
         rts
     }
 

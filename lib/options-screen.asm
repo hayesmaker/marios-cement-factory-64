@@ -1,10 +1,12 @@
-Options: {
+OptionsScreen: {
 	.encoding "screencode_upper"
-	MyLabel1: .text "OPTIONS0"
-  MyLabel2: .text "MUSIC:          ON0"
-  MyLabel3: .text "SFX:            ON0"
-  MyLabel4: .text "RESET SCORES0"
-  MyLabel5: .text "MAIN MENU0"
+	MyLabel1: .text "OPTIONS@"
+  MyLabel2: .text "MUSIC:@"
+  MyLabel3: .text "SFX:@"
+  MyLabel4: .text "RESET SCORES@"
+  MyLabel5: .text "MAIN MENU@"
+  MyLabelOn: .text "ON @"
+  MyLabelOff: .text "OFF@"
 
   .label screen_ram = $c000
   .label sprite_pointers = screen_ram + $3f8
@@ -17,7 +19,7 @@ Options: {
   DebounceFlag:
     .byte $00
   DebounceFireFlag:
-    .byte $00
+    .byte $01
   Player_X:
     .byte 80
   Player_X_MB:
@@ -29,18 +31,28 @@ Options: {
   FramesTable:
     .byte $48, $49, $4A, $4B
 
+  .label row1 = 1
+  .label row2 = 5
+  .label row3 = 8
+  .label row4 = 11
+  .label row5 = 14
+
+  .label col1 = 15
+  .label col2 = 11
+  .label col3 = 11
+  .label col4 = 11
+  .label col5 = 11  
+
 
 	init: {
-
         // inc $d020
         // inc $d021
-
-
         lda #1
         sta shouldUpdate
         //init joystick
-        lda #$00
+        lda #$01
         sta DebounceFireFlag
+        lda #$00
         sta DebounceFlag
         
         lda #$00
@@ -59,7 +71,7 @@ Options: {
         sta $d017
 
         //player sprite enable
-        //only enables sprite 0, doesnt affect 1-7     
+        //only enables sprite 0, disable  1-7     
         lda #%00000001
         sta VIC.SPRITE_ENABLE
 
@@ -120,19 +132,6 @@ Options: {
            inx
            cpx #$400
            bne !loop_colour-
-
-        .label row1 = 1
-        .label row2 = 5
-        .label row3 = 8
-        .label row4 = 11
-        .label row5 = 14
-
-        .label col1 = 15
-        .label col2 = 11
-        .label col3 = 11
-        .label col4 = 11
-        .label col5 = 11
-
         
         // inc $d021
 
@@ -144,7 +143,6 @@ Options: {
         ldx #0
         !loop_text:  
            lda MyLabel1,x       //; read characters from line1 table of text..
-           cmp #$30
            beq !next+
            sta screen_ram + row1*$28 + col1, x 
            inx
@@ -154,7 +152,6 @@ Options: {
         ldx #0
         !loop_text:
           lda MyLabel2,x       //; read characters from line1 table of text..
-          cmp #$30
           beq !next+
           sta screen_ram + row2*$28 + col2, x 
           inx
@@ -164,7 +161,6 @@ Options: {
          ldx #0
          !loop_text:
            lda MyLabel3,x       //; read characters from line1 table of text..
-           cmp #$30
            beq !next+
            sta screen_ram + row3*$28 + col3, x 
            inx
@@ -174,7 +170,6 @@ Options: {
           ldx #0
           !loop_text:
            lda MyLabel4,x       //; read characters from line1 table of text..
-           cmp #$30
            beq !next+
            sta screen_ram + row4*$28 + col4, x 
            inx 
@@ -185,13 +180,15 @@ Options: {
            ldx #0
            !loop_text:
            lda MyLabel5,x       //; read characters from line1 table of text..
-           cmp #$30
            beq !next+
            sta screen_ram + row5*$28 + col5, x 
            inx 
            jmp !loop_text-
            
            !next:  
+
+        jsr printMusic
+        jsr printSound
 
         rts
 	}
@@ -227,6 +224,20 @@ Options: {
     !Fire:
     //doFire
       lda Player_PosY_Index
+      bne !skip+
+        jsr toggleMusic
+      !skip:
+      lda Player_PosY_Index
+      cmp #1
+      bne !skip+
+        jsr toggleSound
+      !skip:
+      lda Player_PosY_Index
+      cmp #2
+      bne !skip+
+        //Reset High Scores
+      !skip:
+      lda Player_PosY_Index
       cmp #3
       bne !skip+
         //go to main menu
@@ -234,6 +245,7 @@ Options: {
         sta shouldUpdate
         jsr Titles.drawScreen
       !skip:
+
 
     inc DebounceFireFlag
     !movement:   
@@ -277,7 +289,7 @@ Options: {
 
     inc DebounceFlag
     //move player left
-    inc $d020
+    //inc $d020
     !:
     !Right:
 
@@ -289,8 +301,7 @@ Options: {
     //move cursor right
     inc $d020
     !end:
-    rts
-    
+    rts 
   }
 
   drawSprites: {
@@ -311,6 +322,67 @@ Options: {
     !return:
     rts
   }
+
+  toggleSound: {
+    jsr Options.toggleSound
+    jsr printSound
+    rts
+  }
+
+  toggleMusic: {
+    jsr Options.toggleMusic
+    jsr printMusic
+    rts
+  }
+
+  printSound: {
+    .label col = 27
+    lda Options.isSoundOn
+    bne !switchOn+
+    ldx #0
+    
+    !loop_text:
+    lda MyLabelOff,x       
+    beq !return+
+    sta screen_ram + row3*$28 + col, x 
+    inx
+    jmp !loop_text-
+
+    !switchOn:
+    ldx #0
+    !loop_text:
+    lda MyLabelOn,x       
+    beq !return+
+    sta screen_ram + row3*$28 + col, x 
+    inx
+    jmp !loop_text-
+    !return:
+    rts
+  }
+
+  printMusic: {
+  .label col = 27
+      lda Options.isMusicOn
+      bne !switchOn+
+      ldx #0
+      !loop_text:
+      lda MyLabelOff,x       
+      beq !return+
+      sta screen_ram + row2*$28 + col, x 
+      inx
+      jmp !loop_text-
+
+      !switchOn:
+      ldx #0
+      !loop_text:
+      lda MyLabelOn,x       
+      beq !return+
+      sta screen_ram + row2*$28 + col, x 
+      inx
+      jmp !loop_text-
+      !return:
+      rts
+    }
 
 
 }

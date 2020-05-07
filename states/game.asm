@@ -67,10 +67,7 @@ Game: {
 	 	lda #1
         sta STATE_IN_PROGRESS	
 
-        sei
-        lda #$01
-        jsr music_init
-        cli
+       	jsr checkMusic
 		//Reset Sprites
 		//Multicolor mode sprites (1 for on 0 for hi-res)
 		lda #%00000000
@@ -224,10 +221,7 @@ Game: {
 		    jsr ELEVATORS.Update2
 		    jsr Mixers.Update
 		    //play SOUND1
-	        lda #<SOUND_TICK
-	        ldy #>SOUND_TICK
-	        ldx #14 //or 7 or 14
-	        jsr $1006
+	        jsr Sounds.LIFT_TICK
 		    //
 		    jmp !+
 		!tick2:
@@ -239,10 +233,8 @@ Game: {
 		    jsr Mixers.Update
 		    //jsr ELEVATORS.Update2
 		    //play SOUND1
-	        lda #<SOUND_TICK
-	        ldy #>SOUND_TICK
-	        ldx #14 //or 7 or 14
-	        jsr $1006
+	        jsr Sounds.LIFT_TICK
+
 		    jmp !+
 		!tick4:
 		    jsr CRATES.Update2
@@ -255,10 +247,7 @@ Game: {
 		    jsr Mixers.Update
 
 		    //play SOUND1
-	        lda #<SOUND_TICK
-	        ldy #>SOUND_TICK
-	        ldx #14 //or 7 or 14
-	        jsr $1006
+	        jsr Sounds.LIFT_TICK
 		    
 		    jmp !+
 		!tick6: 
@@ -274,10 +263,7 @@ Game: {
 		    jsr Mixers.Update
 
 		    //play SOUND1
-	        lda #<SOUND_TICK
-	        ldy #>SOUND_TICK
-	        ldx #14 //or 7 or 14
-	        jsr $1006
+	       	jsr Sounds.LIFT_TICK
 		        
 		    jmp !end+
 		    //jsr ELEVATORS.Update2
@@ -326,6 +312,18 @@ Game: {
 		!exitGame:
 		jsr teardown
 	   	rts
+	}
+
+	checkMusic: {
+		lda Options.isMusicOn
+       	beq !noMusic+ 
+        lda #$01
+        jmp !set+
+        !noMusic:
+        lda #$03
+        !set:
+        jsr music_init
+        rts
 	}
 
 }
