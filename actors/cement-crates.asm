@@ -1,26 +1,25 @@
 CRATES: {
 	PosY:
-		.byte 90
+		.byte 85
 
 	FramesTable1:
 		.byte $40, $40, $40, $56, $57, $58, $59
 	FramesTable2:
-		.byte $40, $40, $40, $56, $57, $58, $5A	
-	//Crate 1 Positions Table
+		.byte $40, $40, $40, $56, $57, $58, $5A
 	PositionsTableIndex1:
 		.byte 0	
 	PositionsTable1_LB:
 			  //120//93 //73
-		.byte $78, $5D, $49, $49, $49, $49, $35
+		.byte $78, $5D, $49, $49, $49, $49
 	PositionsTable1_HB:	
-		.byte $00, $00, $00, $00, $00, $00, $00	
+		.byte $00, $00, $00, $00, $00, $00
 			
 	PositionsTableIndex2:
 		.byte 0
-	PositionsTable2_LB: //271               291
-		.byte $E0, $FB, $10, $10, $10, $10, $24
+	PositionsTable2_LB: //271              
+		.byte $E0, $FB, $10, $10, $10, $10
 	PositionsTable2_HB:
-		.byte $00, $00, $01, $01, $01, $01, $01
+		.byte $00, $00, $01, $01, $01, $01
 
 		// TODO: Decide to use this or make labels to specifc indexes for actions?
 		// ActionsTable:
@@ -56,30 +55,49 @@ CRATES: {
         // crate 1 pos x
         //crate 1 = sprite 1
         //crate 2 = sprite 2
-        lda PositionsTableIndex1
-        tay
+        ldy PositionsTableIndex1
+        bne !skip+
+        	jsr ShowOffScreenCement1
+        	jmp !getXPos+
+        !skip:
+        	jsr HideOffScreenCement1
+        !getXPos:
+        ldy PositionsTableIndex1
         lda PositionsTable1_LB, y
-        sta VIC.SPRITE_1_X
+        // bne !showSprite+
+        // 	//hide hte 
+        // 	lda VIC.SPRITE_ENABLE
+        // 	and #%11111101
+        // 	sta VIC.SPRITE_ENABLE
+        // 	jmp !crate2+
+        // !showSprite:
 
+        sta VIC.SPRITE_1_X
         lda VIC.SPRITE_MSB
         and #%11111101
         sta VIC.SPRITE_MSB
 
-       	lda PositionsTableIndex1
-        tay
+       	ldy PositionsTableIndex1
         lda PositionsTable1_HB, y
         beq !+
-        lda VIC.SPRITE_MSB
-        ora #%00000010
-        sta VIC.SPRITE_MSB
-    !:
+	        lda VIC.SPRITE_MSB
+	        ora #%00000010
+	        sta VIC.SPRITE_MSB
+    	!:
         lda PosY
         sta VIC.SPRITE_1_Y
         sta VIC.SPRITE_2_Y
 
+        !crate2:
         //crate 2 pos x
-        lda PositionsTableIndex2
-        tay
+        ldy PositionsTableIndex2
+        bne !skip+
+        	jsr ShowOffScreenCement2
+        	jmp !getXPos+
+        !skip:
+        	jsr HideOffScreenCement2
+        !getXPos:
+        ldy PositionsTableIndex2
         lda PositionsTable2_LB, y
         sta VIC.SPRITE_2_X
         //crate 2 high bite
@@ -87,8 +105,7 @@ CRATES: {
         and #%11111011
         sta VIC.SPRITE_MSB
 
-       	lda PositionsTableIndex2
-        tay
+       	ldy PositionsTableIndex2
         lda PositionsTable2_HB, y
         beq !+
         lda VIC.SPRITE_MSB
@@ -143,6 +160,63 @@ CRATES: {
     	rts
     }
 
+    ShowOffScreenCement1: {
+    	lda #$B2
+    	ldx #5
+    	ldy #5
+    	jsr Map.SwitchCharAtXY
+
+    	lda #$B3
+    	ldx #5
+    	ldy #6
+    	jsr Map.SwitchCharAtXY
+
+    	rts
+    }
+
+    HideOffScreenCement1: {
+
+    	lda Tiles.EMPTY
+    	ldx #5
+    	ldy #5
+    	jsr Map.SwitchCharAtXY
+
+    	lda Tiles.EMPTY
+    	ldx #5
+    	ldy #6
+    	jsr Map.SwitchCharAtXY
+
+    	rts
+    }
+
+    ShowOffScreenCement2: {
+    	lda #$BA
+    	ldx #34
+    	ldy #5
+    	jsr Map.SwitchCharAtXY
+
+    	lda #$BB
+    	ldx #34
+    	ldy #6
+    	jsr Map.SwitchCharAtXY
+
+    	rts
+    }
+
+    HideOffScreenCement2: {
+    	lda Tiles.EMPTY
+    	ldx #34
+    	ldy #5
+    	jsr Map.SwitchCharAtXY
+
+    	lda Tiles.EMPTY
+    	ldx #34
+    	ldy #6
+    	jsr Map.SwitchCharAtXY
+
+    	rts
+    }
+
 
 	Update1: {
 		lda PLAYER.IsPlayerDead
@@ -151,7 +225,7 @@ CRATES: {
 		inx
 		stx PositionsTableIndex1
 		//check if at max position index and reset to 0 if necessary
-		cpx #7 //todo Create label
+		cpx #6 //todo Create label
 		bne !skip+
 
 			ldx #0
@@ -173,12 +247,10 @@ CRATES: {
 		inx
 		stx PositionsTableIndex2
 		//check if at max position index and reset to 0 if necessary
-		cpx #7 //todo Create label
+		cpx #6 //todo Create label
 		bne !skip+
-
 			ldx #0
 			stx PositionsTableIndex2
-		
 		!skip:
 		//Crate1 Updates	
 		jsr CheckIsOpen2

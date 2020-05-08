@@ -370,6 +370,28 @@ Map: {
 		ldy Tiles.DRIVER_DEAD_RIGHT_12 + 2
 		jsr SwitchCharAtXY
 
+		//Left Cement Crate
+		lda Tiles.EMPTY
+		ldx #5
+		ldy #5
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx #5
+		ldy #6
+		jsr SwitchCharAtXY
+
+		//Right Cement Crate
+		lda Tiles.EMPTY
+		ldx #34
+		ldy #5
+		jsr SwitchCharAtXY
+
+		lda Tiles.EMPTY
+		ldx #34
+		ldy #6
+		jsr SwitchCharAtXY
+
 		lda #39
 		sta RowLoopIndex
 		!Loop:
