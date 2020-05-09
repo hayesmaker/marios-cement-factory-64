@@ -16,7 +16,7 @@ Crates: {
 	CurrentCrate2:
 		.byte EmptyCrate
 	OpenCrateFull:
-		.byte $56, $56, $58
+		.byte $56, $57, $58
 	OpenCrateEmpty:
 		.byte $58, $57, $58			 			
 	
@@ -252,7 +252,6 @@ Crates: {
 
 
 	Update1: {
-		jsr checkFill
 		lda PLAYER.IsPlayerDead
     	bne !return+
 		ldx PositionsTableIndex1
@@ -263,6 +262,17 @@ Crates: {
 		bne !skip+
 			ldx #0
 			stx PositionsTableIndex1
+			jsr checkFill
+			lda shouldFill
+			bne !isFull+
+				lda EmptyCrate
+				jmp !setCrate+
+			!isFull:
+				lda #0
+				sta shouldFill
+				lda FullCrate
+			!setCrate:
+				sta CurrentCrate1
 			//stx noRefillCement1
 		!skip:
 		//Crate1 Updates	
@@ -280,7 +290,6 @@ Crates: {
 	}
 
 	Update2: {
-		jsr checkFill
 		lda PLAYER.IsPlayerDead
     	bne !return+
 		ldx PositionsTableIndex2
@@ -291,6 +300,17 @@ Crates: {
 		bne !skip+
 			ldx #0
 			stx PositionsTableIndex2
+			jsr checkFill
+			lda shouldFill
+			bne !isFull+
+				lda EmptyCrate
+				jmp !setCrate+
+			!isFull:
+				lda #0
+				sta shouldFill
+				lda FullCrate
+			!setCrate:
+				sta CurrentCrate2
 		!skip:
 		//Crate1 Updates	
 		jsr CheckCrateOpenTimeout2
@@ -330,7 +350,14 @@ Crates: {
 
 	pourInterval1: {
   		ldy OpenCrateIndex1
-  		lda OpenCrateFrames,y
+  		lda CurrentCrate1
+  		cmp FullCrate
+  		bne !isEmpty+
+  			lda OpenCrateFull,y
+  			jmp !setFrame+
+  		!isEmpty:
+  			lda OpenCrateEmpty,y
+  		!setFrame:
   		sta Game.SPRITE_POINTERS + 1
 
 		ldy OpenCrateIndex1
@@ -341,7 +368,11 @@ Crates: {
 		!skip:
 		cpy #1
 		bne !skip+
-			jsr Mixers.PourCement1
+			lda CurrentCrate1
+			cmp FullCrate
+			bne !doOpen+
+				jsr Mixers.PourCement1
+			!doOpen:
 			jmp !setInterval+
 		!skip:
 		cpy #2
@@ -366,7 +397,14 @@ Crates: {
 
 	pourInterval2: {
   		ldy OpenCrateIndex2
-  		lda OpenCrateFrames,y
+  		lda CurrentCrate2
+  		cmp FullCrate
+  		bne !isEmpty+
+  			lda OpenCrateFull,y
+  			jmp !setFrame+
+  		!isEmpty:
+  			lda OpenCrateEmpty,y
+  		!setFrame:
   		sta Game.SPRITE_POINTERS + 2
 
 		ldy OpenCrateIndex2
@@ -377,7 +415,11 @@ Crates: {
 		!skip:
 		cpy #1
 		bne !skip+
-			jsr Mixers.PourCement3
+			lda CurrentCrate2
+			cmp FullCrate
+			bne !doOpen+
+				jsr Mixers.PourCement3
+			!doOpen:
 			jmp !setInterval+
 		!skip:
 		cpy #2
@@ -408,7 +450,7 @@ Crates: {
 		!doFill:
 			lda #1
 			sta shouldFill
-			inc $d020
+			//inc $d020
 		!return:
 		rts
 	}
