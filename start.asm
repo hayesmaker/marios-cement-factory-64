@@ -74,14 +74,13 @@ main:
 
 * = $d000 "Sprites"
 	.import binary "./assets/sprites/sprites.bin"
-
 * = $b000 "Map data"
 MAP_TILES: 
 	.import binary "./assets/maps/mcf-bg - Tiles.bin"
 CHAR_COLORS: 
 	.import binary "./assets/maps/mcf-bg - CharAttribs.bin"
 MAP: 
-	.import binary "./assets/maps/mcf-bg - Map (20x13).bin"
+	.import binary "./assets/maps/mcf-bg - Map (20x12).bin"
 * = $f000 "Game-Charset"
 	.import binary "./assets/maps/mcf-bg - Chars.bin"
 * = $f800 "Titles-Charset"

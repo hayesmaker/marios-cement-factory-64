@@ -8,17 +8,32 @@ Game: {
 	PerformFrameCodeFlag:
 	.byte $00  
 	
-	FadeIndex:
-		.byte $00, $07
-	FadeToLightGrey:
-		.byte $00, $06, $0b, $04, $0c, $0f, $0f, $0f
-	FadeTimer:				.byte 0, 200, 200
+	// FadeIndex:
+	// 	.byte $00, $07
+	// FadeToLightGrey:
+	// 	.byte $00, $06, $0b, $04, $0c, $0f, $0f, $0f
+	// FadeTimer:				.byte 0, 200, 200
+
+	//Timings
+	//02:35
+	//02:35
+	//02:37
+	//02:36
+	//02:38
+
+	//50=1
+	//50+50+20 = 120 frames between cements at Game A 0-100
+
+	//30 frames per tick
+	
 
 							// current, currentMax, startValue
-	GameTimerTick:			.byte 20, 20, 20
+	GameTimerTick:			.byte 30, 30, 30
 	                        //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
 	PushButtonTimer:        .byte 0, 10, 10
 	FallGuyTimer:           .byte 0, 35, 35
+	CratePourTimer1:		.byte 0, 15, 15
+	CratePourTimer2: 		.byte 0, 15, 15
 	CementSpillTimer:       .byte 0, 50, 50
 	ScoreBlinkingTimer: 	.byte 0, 25, 25
 	GameCounter:			.byte $00
@@ -98,7 +113,7 @@ Game: {
 		jsr Map.DrawMap
 	    jsr Lives.Initialise
 	    jsr ELEVATORS.Initialise
-		jsr CRATES.Initialise
+		jsr Crates.Initialise
 	    jsr PouredCement.Initialise
 	    jsr Mixers.Initialise
 	    jsr PLAYER.Initialise
@@ -134,10 +149,21 @@ Game: {
 		    lda ScoreBlinkingTimer + 2
 		    sta ScoreBlinkingTimer + 1
 
+		    lda #0
+		    sta CratePourTimer1 + 0
+		    lda CratePourTimer1 + 2
+		    sta CratePourTimer1 + 1
+
+		    lda #0
+		    sta CratePourTimer2 + 0
+		    lda CratePourTimer2 + 2
+		    sta CratePourTimer2 + 1
+
 		    lda MaxTickStates
 		    sta TickState
 		    
-		    jsr CRATES.DrawSprite
+		    jsr Crates.DrawSprite1
+		    jsr Crates.DrawSprite2
 		    jsr PLAYER.DrawSprite
 
 		    jsr Map.Initialise
@@ -214,7 +240,7 @@ Game: {
 		//MAIN GAME ACTIONS ON TICKS
 		!tick0: 
 		    //Reset TickState counter
-		    jsr CRATES.Update1
+		    jsr Crates.Update1
 		    //jsr Mixers.Update
 		    jmp !+
 		!tick1:
@@ -237,7 +263,7 @@ Game: {
 
 		    jmp !+
 		!tick4:
-		    jsr CRATES.Update2
+		    jsr Crates.Update2
 		    //jsr Mixers.Update
 		    //jsr CRATES.Update2
 		    
@@ -276,7 +302,19 @@ Game: {
 		/**
 		** Game Code you want Executed once per frame
 		**/
-		FrameCode: {		
+		FrameCode: {
+			lda CratePourTimer1 + 0
+			beq !next+
+				lda CratePourTimer1 + 1
+				bne !next+
+					jsr Crates.pourInterval1
+			!next:
+			lda CratePourTimer2 + 0
+			beq !next+
+				lda CratePourTimer2 + 1
+				bne !next+
+					jsr Crates.pourInterval2
+			!next:
 		    lda CementSpillTimer + 1
 		    bne !next+
 		        lda CementSpillTimer + 0
