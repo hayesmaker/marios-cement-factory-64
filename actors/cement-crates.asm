@@ -2,8 +2,23 @@ Crates: {
 	PosY:
 		.byte 85
 
+	//@deprecated
 	FramesTable1:
 		.byte $40, $40, $40
+
+	//Full / Empty Crate Frames
+	FullCrate:
+		.byte $40
+	EmptyCrate:
+		.byte $58
+	CurrentCrate1:
+		.byte EmptyCrate
+	CurrentCrate2:
+		.byte EmptyCrate
+	OpenCrateFull:
+		.byte $56, $56, $58
+	OpenCrateEmpty:
+		.byte $58, $57, $58			 			
 	
 	PositionsTableIndex1:
 		.byte 0	
@@ -20,6 +35,7 @@ Crates: {
 	OpenCrateIndex2:
 		.byte 0
 	
+	//@deprecated
 	FramesTable2:
 		.byte $40, $40, $40		
 	PositionsTableIndex2:
@@ -29,6 +45,9 @@ Crates: {
 	PositionsTable2_HB:
 		.byte $00, $00, $01
 
+	shouldFill:
+		.byte $00	
+
 		// TODO: Decide to use this or make labels to specifc indexes for actions?
 		// ActionsTable:
 		// .byte $00, $00, $00, $01, $02, $00		
@@ -37,6 +56,11 @@ Crates: {
 		lda #$00
 		sta VIC.SPRITE_COLOR_1
 		sta VIC.SPRITE_COLOR_2
+		sta shouldFill
+
+		lda EmptyCrate
+		sta CurrentCrate1
+		sta CurrentCrate2
 
 		lda #$40
 		sta Game.SPRITE_POINTERS + 1
@@ -93,8 +117,8 @@ Crates: {
     	//Dont do this if pouring cement?...
     	//...we dont call draw after frame is drawn for pouring so this should be ok
         //Crate1 Do Frames
-        ldy PositionsTableIndex1
-        lda FramesTable1, y
+        
+        lda CurrentCrate1
         sta Game.SPRITE_POINTERS + 1
 
         rts
@@ -130,8 +154,7 @@ Crates: {
     	//Dont do this if pouring cement?...
     	//...we dont call draw after frame is drawn for pouring so this should be ok
         //Crate2 Set Sprite Frame
-        ldy PositionsTableIndex2
-        lda FramesTable2, y
+       	lda CurrentCrate2
         sta Game.SPRITE_POINTERS + 2
 
 		rts
@@ -229,6 +252,7 @@ Crates: {
 
 
 	Update1: {
+		jsr checkFill
 		lda PLAYER.IsPlayerDead
     	bne !return+
 		ldx PositionsTableIndex1
@@ -256,6 +280,7 @@ Crates: {
 	}
 
 	Update2: {
+		jsr checkFill
 		lda PLAYER.IsPlayerDead
     	bne !return+
 		ldx PositionsTableIndex2
@@ -371,6 +396,19 @@ Crates: {
 		lda Game.CratePourTimer2 + 2
 		sta Game.CratePourTimer2 + 1
 
+		!return:
+		rts
+	}
+
+	checkFill:{
+		jsr Game.Random
+		cmp #128
+		bcc !doFill+
+		jmp !return+
+		!doFill:
+			lda #1
+			sta shouldFill
+			inc $d020
 		!return:
 		rts
 	}
