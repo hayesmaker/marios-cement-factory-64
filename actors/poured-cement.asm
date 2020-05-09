@@ -31,14 +31,6 @@ PouredCement: {
 
 		lda $40
 		sta Game.SPRITE_POINTERS + 3
-
-		lda VIC.SPRITE_ENABLE 
-		ora #%00001000
-		sta VIC.SPRITE_ENABLE
-
-        //initialise debounce flags 	
-        //sta DebounceFlag
-        //sta DebounceFireFlag
 		rts
 	}
 

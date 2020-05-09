@@ -1,4 +1,4 @@
-ELEVATORS: {
+Elevators: {
 	//getLength: [ _Positions_L_end - Positions_L ]    6
 	Data_L: //0 - - -[1 2 3]- 8 9 - -12 - - -16 - - -20 - - - - - 
 		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0

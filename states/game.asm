@@ -26,9 +26,9 @@ Game: {
 
 	//30 frames per tick
 	
-
+	.label FRAMES_PER_TICK = 26
 							// current, currentMax, startValue
-	GameTimerTick:			.byte 30, 30, 30
+	GameTimerTick:			.byte FRAMES_PER_TICK, FRAMES_PER_TICK, FRAMES_PER_TICK
 	                        //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
 	PushButtonTimer:        .byte 0, 10, 10
 	FallGuyTimer:           .byte 0, 35, 35
@@ -41,8 +41,8 @@ Game: {
 	TickState:              .byte $00
 	Level:                  .byte $00
 	SpeedIncreaseTable:	
-		//.byte $02, $04, $06, $08, $0A, $0C, $0E, $10, $12
 		.byte $00, $02, $04, $06, $08, $0a, $0c, $0e, $10
+		//.byte 16, 16, 16, 16, 16, 16, 16, 16, 16, 16
 
 	Random: {
         lda seed
@@ -118,7 +118,7 @@ Game: {
 		jsr Random.init
 		jsr Map.DrawMap
 	    jsr Lives.Initialise
-	    jsr ELEVATORS.Initialise
+	    jsr Elevators.Initialise
 		jsr Crates.Initialise
 	    jsr PouredCement.Initialise
 	    jsr Mixers.Initialise
@@ -259,7 +259,7 @@ Game: {
 		    //jsr Mixers.Update
 		    jmp !+
 		!tick1:
-		    jsr ELEVATORS.Update2
+		    jsr Elevators.Update2
 		    jsr Mixers.Update
 		    //play SOUND1
 	        jsr Sounds.LIFT_TICK
@@ -270,7 +270,7 @@ Game: {
 		    //jsr Mixers.Update
 		    jmp !+
 		!tick3:
-		    jsr ELEVATORS.Update1
+		    jsr Elevators.Update1
 		    jsr Mixers.Update
 		    //jsr ELEVATORS.Update2
 		    //play SOUND1
@@ -284,7 +284,7 @@ Game: {
 		    
 		    jmp !+
 		!tick5:
-		    jsr ELEVATORS.Update2    
+		    jsr Elevators.Update2    
 		    jsr Mixers.Update
 
 		    //play SOUND1
@@ -300,7 +300,7 @@ Game: {
 		    lda MaxTickStates
 		    sta TickState
 
-		    jsr ELEVATORS.Update1
+		    jsr Elevators.Update1
 		    jsr Mixers.Update
 
 		    //play SOUND1
