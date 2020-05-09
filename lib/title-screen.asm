@@ -79,19 +79,16 @@ TitleScreen: {
 		lda #%00000011
 		sta $D01D   
         //menu blink sprite enable    
-		lda VIC.SPRITE_ENABLE 
-		ora #%00000111
+		lda #%00000111 
 		sta VIC.SPRITE_ENABLE
         //block 1 enable sprite msb
-        lda VIC.SPRITE_MSB
-        and #%11111000
+        lda #%00000000
         sta VIC.SPRITE_MSB
         
         lda #104
         sta VIC.SPRITE_2_X
         lda #202
         sta VIC.SPRITE_2_Y
-
 
         lda #40
         sta VIC.SPRITE_0_X  
@@ -159,7 +156,7 @@ TitleScreen: {
 		ldx #%11
 		!NoFlash:
 		txa
-		ora #%11111100
+		ora #%00000100
 		sta VIC.SPRITE_ENABLE
 		rts
 	}
@@ -211,7 +208,7 @@ TitleScreen: {
         	bne !+
                 //menu blink sprite enable    
                 lda VIC.SPRITE_ENABLE 
-                ora #%00000100
+                and #%00000100
                 sta VIC.SPRITE_ENABLE
         		lda #GAME_B
         		jmp !setGameMode+

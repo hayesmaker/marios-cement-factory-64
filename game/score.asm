@@ -11,11 +11,10 @@ Score:{
 	lowerScore: .byte 2
 	scoreToggledOn: .byte 1
 
-
 	Reset:{
-		lda #$90
+		lda #$00
 		sta currentScore + 0
-		lda #$02
+		lda #$00
 		sta currentScore + 1
 		rts
 	}
@@ -115,6 +114,9 @@ Score:{
 			//check if player has a lost a life
 			jsr EnableBonus
 		!skip:
+
+
+
 		cld
 		rts
 	}
@@ -161,7 +163,7 @@ Score:{
 		lsr 
 		asl
 		clc
-		adc Ui.NUMBER_WANG
+		adc Ui.NUMBER_WANG  //.byte $60 //First char index for 0
 		//score Blinking
 		ldx scoreToggledOn
 		bne !draw+

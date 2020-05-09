@@ -39,6 +39,10 @@ Game: {
 	GameCounter:			.byte $00
 	MaxTickStates:          .byte $07
 	TickState:              .byte $00
+	Level:                  .byte $00
+	SpeedIncreaseTable:	
+		//.byte $02, $04, $06, $08, $0A, $0C, $0E, $10, $12
+		.byte $00, $02, $04, $06, $08, $0a, $0c, $0e, $10
 
 	Random: {
         lda seed
@@ -71,9 +75,9 @@ Game: {
 	}
 
 	teardown: {
-        // lda VIC.SPRITE_ENABLE 
-        // and #%00000011
-        // sta VIC.SPRITE_ENABLE
+        //lda VIC.SPRITE_ENABLE 
+        lda #%00000000
+        sta VIC.SPRITE_ENABLE
         rts        
 	}
 
@@ -94,7 +98,9 @@ Game: {
 		//border & background colour
 		lda #$00
 		sta $d020 
-		sta $d021  
+		sta $d021
+		//set Level to 0 
+		sta Level 
 		//inc $d020
 		//Turn off bitmap mode
 		lda $d011
@@ -201,8 +207,17 @@ Game: {
 		    !doTick:
 		    //inc $d020
 		    //every 50 frames (1 tick = 1 second)
+		    // set level number and subtract from GameTimerTick
+		    lda Score.currentScore + 1
+		    and #$0f
+		    asl
+		    sta Level
+		    tay
+
 		    lda GameTimerTick + 1
-		    sta GameTimerTick
+		    sec
+		    sbc SpeedIncreaseTable, y 
+		    sta GameTimerTick + 0
 		    inc GameCounter
 
 		    //Tick Switch Statement

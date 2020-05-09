@@ -62,6 +62,8 @@ Titles: {
 	}
 
     drawScreen: {
+        // lda #$00
+        // sta VIC.SPRITE_ENABLE
                 //bitmap mode?
         lda #%00111000    // $38
         sta $d018
@@ -72,6 +74,8 @@ Titles: {
         //vic bank?
         lda #%00000010
         sta $dd00
+
+
 
         lda #0
         sta $d020   // border
