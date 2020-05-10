@@ -267,13 +267,13 @@ PLAYER: {
         sta FramesTableIndex
         rts
     }
-
+ 
     Update: {		    	
 		jsr PlayerControl
+        jsr CheckLiftDeath
 		jsr SetFrameNumber
 		jsr CheckCharUpdates
 		jsr DrawSprite
-        jsr CheckLiftDeath
         rts
 	}
 
@@ -326,13 +326,13 @@ PLAYER: {
 
     CheckIfLiftPresent_Left: {
 
-        lda ELEVATORS.LeftDataIndex
+        lda Elevators.LeftDataIndex
         clc
         adc #3
         sec 
         sbc Player_PosY_Index
         tay 
-        lda ELEVATORS.Data_L, y
+        lda Elevators.Data_L, y
         bne !next+
             //no lift here
             jsr PlayerFall
@@ -341,12 +341,12 @@ PLAYER: {
     }
 
     CheckIfLiftPresent_Right: {
-        lda ELEVATORS.RightDataIndex
+        lda Elevators.RightDataIndex
         clc
         adc Player_PosY_Index
         tay
         dey 
-        lda ELEVATORS.Data_R, y
+        lda Elevators.Data_R, y
         bne !next+
             //no lift
             jsr PlayerFall
