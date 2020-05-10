@@ -1,6 +1,6 @@
 Elevators: {
-	//getLength: [ _Positions_L_end - Positions_L ]    6
-	Data_L: //0 - - -[1 2 3]- 8 9 - -12 - - -16 - - -20 - - - - - 
+	//getLength: [ _Positions_L_end - Positions_L ]   0 1 2 3 4 5
+	Data_L: //0 - - -[1 2 3]- 8 9 - -12 - - -16 - - *-20- - - - -
 		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0
 	_Data_L_End:
 
@@ -13,10 +13,10 @@ Elevators: {
 	DrawLoopIndex:
 		.byte 0
 	StoreYPos:
-		.byte 0		
-	
-	Data_R:// - - - - -                                           - - - - -
-		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,1,0,0,0,1
+		.byte 0		//22  
+		//			  *	 										0 1 2 3 4 5			
+	Data_R:// - - - - -                                       2425 - - - - -
+		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0
 	_Data_R_End:
 
 	RightDataIndex:
@@ -263,16 +263,16 @@ Elevators: {
 	    		ldy DrawLoopIndex_R
 	    		jsr PLAYER.MoveWithLiftY2
 
-	    		ldy StoreYPos_R
+	    		ldy StoreYPos_R	
 	    		lda StoreYPos_R
-	    		
+
 	    		cmp #4
 	    		beq !drawTopCharLift+
 	    		cmp #19
 	    		beq !drawTopCharLift+
-
 	    		jsr AddLiftXY
 	    		jmp !end+
+
 	    	!drawTopCharLift:
 	    		jsr AddTopLiftXY
 	    	
@@ -285,7 +285,7 @@ Elevators: {
 			ldx RightDataIndex
 			inx
 
-			cpx #26 //todo: change this val
+			cpx #25 //todo: change this val
 			bne !return+
 
 			ldx #0 //todo: reset val

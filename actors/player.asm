@@ -270,10 +270,10 @@ PLAYER: {
  
     Update: {		    	
 		jsr PlayerControl
-        jsr CheckLiftDeath
 		jsr SetFrameNumber
-		jsr CheckCharUpdates
 		jsr DrawSprite
+        jsr CheckLiftDeath
+        jsr CheckCharUpdates
         rts
 	}
 
@@ -311,8 +311,6 @@ PLAYER: {
         beq !liftPossible+
         cmp #3
         beq !liftPossible2+
-        // cmp #3
-        // beq !liftPossible+
         jmp !return+
         !liftPossible:
             jsr CheckIfLiftPresent_Left
