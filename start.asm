@@ -47,15 +47,14 @@ SOUND_SCORE:
 #import "./game/lives.asm"
 #import "./game/options.asm"
 
+
 * = * "Main" 
 main: 
-
-	//bank out BASIC and Kernal
+//bank out BASIC and Kernal
   lda $01
   and #%11111000
   ora #%000101
   sta $01
-
 
 	!stateLoop:
 		jsr Titles.entry
@@ -85,3 +84,4 @@ MAP:
 	.import binary "./assets/maps/mcf-bg - Chars.bin"
 * = $f800 "Titles-Charset"
     .import binary "./assets/maps/thereyabloodygo.bin"
+
