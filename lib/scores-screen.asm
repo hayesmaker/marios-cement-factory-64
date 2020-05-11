@@ -1,14 +1,33 @@
 HiScores: {
-	.encoding "screencode_upper"
+	.label screen_ram = $c000
+  .label sprite_pointers = screen_ram + $3f8
+
+  .encoding "screencode_upper"
 	MyLabel1: .text "HIGH SCORES@"
   MyLabel2: .text "HAYESMAKER          1000@"
   MyLabel3: .text "HAYESMAKER           900@"
   MyLabel4: .text "HAYESMAKER           700@"
   MyLabel5: .text "PRESS FIRE@"
+  scoresTableName:
+    .text "HAYESMKR HAYESMKR HAYESMKR HAYESMKR"
+  scoresTableVal:
+    .word $03e8, $0384, $02bc, $01f4
+  __scoresTableVal:
+  scoresTableIndex:
+    .byte $00
+  scoreRows:
+    .byte screen_ram + 5*40 + 7, screen_ram + 7*40 + 7, screen_ram + 9*40 + 7, screen_ram + 11*40 + 7
+    
+  //sta screen_ram + row1*$28 + col1, x   
+  /*
+  .label row1 = 1
+        .label row2 = 5
+        .label row3 = 8
+        .label row4 = 11
+        .label row5 = 20
+  */
 
-
-  .label screen_ram = $c000
-  .label sprite_pointers = screen_ram + $3f8
+ 
 
  shouldUpdate:
     .byte $00
@@ -18,6 +37,8 @@ HiScores: {
     .byte $00
 
 	init: {
+        .label scoreCharTemp = TEMP7
+        .label screenramTemp = TEMP6
         lda #1
         sta shouldUpdate
         //init joystick
@@ -27,7 +48,7 @@ HiScores: {
         sta DebounceFlag
 
 
-		//Turn off bitmap mode
+		    //Turn off bitmap mode
         lda $d011
         and #%11011111
         sta $d011
@@ -98,6 +119,20 @@ HiScores: {
         !next:
 
         ldx #0
+        ldy scoresTableIndex
+        !loop_score:
+          lda scoresTableName,x
+          cmp #30
+          beq !scoreAndEnd+
+          stx scoresTableIndex
+          ldx scoreRows, y
+          
+          
+          !scoreAndEnd:
+
+
+
+
         !loop_text:
           lda MyLabel2,x       //; read characters from line1 table of text.
           beq !next+
