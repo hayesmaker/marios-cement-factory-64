@@ -2,12 +2,25 @@ HiScores: {
 	.label screen_ram = $c000
   .label sprite_pointers = screen_ram + $3f8
 
+  rowScreenTable: .fillword 25, screen_ram + (i * 40)
+
   .encoding "screencode_upper"
 	MyLabel1: .text "HIGH SCORES@"
   MyLabel2: .text "HAYESMAKER          1000@"
   MyLabel3: .text "HAYESMAKER           900@"
   MyLabel4: .text "HAYESMAKER           700@"
   MyLabel5: .text "PRESS FIRE@"
+  scoresTableName:
+     .text "HAYESMKR HAYESMKR HAYESMKR HAYESMKR"
+
+  scoresTableIndex:
+     .byte $00
+  rowIndex:
+     .byte $00
+  scoresTableVal:
+     .word $03e8, $0384, $02bc, $01f4
+  __scoresTableVal:
+
   
   
  shouldUpdate:
@@ -18,10 +31,6 @@ HiScores: {
     .byte $00
 
 	init: {
-        .label scoreCharTemp = TEMP7
-        .label screenramTemp = TEMP6
-
-        
         lda #1
         sta shouldUpdate
         //init joystick
@@ -100,49 +109,62 @@ HiScores: {
         !next:
 
 
-        !loop_text:
-          lda MyLabel2,x       //; read characters from line1 table of text.
-          beq !next+
-          sta screen_ram + row2*$28 + col2, x 
-          inx
-          jmp !loop_text-           
-         !next:
-
-         ldx #0
-         !loop_text:
-           lda MyLabel3,x       //; read characters from line1 table of text..
-           beq !next+
-           sta screen_ram + row3*$28 + col3, x 
-           inx
-           jmp !loop_text-
-          !next:
-
-          ldx #0
-          !loop_text:
-           lda MyLabel4,x       //; read characters from line1 table of text..
-           beq !next+
-           sta screen_ram + row4*$28 + col4, x 
-           inx 
-           jmp !loop_text-
-           !next:
-
-           ldx #0
-          !loop_text:
-           lda MyLabel5,x       //; read characters from line1 table of text..
-           beq !next+
-           sta screen_ram + row5*$28 + col5, x 
-           inx 
-           jmp !loop_text-
-           
-           !next:
+       jsr drawTable
 
 		rts
 	}
 
+  drawTable: {
+    .label screenramTemp = TEMP6
+    .label wordIndexCount = TEMP5
+    .label START_ROW = 5
+    .label START_COL = 7
+
+    lda #0
+    sta scoresTableIndex
+    sta wordIndexCount
+    lda #START_ROW
+    sta rowIndex
+
+    !loop_char:
+    ldx scoresTableIndex
+    ldy rowIndex
+    tya
+    asl
+    tay
+    lda rowScreenTable, y
+    sta screenramTemp
+    lda rowScreenTable + 1, y
+    sta screenramTemp + 1
+    
+    ldy scoresTableIndex
+    cpy #35
+    beq !end+
+    lda scoresTableName, y
+    cmp #32
+    beq !loop_row+
+    ldy wordIndexCount
+    sta (screenramTemp), y
+
+    inc scoresTableIndex
+    inc wordIndexCount
+    jmp !loop_char-
+
+    !loop_row:
+    inc scoresTableIndex
+    lda #0
+    sta wordIndexCount
+    inc rowIndex
+    jmp !loop_char-
+
+    !end:
+    rts
+  }
+
   update: {
     //inc $d020
     jsr control
-    jsr drawSprites
+    //jsr drawSprites
     rts
   }
 
