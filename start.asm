@@ -42,11 +42,6 @@ SOUND_SCORE:
 #import "./actors/elevators.asm"
 #import "./actors/player.asm"
 #import "./actors/poured-cement.asm"
-#import "./game/constants.asm"
-#import "./game/score.asm"
-#import "./game/lives.asm"
-#import "./game/options.asm"
-
 
 * = * "Main" 
 main: 
@@ -62,12 +57,22 @@ main:
 		
 	jmp !stateLoop-
 
+*=* "End main"
+
 *=$4c00;             .fill picture.getScreenRamSize(), picture.getScreenRam(i)
 *=$5000 "Menu Sprites"
      .import binary "./assets/sprites/titles.bin"
 *=$5c00; colorRam:   .fill picture.getColorRamSize(), picture.getColorRam(i)
 *=$6000;             .fill picture.getBitmapSize(), picture.getBitmap(i)
 
+*=$8000 "modules"
+
+#import "./game/constants.asm"
+#import "./game/score.asm"
+#import "./game/lives.asm"
+#import "./game/options.asm"
+
+*=* "end of modules"
 // .label SCREEN_RAM = $c000
 // .label SPRITE_POINTERS = SCREEN_RAM + $3f8
 
