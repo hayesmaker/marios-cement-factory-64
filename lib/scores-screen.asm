@@ -8,8 +8,9 @@ HiScores: {
   MyLabel3: .text "HAYESMAKER           900@"
   MyLabel4: .text "HAYESMAKER           700@"
   MyLabel5: .text "PRESS FIRE@"
+  
   scoresTableName:
-    .text "HAYESMKR HAYESMKR HAYESMKR HAYESMKR"
+    .text "HAYESMKR@HAYESMKR@HAYESMKR@HAYESMKR "
   scoresTableVal:
     .word $03e8, $0384, $02bc, $01f4
   __scoresTableVal:
@@ -104,7 +105,7 @@ HiScores: {
         .label row5 = 20
 
         .label col1 = 15
-        .label col2 = 7
+        .label col2 = 2
         .label col3 = 7
         .label col4 = 7
         .label col5 = 14
@@ -118,56 +119,30 @@ HiScores: {
            jmp !loop_text-
         !next:
 
+        /*
+        scoresTableName:
+    .text "HAYESMKR@HAYESMKR@HAYESMKR@HAYESMKR "
+        */
+
         ldx #0
-        ldy scoresTableIndex
-        !loop_score:
+        !loop_text:
           lda scoresTableName,x
           cmp #30
-          beq !scoreAndEnd+
-          stx scoresTableIndex
-          ldx scoreRows, y
-          
-          
-          !scoreAndEnd:
-
-
-
-
-        !loop_text:
-          lda MyLabel2,x       //; read characters from line1 table of text.
+          beq !end+
+          cmp #0
           beq !next+
-          sta screen_ram + row2*$28 + col2, x 
-          inx
-          jmp !loop_text-           
-         !next:
 
-         ldx #0
-         !loop_text:
-           lda MyLabel3,x       //; read characters from line1 table of text..
-           beq !next+
-           sta screen_ram + row3*$28 + col3, x 
-           inx
-           jmp !loop_text-
+          sta screen_ram + row2*$28 + col2, x
+          inx
+          jmp !loop_text-
+          
           !next:
 
-          ldx #0
-          !loop_text:
-           lda MyLabel4,x       //; read characters from line1 table of text..
-           beq !next+
-           sta screen_ram + row4*$28 + col4, x 
-           inx 
-           jmp !loop_text-
-           !next:
 
-           ldx #0
-          !loop_text:
-           lda MyLabel5,x       //; read characters from line1 table of text..
-           beq !next+
-           sta screen_ram + row5*$28 + col5, x 
-           inx 
-           jmp !loop_text-
-           
-           !next:
+
+        !end:
+
+         
 
 		rts
 	}
