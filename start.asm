@@ -4,19 +4,17 @@ BasicUpstart2(main)
 .label music_init =*
 .label music_play =*+3	
 .import binary "./assets/sound/music.bin"
-//tick: shuffle //sfx_shuffle
-//move: jump //sfx_bnce
-//death:sfx_boom //sfx_crunch
+
 SOUND_FALL:
-.import binary "./assets/sound/sfx/sfx_boom"
+.import binary "./assets/sound/sfx/SOUND_FALL"
 SOUND_MOVE:
-.import binary "./assets/sound/sfx/sfx_bnce"
+.import binary "./assets/sound/sfx/SOUND_MOVE"
 SOUND_TICK: 
-.import binary "./assets/sound/sfx/shuffle"
+.import binary "./assets/sound/sfx/SOUND_TICK"
 SOUND_CRUNCH:
-.import binary "./assets/sound/sfx/sfx_crunch"
+.import binary "./assets/sound/sfx/SOUND_FALL"
 SOUND_SCORE:
-.import binary "./assets/sound/sfx/die"
+.import binary "./assets/sound/sfx/SOUND_SCORE"
 
 
 * = * "KoalaImage" 
@@ -42,26 +40,24 @@ SOUND_SCORE:
 #import "./actors/elevators.asm"
 #import "./actors/player.asm"
 #import "./actors/poured-cement.asm"
-#import "./game/constants.asm"
-#import "./game/score.asm"
-#import "./game/lives.asm"
-#import "./game/options.asm"
 
 * = * "Main" 
 main: 
+//bank out BASIC and Kernal
 
-	//bank out BASIC and Kernal
   lda $01
   and #%11111000
   ora #%000101
   sta $01
 
-
 	!stateLoop:
+
 		jsr Titles.entry
 		jsr Game.entry
 		
 	jmp !stateLoop-
+
+*=* "End main"
 
 *=$4c00;             .fill picture.getScreenRamSize(), picture.getScreenRam(i)
 *=$5000 "Menu Sprites"
@@ -69,6 +65,14 @@ main:
 *=$5c00; colorRam:   .fill picture.getColorRamSize(), picture.getColorRam(i)
 *=$6000;             .fill picture.getBitmapSize(), picture.getBitmap(i)
 
+*=$8000 "modules"
+
+#import "./game/constants.asm"
+#import "./game/score.asm"
+#import "./game/lives.asm"
+#import "./game/options.asm"
+
+*=* "end of modules"
 // .label SCREEN_RAM = $c000
 // .label SPRITE_POINTERS = SCREEN_RAM + $3f8
 
@@ -85,3 +89,4 @@ MAP:
 	.import binary "./assets/maps/mcf-bg - Chars.bin"
 * = $f800 "Titles-Charset"
     .import binary "./assets/maps/thereyabloodygo.bin"
+

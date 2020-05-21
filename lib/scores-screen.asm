@@ -1,51 +1,38 @@
 HiScores: {
 	.label screen_ram = $c000
   .label sprite_pointers = screen_ram + $3f8
-
-  rowScreenTable:
-    .fillword 25, screen_ram + (i * 40)
+  .label WHITE_SPACE_CHAR = 32
+  
+  rowScreenTable: .fillword 25, screen_ram + (i * 40)
 
   .encoding "screencode_upper"
 	MyLabel1: .text "HIGH SCORES@"
-  MyLabel2: .text "HAYESMAKER          1000@"
+  MyLabel2: .text "HAYESMAKER          1234@"
   MyLabel3: .text "HAYESMAKER           900@"
   MyLabel4: .text "HAYESMAKER           700@"
   MyLabel5: .text "PRESS FIRE@"
-  
-
-  scoresTableIndex:
-    .byte $00
-  rowIndex:
-    .byte $00  
   scoresTableName:
-    .text "HAYESMKR HAYESMKR HAYESMKR HAYESMKR"
+   .text "HAYESMKR HAYESMKR HAYESMKR HAYESMKR"
+  __scoresTableName: 
+  
+  NUMBERWANG:
+    .byte $30 //First char index for 0
+  scoresTableIndex:
+     .byte $00
+  rowIndex:
+     .byte $00
   scoresTableVal:
-    .word $03e8, $0384, $02bc, $01f4
+     .word $1234, $0900, $0700, $0500
   __scoresTableVal:
-
-  screen_rows:
-    .word $00C8, $0140, $01B8, $0230
     
-  //sta screen_ram + row1*$28 + col1, x   
-  /*
-  .label row1 = 1
-        .label row2 = 5
-        .label row3 = 8
-        .label row4 = 11
-        .label row5 = 20
-  */
-
- 
-
- shouldUpdate:
-    .byte $00
-  DebounceFlag:
+  shouldUpdate:
     .byte $00
   DebounceFireFlag:
-    .byte $00
+    .byte $01
+  DebounceFlag:
+    .byte $00    
 
 	init: {
-        
         lda #1
         sta shouldUpdate
         //init joystick
@@ -102,7 +89,6 @@ HiScores: {
            cpx #$400
            bne !loop_colour-
 
-       
         .label row1 = 1
         .label row2 = 5
         .label row3 = 8
@@ -123,86 +109,185 @@ HiScores: {
            inx
            jmp !loop_text-
         !next:
-
-        /*
-        screenCharIndex:
-          .byte 00
-        scoresTableLetter:
-          .byte $00
-        scoresTableIndex:
-          .byte $00
-        scoreIndex:
-          .byte $00  
-        scoresTableName:
-          .text "HAYESMKR HAYESMKR HAYESMKR HAYESMKR"
-        scoresTableVal:
-          .word $03e8, $0384, $02bc, $01f4
-        __scoresTableVal:
-
-        screen_rows:
-          .word $00C8, $0140, $01B8, $0230
-        */
-        
-        /*
-        tya
-        asl
-        tay
-        lda RowScreenTable, y
-        sta zpCharIndex
-        lda RowScreenTable + 1, y
-        sta zpCharIndex + 1
-        txa
-        tay
-        sta (zpCharIndex),y
-        rts
-        */
-    jsr drawTable
-
+    jsr drawNames
+    jsr drawScore
 		rts
 	}
 
-  drawTable: {
-    .label scoreCharTemp = TEMP7
+    /*
+    //units 1s
+    lda currentScore
+    and #$0f
+    asl 
+    clc
+    adc Ui.NUMBER_WANG //#$60
+    sta Game.SCREEN_RAM + 133
+    
+    //units 10s
+    lda currentScore
+    lsr
+    lsr 
+    lsr 
+    lsr 
+    asl
+    clc
+    adc Ui.NUMBER_WANG  //.byte $60 //First char index for 0 
+    sta Game.SCREEN_RAM + 132
+
+    //units 100s
+    lda currentScore + 1
+    and #$0f
+    asl 
+    clc
+    adc Ui.NUMBER_WANG
+    sta Game.SCREEN_RAM + 131
+    */
+
+  drawScore: {
+    .label scoreTemp = TEMP8
     .label screenramTemp = TEMP6
-    .label wordIndexTemp = TEMP5
+    .label digitIndexCount = TEMP4
+    .label START_ROW = 5
+    .label START_COL = 2
+
+
 
     lda #0
     sta scoresTableIndex
-    sta wordIndexTemp
-    lda #5
+    sta digitIndexCount
+    lda #START_ROW
     sta rowIndex
 
-    //
-    !loop_word:
-      ldy rowIndex
-      iny
-      sty rowIndex 
+    !loop_score:
+    ldx scoresTableIndex
+    lda rowIndex
+    asl
+    tay
+    lda rowScreenTable, y
+    sta screenramTemp
+    lda rowScreenTable + 1, y
+    sta screenramTemp + 1
 
-      lda #0
-      sta wordIndexTemp
+    ldy scoresTableIndex
+    cpy #[__scoresTableVal - scoresTableVal]
+    beq !end+
 
-    !loop_text:
+    //get score
+    lda <scoresTableVal, y
+    sta scoreTemp + 0
+    lda >scoresTableVal, y
+    sta scoreTemp + 1
+
+    //start col
+    lda digitIndexCount
+    clc
+    adc #START_COL
+    tay
+
+    //y has start col
+    //lda digitIndexCount
+
+    //units
+    lda scoreTemp
+    and #$0f
+    asl 
+    clc
+    adc NUMBERWANG //$30
+    sta (screenramTemp), y
+
+    dey
+
+    //tens
+    lda scoreTemp
+    lsr
+    lsr 
+    lsr 
+    lsr 
+    asl
+    clc
+    adc NUMBERWANG  //.byte $30 //First char index for 0 
+    sta (screenramTemp), y
+
+    dey
+    dey
+    //hundreds
+    lda scoreTemp + 1
+    and #$0f
+    asl 
+    clc
+    adc NUMBERWANG
+    sta (screenramTemp), y
+
+    dey
+    dey
+    dey
     
-      ldx wordIndexTemp
-      ldy rowIndex
-      lda rowScreenTable, y
-      clc
-      adc wordIndexTemp
-      sta screenramTemp
-      lda rowScreenTable + 1, y
-      sta screenramTemp + 1
+    //thousands
+    lda scoreTemp + 1
+    lsr
+    lsr 
+    lsr 
+    asl
+    clc
+    adc NUMBERWANG  // $30: start index of numbers (char: 0)
+    sta (screenramTemp), y
 
-      ldx scoresTableIndex
-      cpx #34
-      beq !end+
-        lda scoresTableName, x
-        beq !loop_word-
-          ldx wordIndexTemp
-          sta (screenramTemp), x
-          inc wordIndexTemp  
-          inc scoresTableIndex
-          jmp !loop_text-
+    !end:
+    rts
+  }
 
+  drawNames: {
+    //.label scoreCharTemp = TEMP7
+    .label screenramTemp = TEMP6
+    .label wordIndexCount = TEMP5
+    .label START_ROW = 5
+    .label START_COL = 7
+
+    lda #0
+    sta scoresTableIndex
+    sta wordIndexCount
+    lda #START_ROW
+    sta rowIndex
+
+    !loop_char:
+    ldx scoresTableIndex
+    lda rowIndex
+    asl
+    tay
+    lda rowScreenTable, y
+    sta screenramTemp
+    lda rowScreenTable + 1, y
+    sta screenramTemp + 1
+    
+    ldy scoresTableIndex
+    cpy #[__scoresTableName - scoresTableName]
+    beq !end+
+    
+    lda scoresTableName, y  //Get letter
+    cmp #WHITE_SPACE_CHAR
+    beq !loop_row+
+
+    //letter x position adc START_COL to indent
+    lda wordIndexCount
+    clc
+    adc #START_COL
+    tay
+
+    ldx scoresTableIndex
+    lda scoresTableName, x  //Get letter (again!)
+    sta (screenramTemp), y  //print letter
+
+    inc scoresTableIndex
+    inc wordIndexCount
+    jmp !loop_char-
+
+    !loop_row:
+    inc scoresTableIndex
+    lda #0
+    sta wordIndexCount
+    inc rowIndex
+    inc rowIndex
+    jmp !loop_char-
     !end:
     rts
   }
@@ -210,7 +295,7 @@ HiScores: {
   update: {
     //inc $d020
     jsr control
-    jsr drawSprites
+    //jsr drawSprites
     rts
   }
 
