@@ -67,15 +67,6 @@ Score:{
 		rts
 	}
 
-	//DebugLift
-	DebugLift: {
-		lda DebugLift
-		sta currentScore
-
-
-		rts
-	}
-
 	/**
 	* Ensure scoreToAdd is set before calling
 	*/
@@ -136,7 +127,7 @@ Score:{
 
 	RenderScore: {
 		//Check if Score is Toggled or Not
-		lda currentScore
+		lda currentScore	
 		and #$0f
 		asl 
 		clc

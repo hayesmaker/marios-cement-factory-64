@@ -7,6 +7,8 @@
 .label TEMP7 = $08
 .label TEMP8 = $09
 .label TEMP9 = $0a
+.label TEMP10 = $0b
+.label TEMP11 = $0c
 
 
 .label JOY_ZP = $10

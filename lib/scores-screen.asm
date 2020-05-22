@@ -7,10 +7,7 @@ HiScores: {
 
   .encoding "screencode_upper"
 	MyLabel1: .text "HIGH SCORES@"
-  MyLabel2: .text "HAYESMAKER          1234@"
-  MyLabel3: .text "HAYESMAKER           900@"
-  MyLabel4: .text "HAYESMAKER           700@"
-  MyLabel5: .text "PRESS FIRE@"
+  MyLabel2: .text "PRESS FIRE@"
   scoresTableName:
    .text "HAYESMKR HAYESMKR HAYESMKR HAYESMKR"
   __scoresTableName: 
@@ -24,6 +21,9 @@ HiScores: {
   scoresTableVal:
      .word $1234, $0900, $0700, $0500
   __scoresTableVal:
+
+  scoreTemp:
+      .byte $00, $00
     
   shouldUpdate:
     .byte $00
@@ -144,13 +144,11 @@ HiScores: {
     */
 
   drawScore: {
-    .label scoreTemp = TEMP8
-    .label screenramTemp = TEMP6
-    .label digitIndexCount = TEMP4
+    //.label scoreTemp = TEMP8
+    .label screenramTemp = TEMP9
+    .label digitIndexCount = TEMP11
     .label START_ROW = 5
-    .label START_COL = 2
-
-
+    .label START_COL = 28
 
     lda #0
     sta scoresTableIndex
@@ -159,7 +157,6 @@ HiScores: {
     sta rowIndex
 
     !loop_score:
-    ldx scoresTableIndex
     lda rowIndex
     asl
     tay
@@ -169,8 +166,9 @@ HiScores: {
     sta screenramTemp + 1
 
     ldy scoresTableIndex
-    cpy #[__scoresTableVal - scoresTableVal]
-    beq !end+
+    
+    // cpy #[__scoresTableVal - scoresTableVal]
+    // beq !end+
 
     //get score
     lda <scoresTableVal, y
@@ -190,7 +188,7 @@ HiScores: {
     //units
     lda scoreTemp
     and #$0f
-    asl 
+    asl
     clc
     adc NUMBERWANG //$30
     sta (screenramTemp), y
@@ -209,7 +207,7 @@ HiScores: {
     sta (screenramTemp), y
 
     dey
-    dey
+    
     //hundreds
     lda scoreTemp + 1
     and #$0f
@@ -218,8 +216,6 @@ HiScores: {
     adc NUMBERWANG
     sta (screenramTemp), y
 
-    dey
-    dey
     dey
     
     //thousands
@@ -238,7 +234,7 @@ HiScores: {
 
   drawNames: {
     //.label scoreCharTemp = TEMP7
-    .label screenramTemp = TEMP6
+    .label screenramTemp = TEMP10
     .label wordIndexCount = TEMP5
     .label START_ROW = 5
     .label START_COL = 7
