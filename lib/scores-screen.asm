@@ -166,14 +166,13 @@ HiScores: {
     sta screenramTemp + 1
 
     ldy scoresTableIndex
-    
-    // cpy #[__scoresTableVal - scoresTableVal]
-    // beq !end+
+    cpy #[__scoresTableVal - scoresTableVal]
+    beq !end+
 
     //get score
-    lda <scoresTableVal, y
+    lda scoresTableVal, y
     sta scoreTemp + 0
-    lda >scoresTableVal, y
+    lda scoresTableVal + 1, y
     sta scoreTemp + 1
 
     //start col
@@ -188,20 +187,17 @@ HiScores: {
     //units
     lda scoreTemp
     and #$0f
-    asl
     clc
     adc NUMBERWANG //$30
     sta (screenramTemp), y
 
     dey
-
     //tens
     lda scoreTemp
     lsr
     lsr 
     lsr 
     lsr 
-    asl
     clc
     adc NUMBERWANG  //.byte $30 //First char index for 0 
     sta (screenramTemp), y
@@ -211,7 +207,6 @@ HiScores: {
     //hundreds
     lda scoreTemp + 1
     and #$0f
-    asl 
     clc
     adc NUMBERWANG
     sta (screenramTemp), y
@@ -223,10 +218,16 @@ HiScores: {
     lsr
     lsr 
     lsr 
-    asl
+    lsr
     clc
     adc NUMBERWANG  // $30: start index of numbers (char: 0)
     sta (screenramTemp), y
+
+    inc scoresTableIndex
+    inc scoresTableIndex
+    inc rowIndex
+    inc rowIndex
+    jmp !loop_score-
 
     !end:
     rts
