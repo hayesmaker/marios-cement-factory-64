@@ -1,10 +1,11 @@
 Credits: {
 	.encoding "screencode_upper"
 	MyLabel1: .text "CREDITS@"
-  MyLabel2: .text "CODE     HAYESMAKER64@"
-  MyLabel3: .text "GFX      HAYESMAKER64@"
-  MyLabel4: .text "SOUND    PHASE101@"
-  MyLabel5: .text "PRESS FIRE@"
+  MyLabel2: .text "CODE       HAYESMAKER64@"
+  MyLabel3: .text "GFX        HAYESMAKER64@"
+  MyLabel4: .text "MUSIC      PHAZE101@"
+  MyLabel5: .text "SFX        RICHMONDMIKE@"
+  MyLabel6: .text "PRESS FIRE@"
 
   .label screen_ram = $c000
   .label sprite_pointers = screen_ram + $3f8
@@ -79,13 +80,15 @@ Credits: {
         .label row2 = 5
         .label row3 = 8
         .label row4 = 11
-        .label row5 = 20
+        .label row5 = 13
+        .label row6 = 20
 
         .label col1 = 15
         .label col2 = 7
         .label col3 = 7
         .label col4 = 7
-        .label col5 = 14
+        .label col5 = 7
+        .label col6 = 14
 
         ldx #0
         !loop_text:  
@@ -123,11 +126,20 @@ Credits: {
           jmp !loop_text-
           !next:
 
-          ldx #0
+           ldx #0
           !loop_text:
           lda MyLabel5,x       //; read characters from line1 table of text..
           beq !next+
           sta screen_ram + row5*$28 + col5, x 
+          inx 
+          jmp !loop_text-
+          !next:
+
+          ldx #0
+          !loop_text:
+          lda MyLabel6,x       //; read characters from line1 table of text..
+          beq !next+
+          sta screen_ram + row6*$28 + col6, x 
           inx 
           jmp !loop_text-
           !next:  

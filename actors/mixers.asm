@@ -1000,7 +1000,6 @@ Mixers: {
 	}
 
 	AddCement5: {		
-		inc $d020
 		dec NumPoured5
 		lda NumPoured5
 		bne !skip+
@@ -1010,7 +1009,8 @@ Mixers: {
 	}
 
 	AddCement6: {
-		inc $d020
+		// @todo fix sprite not disappearing heere
+		// inc $d020
 		dec NumPoured6
 		lda NumPoured6
 		bne !skip+
