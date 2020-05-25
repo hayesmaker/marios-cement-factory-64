@@ -55,8 +55,7 @@ main:
 		jsr Titles.entry
 		jsr GameOver.entry
 		jsr Game.entry
-		
-		
+
 	jmp !stateLoop-
 
 *=* "End main"

@@ -51,9 +51,6 @@ IRQ: {
 	TitlesIRQHandler: {
 		
 		:StoreState()
-
-			//dec Titles.deleteDebounce + 1
-
 			jsr music_play
 			lsr VIC.INTERRUPT_STATUS     // ********************
 		:RestoreState()	

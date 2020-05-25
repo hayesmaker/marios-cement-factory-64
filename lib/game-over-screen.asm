@@ -34,7 +34,8 @@ GameOverScreen: {
     .byte $00  
 
 
- 
+  playerNameEntered: 
+    .fill 8, WHITE_SPACE_CHAR
 
 
 //highscore vars
@@ -82,6 +83,9 @@ init: {
       sta $d020   // border
       lda #RED
       sta $d021   // background
+
+      ldy #0
+      sty delDebounce
 
   //clear screen
       ldx #0
@@ -282,8 +286,9 @@ keyControl: {
     cmp #$ff
 
     beq NoNewAphanumericKey
-       ldy #0
-       sty delDebounce
+      ldy #0
+      sty delDebounce
+
       // Check A for Alphanumeric keys
       //.break
       sta TempA
@@ -301,9 +306,11 @@ keyControl: {
       lda #col
       clc 
       adc playerNameIndex
-      tay
+      tay 
       lda TempA
+      sta playerNameEntered, y  //h a y e s m a k e r
       sta (screenramTemp),y
+
       inc playerNameIndex
 
     NoNewAphanumericKey:
@@ -328,17 +335,53 @@ keyControl: {
     // stx $0401
     // sty $0402
     NoValidInput:  // This may be substituted for an errorhandler if needed
-    cmp #$ff
-    bne !return+
-      lda #0
-      sta delDebounce
     !return:
   rts
 }
 
+onDeleteTimeout: {
+  ldy #0
+  sty delDebounce
+
+  lda #0
+  sta GameOver.deleteDebounceTimer + 0
+  lda GameOver.deleteDebounceTimer + 2
+  sta GameOver.deleteDebounceTimer + 1
+  rts
+}
+
 onDeletePressed: {
-  inc $d020
+  .label screenramTemp = TEMP9
+  .label row = 10
+  .label col = 15
+
+  lda #1
+  sta GameOver.deleteDebounceTimer + 0
+  lda GameOver.deleteDebounceTimer + 2
+  sta GameOver.deleteDebounceTimer + 1
+
+  lda playerNameIndex
+  beq !return+
+  
+  dec playerNameIndex
+  lda #row
+  asl
+  tay
+  lda rowScreenTable, y
+  sta screenramTemp
+  lda rowScreenTable + 1, y
+  sta screenramTemp + 1
+  lda #col
+  clc 
+  adc playerNameIndex
+  tay 
+  lda #WHITE_SPACE_CHAR
+  sta playerNameEntered, y  //h a y e s m a k e r
+  sta (screenramTemp),y
+
   inc delDebounce
+
+  !return:
   rts
 }
 

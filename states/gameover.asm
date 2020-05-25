@@ -10,12 +10,21 @@ GameOver: {
     STATE_IN_PROGRESS:
         .byte $01
 
+    deleteDebounceTimer:
+        .byte 0, 250, 250
+    
+
 
 	entry: {
 
         lda #1
         sta STATE_IN_PROGRESS
 
+
+        lda #0
+        sta deleteDebounceTimer + 0
+        lda deleteDebounceTimer + 2
+        sta deleteDebounceTimer + 1
         //init joystick
         lda #$01
         sta DebounceFireFlag
@@ -42,7 +51,9 @@ GameOver: {
             lda STATE_IN_PROGRESS
             beq !end+
 
+            dec deleteDebounceTimer + 1    
             //Do OTHER STUFF
+            jsr frameCode
             jsr GameOverScreen.update
         jmp !TitleLoop-
 
@@ -60,6 +71,18 @@ GameOver: {
         lda #$03
         !set:
         jsr music_init
+        rts
+    }
+
+    frameCode: {
+
+        lda deleteDebounceTimer + 0
+        beq !next+
+        lda deleteDebounceTimer + 1
+        bne !next+
+            jsr GameOverScreen.onDeleteTimeout
+        !next:
+
         rts
     }
 

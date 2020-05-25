@@ -34,7 +34,7 @@ Titles: {
         .byte 154, 170, 186, 202, 218
     SelectorTableWidth:
         .byte $03,$03,$03,$03,$01   
-
+    
 	entry: {
         lda #1
         sta STATE_IN_PROGRESS
