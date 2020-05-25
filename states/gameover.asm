@@ -36,19 +36,31 @@ GameOver: {
         the fist 4 bits there : 0000 tell the vic the screen is at $c000
         the last 4 : 1110 tell it the chars are found at $f800
         */
-        jsr ScoreEntryScreen.init
+        jsr GameOverScreen.init
 
          !TitleLoop:
             lda STATE_IN_PROGRESS
             beq !end+
 
             //Do OTHER STUFF
-            jsr ScoreEntryScreen.update
+            jsr GameOverScreen.update
         jmp !TitleLoop-
 
         !end:
         rts
 
 	}
+
+     checkMusic: {
+        lda Options.isMusicOn
+        beq !noMusic+ 
+        lda #$00
+        jmp !set+
+        !noMusic:
+        lda #$03
+        !set:
+        jsr music_init
+        rts
+    }
 
 }

@@ -1,5 +1,5 @@
 HiScores: {
-	.label screen_ram = $c000
+  .label screen_ram = $c000
   .label sprite_pointers = screen_ram + $3f8
   .label WHITE_SPACE_CHAR = 32
   
@@ -41,7 +41,7 @@ HiScores: {
         lda #$00
         sta DebounceFlag
 
-		    //Turn off bitmap mode
+	    //Turn off bitmap mode
         lda $d011
         and #%11011111
         sta $d011
@@ -49,7 +49,7 @@ HiScores: {
         //VIC n stuff
         //set last VIC bank (to allow charset)
         lda #$00
-        sta $dd00
+        sta $dd00   
         /*
         the fist 4 bits there : 0000 tell the vic the screen is at $c000
         the last 4 : 1110 tell it the chars are found at $f800
@@ -105,12 +105,12 @@ HiScores: {
         !loop_text:  
            lda MyLabel1,x       //; read characters from line1 table of text..
            beq !next+
-           sta screen_ram + row1*$28 + col1, x 
+           sta screen_ram + row1*$28 + col1, x
            inx
            jmp !loop_text-
         !next:
-    jsr drawNames
-    jsr drawScore
+        jsr drawNames
+        jsr drawScore
 		rts
 	}
 
@@ -293,6 +293,7 @@ HiScores: {
     //inc $d020
     jsr control
     //jsr drawSprites
+    jsr keyControl
     rts
   }
 
@@ -380,8 +381,8 @@ HiScores: {
     
   }
 
-  drawSprites: {
-    
+  keyControl: {
+
     rts
   }
 

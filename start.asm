@@ -53,7 +53,9 @@ main:
 	!stateLoop:
 
 		jsr Titles.entry
+		jsr GameOver.entry
 		jsr Game.entry
+		
 		
 	jmp !stateLoop-
 
@@ -71,10 +73,11 @@ main:
 #import "./game/score.asm"
 #import "./game/lives.asm"
 #import "./game/options.asm"
+#import "./states/gameover.asm"
+#import "./lib/game-over-screen.asm"
+#import "./lib/keyboard.asm"
 
 *=* "end of modules"
-// .label SCREEN_RAM = $c000
-// .label SPRITE_POINTERS = SCREEN_RAM + $3f8
 
 * = $d000 "Sprites"
 	.import binary "./assets/sprites/sprites.bin"

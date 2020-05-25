@@ -57,7 +57,6 @@ TitleScreen: {
         lda #MAIN_MENU
         sta SCREEN_MODE
         
-        //start musak        
 		lda #RED
 		sta VIC.SPRITE_COLOR_0
         //lda #YELLOW
