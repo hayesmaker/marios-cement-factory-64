@@ -62,7 +62,16 @@ keyPressedX:
 delDebounce:
   .byte 0
 
+joyEnabled:
+  .byte 0
+keysEnabled:
+  .byte 0 
+
 init: {
+      lda #1
+      sta DebounceFireFlag
+      lda #$00
+      sta DebounceFlag
       //Turn off bitmap mode
       lda $d011
       and #%11011111
@@ -129,10 +138,90 @@ init: {
       lda #0
       sta playerNameIndex
 
-      jsr drawCongratsMessage
-      jsr drawContinueMessage
 
+      jsr checkHighScorePosition
+      //y will contain highscorePosition?
+
+      cpy #[HiScores.__scoresTableVal - HiScores.scoresTableVal]
+      bne !skip+
+        jsr  drawFiredMessage
+        jmp !return+
+      !skip:
+        lda #1
+        sta keysEnabled
+        lda #0
+        sta joyEnabled
+        jsr drawCongratsMessage
+      
+      !return:
+      //jsr drawContinueMessage
       rts
+}
+
+checkHighScorePosition: {
+  .label scoreLB = TEMP1
+  .label scoreHB = TEMP2
+  .label hiscorePos = TEMP3
+
+  lda #0
+  sta hiscorePos
+
+  lda Score.currentScore
+  sta scoreLB
+  lda Score.currentScore + 1
+  sta scoreHB
+
+  //HiScores.scoresTableVal
+  ldy #0
+  !loop:
+    lda HiScores.scoresTableVal + 1, y
+    sec
+    sbc scoreHB
+    bmi !putScore+
+    bne !skip+
+      lda HiScores.scoresTableVal + 0,y
+      sec
+      sbc scoreLB
+      bmi !putScore+  
+    !skip:
+    cpy #[HiScores.__scoresTableVal - HiScores.scoresTableVal]
+    beq !return+
+    iny
+    jmp !loop-
+
+    !putScore:
+    sty hiscorePos
+
+    !loop:
+    cpy #[HiScores.__scoresTableVal - HiScores.scoresTableVal]
+    bne !skip+
+      lda scoreLB
+      sta HiScores.scoresTableVal + 0,y
+      lda scoreHB
+      sta HiScores.scoresTableVal + 1,y
+    !skip:
+    //0-2
+    lda HiScores.scoresTableVal + 0, y
+    iny
+    sta HiScores.scoresTableVal + 0,y
+    dey
+    lda HiScores.scoresTableVal + 1, y
+    iny
+    sta HiScores.scoresTableVal + 1,y
+    dey
+    dey
+    cpy hiscorePos
+    bne !skip+
+      lda scoreLB
+      sta HiScores.scoresTableVal + 0,y
+      lda scoreHB
+      sta HiScores.scoresTableVal + 1,y
+    !skip:
+    dey
+    dey
+    bpl !loop-
+  !return:
+  rts
 }
 
 drawCongratsMessage:  {
@@ -165,6 +254,40 @@ drawCongratsMessage:  {
   rts
 }
 
+
+drawFiredMessage:  {
+  .label row1 = 8
+  .label col1 = 12
+  .label row2 = 10
+  .label col2 = 15
+
+  lda #1
+  sta isEntryEnabled
+
+  ldx #0
+  !loop_text:  
+    lda LABEL_FIRED_1,x       //; read characters from line1 table of text..
+    beq !next+
+    sta screen_ram + row1*$28 + col1, x 
+    inx  
+    jmp !loop_text-
+  !next:
+
+  ldx #0
+  !loop_text:  
+    lda LABEL_FIRED_2,x       //; read characters from line1 table of text..
+    beq !next+
+    sta screen_ram + row2*$28 + col2, x 
+    inx  
+    jmp !loop_text-
+  !next:
+  jsr drawContinueMessage
+  jsr enableJoy
+
+  rts
+}
+
+
 drawContinueMessage: {
   .label row = 20
   .label col = 14
@@ -178,92 +301,117 @@ drawContinueMessage: {
       jmp !loop_text-
     !next:
 
+
+
+  rts
+}
+
+enableJoy: {
+  lda #0
+  sta keysEnabled
+  sta $dc02 //NO IDEA why THIS IS NECESSARY //ENABLES JOYSTICK
+  lda #1
+  sta joyEnabled
+
   rts
 }
 
 update: {
-  jsr keyControl
-  //jsr control
-  
+  lda joyEnabled
+  beq !skip+
+    jsr joyControl
+  !skip:
+  lda keysEnabled
+  beq !skip+
+    jsr keyControl
+  !skip: 
   rts
 }
 
-control: {
-  .label JOY_PORT_2 = $dc00
-  .label JOY_UP = %00001
-  .label JOY_DN = %00010
-  .label JOY_LT = %00100
-  .label JOY_RT = %01000
-  .label JOY_FIRE = %10000
+joyControl: {
+    .label JOY_PORT_2 = $dc00
+    .label JOY_UP = %00001
+    .label JOY_DN = %00010
+    .label JOY_LT = %00100
+    .label JOY_RT = %01000
+    .label JOY_FIRE = %10000
 
-  lda JOY_PORT_2
-  sta JOY_ZP
-  lda JOY_ZP
-  and #JOY_FIRE
-  beq !fireButtonPressed+
+    lda JOY_PORT_2
+    sta JOY_ZP
+    and #JOY_FIRE
+    beq !fireButtonPressed+
 
-  lda #$00
-  sta DebounceFireFlag
-  jmp !movement+
+    lda #$00
+    sta DebounceFireFlag
+    jmp !movement+
 
-  !fireButtonPressed:
-  lda DebounceFireFlag
-  bne !movement+
-  !:
-  !Fire:
-  //doFire
+    !fireButtonPressed:
+    lda DebounceFireFlag
+    bne !movement+
+    !:
+    !Fire:
 
-  inc DebounceFireFlag
-  !movement:   
-  //Check if we need debounce
-  lda DebounceFlag
-  beq !+
-  //Otherwise check if we can turn it off
-  lda JOY_ZP
-  and #[JOY_LT + JOY_RT + JOY_UP + JOY_DN]
-  cmp #[JOY_LT + JOY_RT + JOY_UP + JOY_DN]
-  bne !end+
+        //doFire
+        lda #0
+        sta isEntryEnabled
+        sta shouldUpdate
 
-  lda #$00
-  sta DebounceFlag
-  !:
-  !Up: 
-  lda JOY_ZP
-  and #JOY_UP
-  bne !+
-  inc DebounceFlag
-  //do up
- 
-  !:
-  !Down:
-  lda JOY_ZP
-  and #JOY_DN
-  bne !+
-  inc DebounceFlag
-  //do down
- 
-  !:
-  !Left:
-  lda JOY_ZP
-  and #JOY_LT
-  bne !+
+        lda #0
+        sta GameOver.STATE_IN_PROGRESS
+        
 
-  inc DebounceFlag
-  //move player left
+      !skip:
+    
+    inc DebounceFireFlag
+    !movement:   
+    //Check if we need debounce
+    lda DebounceFlag
+    beq !+
+    //Otherwise check if we can turn it off
+    lda JOY_ZP
+    and #[JOY_LT + JOY_RT + JOY_UP + JOY_DN]
+    cmp #[JOY_LT + JOY_RT + JOY_UP + JOY_DN]
+    bne !end+
 
-  !:
-  !Right:
+    lda #$00
+    sta DebounceFlag
+    !:
+    !Up: 
+    lda JOY_ZP
+    and #JOY_UP
+    bne !+
+    inc DebounceFlag
+    //do up
+    
+    !:
+    !Down:
+    lda JOY_ZP
+    and #JOY_DN
+    bne !+
+    inc DebounceFlag
+    //do down
+    
+    !:
+    !Left:
+    lda JOY_ZP
+    and #JOY_LT
+    bne !+
+    inc DebounceFlag
+    //move player left
+    
+    !:
+    !Right:
 
-  lda JOY_ZP
-  and #JOY_RT
-  bne !end+
+    lda JOY_ZP
+    and #JOY_RT
+    bne !end+
+    inc DebounceFlag              
+    //move cursor right
 
-  inc DebounceFlag              
-  //move cursor right
-
-  !end:
-  rts 
-}
+    !end:
+    rts
+    
+  }
 
 keyControl: {
     .label TempA = TEMP4
@@ -288,6 +436,7 @@ keyControl: {
     beq NoNewAphanumericKey
       ldy #0
       sty delDebounce
+
 
       // Check A for Alphanumeric keys
       //.break
@@ -388,6 +537,8 @@ onDeletePressed: {
 onEnterPressed: {
   lda #0
   sta isEntryEnabled
+  jsr drawContinueMessage
+  jsr enableJoy
 
 
   rts

@@ -11,7 +11,7 @@
 .label TEMP11 = $0c
 
 
-.label JOY_ZP = $10
+.label JOY_ZP = $20
 
 ZP_COUNTER: .byte $00
 

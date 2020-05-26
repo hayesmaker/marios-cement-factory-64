@@ -19,7 +19,7 @@ HiScores: {
   rowIndex:
      .byte $00
   scoresTableVal:
-     .word $1234, $0900, $0700, $0500
+     .word $1234, $0900, $0700, $0001
   __scoresTableVal:
 
   scoreTemp:

@@ -16,7 +16,6 @@ GameOver: {
 
 
 	entry: {
-
         lda #1
         sta STATE_IN_PROGRESS
 
@@ -51,13 +50,15 @@ GameOver: {
             lda STATE_IN_PROGRESS
             beq !end+
 
-            dec deleteDebounceTimer + 1    
+            dec deleteDebounceTimer + 1
             //Do OTHER STUFF
             jsr frameCode
             jsr GameOverScreen.update
         jmp !TitleLoop-
 
         !end:
+            lda #0
+            sta shouldUpdate
         rts
 
 	}
@@ -80,6 +81,7 @@ GameOver: {
         beq !next+
         lda deleteDebounceTimer + 1
         bne !next+
+            //inc $d020
             jsr GameOverScreen.onDeleteTimeout
         !next:
 

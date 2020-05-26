@@ -11,7 +11,7 @@ SOUND_MOVE:
 .import binary "./assets/sound/sfx/SOUND_MOVE"
 SOUND_TICK: 
 .import binary "./assets/sound/sfx/SOUND_TICK"
-SOUND_CRUNCH:
+SOUND_CRUNCH: 
 .import binary "./assets/sound/sfx/SOUND_FALL"
 SOUND_SCORE:
 .import binary "./assets/sound/sfx/SOUND_SCORE"
@@ -53,8 +53,8 @@ main:
 	!stateLoop:
 
 		jsr Titles.entry
-		jsr GameOver.entry
 		jsr Game.entry
+		jsr GameOver.entry
 
 	jmp !stateLoop-
 
