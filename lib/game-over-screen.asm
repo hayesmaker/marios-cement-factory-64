@@ -147,10 +147,7 @@ init: {
         jsr  drawFiredMessage
         jmp !return+
       !skip:
-        lda #1
-        sta keysEnabled
-        lda #0
-        sta joyEnabled
+        jsr enableKeys
         jsr drawCongratsMessage
       
       !return:
@@ -306,12 +303,25 @@ drawContinueMessage: {
   rts
 }
 
+enableKeys: {
+  lda #1
+  sta keysEnabled
+  lda #0
+  sta joyEnabled
+
+  rts
+
+}
+
 enableJoy: {
   lda #0
   sta keysEnabled
   sta $dc02 //NO IDEA why THIS IS NECESSARY //ENABLES JOYSTICK
   lda #1
   sta joyEnabled
+
+  lda #$ff
+  sta $dc00
 
   rts
 }
@@ -350,7 +360,8 @@ joyControl: {
     bne !movement+
     !:
     !Fire:
-
+        lda keysEnabled
+        bne !skip+
         //doFire
         lda #0
         sta isEntryEnabled
