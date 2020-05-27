@@ -9,8 +9,8 @@ HiScores: {
 	MyLabel1: .text "HIGH SCORES@"
   MyLabel2: .text "PRESS FIRE@"
   scoresTableName:
-   .text "HAYESMKR HAYESMKR HAYESMKR HAYESMKR"
-  __scoresTableName: 
+   .text "FIRST   @SECOND  @THIRD   @FORTH   @"
+  __scoresTableName:
   
   NUMBERWANG:
     .byte $30 //First char index for 0
@@ -18,9 +18,12 @@ HiScores: {
      .byte $00
   rowIndex:
      .byte $00
-  scoresTableVal:
-     .word $1234, $0900, $0700, $0001
-  __scoresTableVal:
+
+  scoresTableHB:
+    .byte $00, $00, $00, $00
+  scoresTableLB:
+    .byte $30, $20, $10, $02
+  __scoresTable:  
 
   scoreTemp:
       .byte $00, $00
@@ -160,19 +163,19 @@ HiScores: {
     lda rowIndex
     asl
     tay
-    lda rowScreenTable, y
+    lda rowScreenTable, y 
     sta screenramTemp
     lda rowScreenTable + 1, y
     sta screenramTemp + 1
 
     ldy scoresTableIndex
-    cpy #[__scoresTableVal - scoresTableVal]
+    cpy #[__scoresTable - scoresTableLB]
     beq !end+
 
     //get score
-    lda scoresTableVal, y
+    lda scoresTableLB, y
     sta scoreTemp + 0
-    lda scoresTableVal + 1, y
+    lda scoresTableHB, y
     sta scoreTemp + 1
 
     //start col
@@ -224,7 +227,6 @@ HiScores: {
     sta (screenramTemp), y
 
     inc scoresTableIndex
-    inc scoresTableIndex
     inc rowIndex
     inc rowIndex
     jmp !loop_score-
@@ -261,7 +263,7 @@ HiScores: {
     beq !end+
     
     lda scoresTableName, y  //Get letter
-    cmp #WHITE_SPACE_CHAR
+
     beq !loop_row+
 
     //letter x position adc START_COL to indent

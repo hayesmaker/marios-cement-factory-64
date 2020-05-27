@@ -31,7 +31,7 @@ SOUND_SCORE:
 #import "./states/titles.asm"
 #import "./states/game.asm"
 #import "./lib/zeropage.asm"
-#import "./lib/labels.asm"
+#import "./lib/labels.asm"	
 #import "./lib/vic.asm"
 #import "./lib/map.asm"
 #import "./lib/irq.asm"
@@ -53,7 +53,7 @@ main:
 	!stateLoop:
 
 		jsr Titles.entry
-		jsr Game.entry
+		//jsr Game.entry
 		jsr GameOver.entry
 
 	jmp !stateLoop-

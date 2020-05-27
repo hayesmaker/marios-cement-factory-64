@@ -33,6 +33,9 @@ GameOverScreen: {
   isEntryEnabled:
     .byte $00  
 
+  hiscorePos:
+    .byte $ff  
+
 
   playerNameEntered: 
     .fill 8, WHITE_SPACE_CHAR
@@ -141,8 +144,7 @@ init: {
 
       jsr checkHighScorePosition
       //y will contain highscorePosition?
-
-      cpy #[HiScores.__scoresTableVal - HiScores.scoresTableVal]
+      cpy #[HiScores.__scoresTable - HiScores.scoresTableLB]
       bne !skip+
         jsr  drawFiredMessage
         jmp !return+
@@ -158,30 +160,31 @@ init: {
 checkHighScorePosition: {
   .label scoreLB = TEMP1
   .label scoreHB = TEMP2
-  .label hiscorePos = TEMP3
+  //.label hiscorePos = TEMP3
 
   lda #0
   sta hiscorePos
 
-  lda Score.currentScore
+  lda Score.currentScore + 0
   sta scoreLB
   lda Score.currentScore + 1
   sta scoreHB
 
-  //HiScores.scoresTableVal
+  //HiScores.scoresTableLB
+  //HiScores.scoresTableHB
   ldy #0
   !loop:
-    lda HiScores.scoresTableVal + 1, y
+    lda HiScores.scoresTableHB, y
     sec
     sbc scoreHB
     bmi !putScore+
     bne !skip+
-      lda HiScores.scoresTableVal + 0,y
+      lda HiScores.scoresTableLB,y
       sec
       sbc scoreLB
       bmi !putScore+  
     !skip:
-    cpy #[HiScores.__scoresTableVal - HiScores.scoresTableVal]
+    cpy #[HiScores.__scoresTable - HiScores.scoresTableLB]
     beq !return+
     iny
     jmp !loop-
@@ -190,34 +193,30 @@ checkHighScorePosition: {
     sty hiscorePos
 
     !loop:
-    cpy #[HiScores.__scoresTableVal - HiScores.scoresTableVal]
+    cpy #[HiScores.__scoresTable - HiScores.scoresTableLB]
     bne !skip+
       lda scoreLB
-      sta HiScores.scoresTableVal + 0,y
+      sta HiScores.scoresTableLB,y
       lda scoreHB
-      sta HiScores.scoresTableVal + 1,y
+      sta HiScores.scoresTableHB,y
     !skip:
     //0-2
-    lda HiScores.scoresTableVal + 0, y
-    iny
-    sta HiScores.scoresTableVal + 0,y
-    dey
-    lda HiScores.scoresTableVal + 1, y
-    iny
-    sta HiScores.scoresTableVal + 1,y
-    dey
-    dey
+    lda HiScores.scoresTableLB, y
+    sta HiScores.scoresTableLB + 1, y
+    
+    lda HiScores.scoresTableHB,y
+    sta HiScores.scoresTableHB + 1,y
+
     cpy hiscorePos
     bne !skip+
       lda scoreLB
-      sta HiScores.scoresTableVal + 0,y
+      sta HiScores.scoresTableLB,y
       lda scoreHB
-      sta HiScores.scoresTableVal + 1,y
+      sta HiScores.scoresTableHB,y
     !skip:
-    dey
-    dey
-    bpl !loop-
-  !return:
+      dey
+      bpl !loop-
+    !return:
   rts
 }
 
@@ -468,9 +467,10 @@ keyControl: {
       adc playerNameIndex
       tay 
       lda TempA
-      sta playerNameEntered, y  //h a y e s m a k e r
       sta (screenramTemp),y
-
+      //add letter to stored payerName
+      ldy playerNameIndex
+      sta playerNameEntered, y  //h a y e s m a k e r
       inc playerNameIndex
 
     NoNewAphanumericKey:
@@ -545,11 +545,58 @@ onDeletePressed: {
   rts
 }
 
+commitName: {
+  .label playerNameCharIndex = TEMP1
+  .label letterIndex = TEMP2
+  .label scorePos = TEMP3
+
+  /*
+  scoresTableName:
+    .text "FIRST   @SECOND  @THIRD   @FORTH   @"
+  __scoresTableName:
+  */
+
+  lda hiscorePos
+  sta scorePos
+  asl
+  asl
+  asl
+  clc
+  adc scorePos
+  
+  sta playerNameCharIndex
+  
+  lda #0
+  sta letterIndex
+
+  !loop:
+  ldy letterIndex
+  cpy #8
+  beq !end+
+
+
+  lda playerNameCharIndex
+  clc
+  adc letterIndex
+  tax 
+
+  ldy letterIndex
+  lda playerNameEntered, y
+  sta HiScores.scoresTableName,x
+  
+  inc letterIndex
+  jmp !loop-
+
+  !end:
+  rts
+}
+
 onEnterPressed: {
   lda #0
   sta isEntryEnabled
   jsr drawContinueMessage
   jsr enableJoy
+  jsr commitName
 
 
   rts
