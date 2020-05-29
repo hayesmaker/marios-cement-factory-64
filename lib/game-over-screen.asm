@@ -160,6 +160,10 @@ init: {
 checkHighScorePosition: {
   .label scoreLB = TEMP1
   .label scoreHB = TEMP2
+  .label tempScoreLB = TEMP3
+  .label tempScoreHB = TEMP4
+  .label passIndex = TEMP5
+  .label passLen = TEMP6
   //.label hiscorePos = TEMP3
 
   lda #0
@@ -190,33 +194,60 @@ checkHighScorePosition: {
     jmp !loop-
 
     !putScore:
+    //0
     sty hiscorePos
+    //4
+    lda #[HiScores.__scoresTable - HiScores.scoresTableLB] //
+    sec
+    sbc hiscorePos                                         //0
+    //4
+    sta passLen                                            
+    //dec passLen
+    //      0     1     2     3
+    // #[0035, 0025, 0015, 0005]
+    
+    // y = 0
+    // passIndex = 0
+    ldy #0
+    sty passIndex
 
     !loop:
-    cpy #[HiScores.__scoresTable - HiScores.scoresTableLB]
-    bne !skip+
-      lda scoreLB
-      sta HiScores.scoresTableLB,y
-      lda scoreHB
-      sta HiScores.scoresTableHB,y
-    !skip:
-    //0-2
-    lda HiScores.scoresTableLB, y
-    sta HiScores.scoresTableLB + 1, y
-    
-    lda HiScores.scoresTableHB,y
-    sta HiScores.scoresTableHB + 1,y
+    //a = 04
+    lda passLen
+    sec
+    // 0 1 2 3
+    sbc passIndex
+    sbc #1
+    //y = 3 2 1 0
+    tay
+    cpy #3
+    beq !skip+
 
-    cpy hiscorePos
-    bne !skip+
-      lda scoreLB
-      sta HiScores.scoresTableLB,y
-      lda scoreHB
-      sta HiScores.scoresTableHB,y
+    lda HiScores.scoresTableLB, y
+    //05, 15, 25, 35
+    sta tempScoreLB
+    lda HiScores.scoresTableHB, y
+    sta tempScoreHB
+
+    lda tempScoreLB
+    iny
+    sta HiScores.scoresTableLB, y
+    lda tempScoreHB
+    sta HiScores.scoresTableHB, y
+
     !skip:
-      dey
-      bpl !loop-
+    inc passIndex
+    lda passIndex
+    cmp passLen
+    bne !loop-
+
     !return:
+
+    ldy hiscorePos
+    lda scoreLB
+    sta HiScores.scoresTableLB, y
+    lda scoreHB
+    sta HiScores.scoresTableHB, y
   rts
 }
 
@@ -446,7 +477,6 @@ keyControl: {
     beq NoNewAphanumericKey
       ldy #0
       sty delDebounce
-
 
       // Check A for Alphanumeric keys
       //.break
