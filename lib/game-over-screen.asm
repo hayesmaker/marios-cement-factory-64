@@ -5,6 +5,11 @@ GameOverScreen: {
 
   rowScreenTable: .fillword 25, screen_ram + (i * 40)
 
+  charShiftTable:
+    .byte $12, $1B, $24
+  maxScorePass:
+    .byte $03 
+
   .encoding "screencode_upper"
   MyLabel1: .text "GAME OVER@"
   MyLabel2: .text "PRESS FIRE@"
@@ -138,8 +143,13 @@ init: {
          jmp !loop_text-
       !next:
 
+      //init variables
+
       lda #0
       sta playerNameIndex
+
+      lda #3
+      sta maxScorePass
 
 
       jsr checkHighScorePosition
@@ -164,8 +174,7 @@ checkHighScorePosition: {
   .label tempScoreHB = TEMP4
   .label passIndex = TEMP5
   .label passLen = TEMP6
-  //.label hiscorePos = TEMP3
-
+  
   lda #0
   sta hiscorePos
 
@@ -174,8 +183,6 @@ checkHighScorePosition: {
   lda Score.currentScore + 1
   sta scoreHB
 
-  //HiScores.scoresTableLB
-  //HiScores.scoresTableHB
   ldy #0
   !loop:
     lda HiScores.scoresTableHB, y
@@ -195,34 +202,34 @@ checkHighScorePosition: {
 
     !putScore:
     //0
+
+
     sty hiscorePos
-    //4
-    lda #[HiScores.__scoresTable - HiScores.scoresTableLB] //
+    //y = 2
+    //.break
+    lda #[HiScores.__scoresTable - HiScores.scoresTableLB] 
+    //a = 4
     sec
-    sbc hiscorePos                                         //0
-    //4
+    //0, 1, 2, 3
+    sbc hiscorePos
+    sbc #1
+    //3, 2, 1, 0
     sta passLen                                            
-    //dec passLen
-    //      0     1     2     3
-    // #[0035, 0025, 0015, 0005]
-    
-    // y = 0
-    // passIndex = 0
+    // a = 1
+
     ldy #0
     sty passIndex
 
+    /*
+     scoresTableLB:
+        .byte $35, $25, $15, $05
+    */
+
     !loop:
-    //a = 04
     lda passLen
-    sec
-    // 0 1 2 3
-    sbc passIndex
-    sbc #1
-    //y = 3 2 1 0
-    tay
-    cpy #3
     beq !skip+
 
+    ldy hiscorePos
     lda HiScores.scoresTableLB, y
     //05, 15, 25, 35
     sta tempScoreLB
@@ -248,6 +255,11 @@ checkHighScorePosition: {
     sta HiScores.scoresTableLB, y
     lda scoreHB
     sta HiScores.scoresTableHB, y
+
+    lda maxScorePass
+    sec
+    sbc hiscorePos
+    sta maxScorePass
   rts
 }
 
@@ -579,12 +591,17 @@ commitName: {
   .label playerNameCharIndex = TEMP1
   .label letterIndex = TEMP2
   .label scorePos = TEMP3
-
+  .label tempLetter = TEMP4
+  .label passIndex = TEMP5
+  .label passLen = TEMP6
+  .label arrayLen = TEMP7 
   /*
   scoresTableName:
     .text "FIRST   @SECOND  @THIRD   @FORTH   @"
   __scoresTableName:
   */
+
+  
 
   lda hiscorePos
   sta scorePos
@@ -593,9 +610,53 @@ commitName: {
   asl
   clc
   adc scorePos
-  
   sta playerNameCharIndex
+
+  lda #0 
+  sta passIndex
+
+  lda #[HiScores.__scoresTableName - HiScores.scoresTableName]
+  sta arrayLen
+
+  lda scorePos
+  cmp #3
+  beq !drawName+
+
+  !outerLoop:
+  lda #0
+  sta letterIndex
   
+  !loop:
+  ldy passIndex
+  lda arrayLen
+  sec
+  sbc charShiftTable, y
+  clc
+  adc letterIndex
+  tay
+
+  lda HiScores.scoresTableName, y
+  sta tempLetter
+
+  tya
+  clc
+  adc #9
+  tay
+  lda tempLetter
+  sta HiScores.scoresTableName, y
+
+  inc letterIndex
+  lda letterIndex
+  cmp #8
+  bne !loop-
+
+  inc passIndex
+  lda passIndex
+  cmp maxScorePass
+  bne !outerLoop-
+
+  !drawName:
+
   lda #0
   sta letterIndex
 
@@ -603,7 +664,6 @@ commitName: {
   ldy letterIndex
   cpy #8
   beq !end+
-
 
   lda playerNameCharIndex
   clc

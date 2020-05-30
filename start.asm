@@ -44,18 +44,15 @@ SOUND_SCORE:
 * = * "Main" 
 main: 
 //bank out BASIC and Kernal
-
   lda $01
   and #%11111000
   ora #%000101
   sta $01
 
 	!stateLoop:
-
-		jsr Titles.entry
-		//jsr Game.entry
-		jsr GameOver.entry
-
+	jsr Titles.entry
+	jsr GameOver.entry
+	//jsr Game.entry
 	jmp !stateLoop-
 
 *=* "End main"

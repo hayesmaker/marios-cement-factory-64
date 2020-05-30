@@ -3,7 +3,7 @@ DebugLift:
 
 Score:{
 
-	currentScore: .byte $50, $00
+	currentScore: .byte $40, $00
 	bonusOn: .byte 0
 	scoreToAdd: .byte 0
 	isBonus: .byte $00
@@ -12,9 +12,9 @@ Score:{
 	scoreToggledOn: .byte 1
 
 	Reset:{
-		lda #$25
+		lda #$00
 		sta currentScore + 0
-		lda #$09
+		lda #$00
 		sta currentScore + 1
 		rts
 	}

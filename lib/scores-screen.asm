@@ -9,7 +9,7 @@ HiScores: {
 	MyLabel1: .text "HIGH SCORES@"
   MyLabel2: .text "PRESS FIRE@"
   scoresTableName:
-   .text "FIRST   @SECOND  @THIRD   @FORTH   @"
+   .text "DOC     @THE     @DESTROYR@MARIO YO@"
   __scoresTableName:
   
   NUMBERWANG:
@@ -240,7 +240,7 @@ HiScores: {
     .label screenramTemp = TEMP10
     .label wordIndexCount = TEMP5
     .label START_ROW = 5
-    .label START_COL = 7
+    .label START_COL = 10
 
     lda #0
     sta scoresTableIndex
