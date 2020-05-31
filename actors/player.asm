@@ -923,6 +923,10 @@ PLAYER: {
         and #JOY_RT
         bne !end+
 
+        lda Player_PosY_Index
+        cmp #1
+        beq !end+
+
         inc DebounceFlag              
         //move player  right
         ldy FramesTableIndex
