@@ -3,7 +3,7 @@ DebugLift:
 
 Score:{
 
-	currentScore: .byte $40, $00
+	currentScore: .byte $00, $00
 	bonusOn: .byte 0
 	scoreToAdd: .byte 0
 	isBonus: .byte $00

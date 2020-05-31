@@ -151,9 +151,11 @@ init: {
       lda #3
       sta maxScorePass
 
+      lda #$ff
+      sta hiscorePos
 
       jsr checkHighScorePosition
-      //y will contain highscorePosition?
+      //y will contain highscorePosition
       cpy #[HiScores.__scoresTable - HiScores.scoresTableLB]
       bne !skip+
         jsr  drawFiredMessage
@@ -161,9 +163,8 @@ init: {
       !skip:
         jsr enableKeys
         jsr drawCongratsMessage
-      
       !return:
-      //jsr drawContinueMessage
+      jsr drawContinueMessage
       rts
 }
 
@@ -174,15 +175,16 @@ checkHighScorePosition: {
   .label tempScoreHB = TEMP4
   .label passIndex = TEMP5
   .label passLen = TEMP6
-  
-  lda #0
-  sta hiscorePos
 
+  //.break
+  
   lda Score.currentScore + 0
   sta scoreLB
   lda Score.currentScore + 1
   sta scoreHB
 
+  //check current score is in the table
+  // (if y = tableLen) score is not in table
   ldy #0
   !loop:
     lda HiScores.scoresTableHB, y
@@ -190,54 +192,37 @@ checkHighScorePosition: {
     sbc scoreHB
     bmi !putScore+
     bne !skip+
-      lda HiScores.scoresTableLB,y
-      sec
-      sbc scoreLB
-      bmi !putScore+  
+    lda HiScores.scoresTableLB,y
+    sec
+    sbc scoreLB
+    bmi !putScore+  
     !skip:
     cpy #[HiScores.__scoresTable - HiScores.scoresTableLB]
     beq !return+
     iny
     jmp !loop-
 
+    //shift all scores down the table from current score position
     !putScore:
-    //0
-
-
     sty hiscorePos
-    //y = 2
-    //.break
     lda #[HiScores.__scoresTable - HiScores.scoresTableLB] 
-    //a = 4
     sec
-    //0, 1, 2, 3
     sbc hiscorePos
     sbc #1
-    //3, 2, 1, 0
     sta passLen                                            
-    // a = 1
-
     ldy #0
     sty passIndex
-
-    /*
-     scoresTableLB:
-        .byte $35, $25, $15, $05
-    */
 
     !loop:
     lda passLen
     beq !skip+
-
     ldy hiscorePos
     lda HiScores.scoresTableLB, y
-    //05, 15, 25, 35
     sta tempScoreLB
     lda HiScores.scoresTableHB, y
     sta tempScoreHB
-
-    lda tempScoreLB
     iny
+    lda tempScoreLB
     sta HiScores.scoresTableLB, y
     lda tempScoreHB
     sta HiScores.scoresTableHB, y
@@ -248,8 +233,7 @@ checkHighScorePosition: {
     cmp passLen
     bne !loop-
 
-    !return:
-
+    //save current score into score table
     ldy hiscorePos
     lda scoreLB
     sta HiScores.scoresTableLB, y
@@ -260,6 +244,8 @@ checkHighScorePosition: {
     sec
     sbc hiscorePos
     sta maxScorePass
+
+    !return:
   rts
 }
 
@@ -595,15 +581,11 @@ commitName: {
   .label passIndex = TEMP5
   .label passLen = TEMP6
   .label arrayLen = TEMP7 
-  /*
-  scoresTableName:
-    .text "FIRST   @SECOND  @THIRD   @FORTH   @"
-  __scoresTableName:
-  */
-
   
-
   lda hiscorePos
+  cmp #$ff
+  beq !end+
+
   sta scorePos
   asl
   asl
