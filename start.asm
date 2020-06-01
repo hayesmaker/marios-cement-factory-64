@@ -41,6 +41,19 @@ SOUND_SCORE:
 #import "./actors/player.asm"
 #import "./actors/poured-cement.asm"
 
+/*
+Sprite Map - IN GAME
+----------
+00000001 - 0 Player Main
+00000010 - 1 Cement Crate 1
+00000100 - 2 Cement Crate 2
+00001000 - 3 Poured Cement
+00010000 - 4 Poured Cement
+00100000 - 5 Player Crushed
+01000000 - 6 Poured Cement
+10000000 - 7 Poured Cement
+*/
+
 * = * "Main" 
 main: 
 //bank out BASIC and Kernal

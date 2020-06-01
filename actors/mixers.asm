@@ -758,6 +758,9 @@ Mixers: {
 		sta NumPoured2
 		sta NumPoured4
 
+		lda #0
+		jsr PouredCement.HideSprite
+		lda #2
 		jsr PouredCement.HideSprite
 
 		lda Tiles.EMPTY + 0
@@ -950,6 +953,7 @@ Mixers: {
 		dec NumPoured2
 		lda NumPoured2
 		bne !skip+
+			lda #0
 			jsr PouredCement.HideSprite
 		!skip:
 		lda #1
@@ -991,6 +995,7 @@ Mixers: {
 		dec NumPoured4
 		lda NumPoured4
 		bne !skip+
+			lda #2
 			jsr PouredCement.HideSprite
 		!skip:
 
@@ -1007,6 +1012,7 @@ Mixers: {
 		dec NumPoured5
 		lda NumPoured5
 		bne !skip+
+			lda #1
 			jsr PouredCement.HideSprite
 		!skip:
 		rts
@@ -1018,6 +1024,7 @@ Mixers: {
 		dec NumPoured6
 		lda NumPoured6
 		bne !skip+
+			lda #3
 			jsr PouredCement.HideSprite
 		!skip:
 		rts

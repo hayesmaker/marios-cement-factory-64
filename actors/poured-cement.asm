@@ -18,50 +18,133 @@ PouredCement: {
 
     SpillCountIndex:
         .byte $00    
+
+    /*
+    00001000 - 3 Poured Cement  0     0   2  |  1    3
+    00010000 - 4 * EMPTY *      1     1   3  |  2    4
+    01000000 - 6 * EMPTY *      2
+    10000000 - 7 * EMPTY *      3
+    */    
 	
     //@todo ADD A Second Sprite to handle right poured cements seperately
     //@todo OR use char sprites for poured cements here (requires redrawing tiles)
 	Initialise: {
 		lda #$00
 		sta VIC.SPRITE_COLOR_3
+        //lda #RED
+        sta VIC.SPRITE_COLOR_4
+        //lda #YELLOW
+        sta VIC.SPRITE_COLOR_6
+        //lda #GREEN
+        sta VIC.SPRITE_COLOR_7
+
+
+        lda #$00
 		sta VIC.SPRITE_MULTICOLOR
 		sta PositionFrameIndex	
         sta HopperIndex
         sta SpillCountIndex
 
-		lda $40
+		lda FRAME_ID
 		sta Game.SPRITE_POINTERS + 3
+        sta Game.SPRITE_POINTERS + 4
+        sta Game.SPRITE_POINTERS + 6
+        sta Game.SPRITE_POINTERS + 7
+
 		rts
 	}
 
+    /*
+    00001000 - 4 Poured Cement  0     0   2  |  1    3
+    00010000 - 5 * EMPTY *      1     1   3  |  2    4
+    01000000 - 7 * EMPTY *      2
+    10000000 - 8 * EMPTY *      3
+    */    
     HideSprite: {
-        lda VIC.SPRITE_ENABLE 
-        and #%11110111
-        sta VIC.SPRITE_ENABLE
+        cmp #0
+        bne !skip+
+            lda VIC.SPRITE_ENABLE 
+            and #%11110111
+            sta VIC.SPRITE_ENABLE
+        !skip:
+        cmp #1
+        bne !skip+
+            lda VIC.SPRITE_ENABLE 
+            and #%11101111
+            sta VIC.SPRITE_ENABLE
+        !skip:
+        cmp #2
+        bne !skip+
+            lda VIC.SPRITE_ENABLE 
+            and #%10111111
+            sta VIC.SPRITE_ENABLE
+        !skip:
+        cmp #3
+        bne !skip+
+            lda VIC.SPRITE_ENABLE 
+            and #%01111111
+            sta VIC.SPRITE_ENABLE
+        !skip:
         rts
     }
+
     
     ShowSprite: {
         //set accumulator
         //to position index
+        /*
+        00001000 - 4 Poured Cement  0     0   2  |  1    3
+        00010000 - 5 * EMPTY *      1     1   3  |  2    4
+        01000000 - 7 * EMPTY *      2
+        10000000 - 8 * EMPTY *      3
+        */    
         sta PositionFrameIndex  
-
-        lda VIC.SPRITE_ENABLE 
-        ora #%00001000
-        sta VIC.SPRITE_ENABLE
-
-        jsr DrawSprite
-
+        cmp #0
+        bne !skip+
+            lda VIC.SPRITE_ENABLE 
+            ora #%00001000
+            sta VIC.SPRITE_ENABLE
+            jsr drawSprite1
+        !skip:
+        cmp #1
+        bne !skip+
+            lda VIC.SPRITE_ENABLE 
+            ora #%00010000
+            sta VIC.SPRITE_ENABLE
+            jsr drawSprite2
+        !skip:
+        cmp #2
+        bne !skip+
+            lda VIC.SPRITE_ENABLE 
+            ora #%01000000
+            sta VIC.SPRITE_ENABLE
+            jsr drawSprite3
+        !skip:
+        cmp #3
+        bne !skip+
+            lda VIC.SPRITE_ENABLE 
+            ora #%10000000
+            sta VIC.SPRITE_ENABLE
+            jsr drawSprite4
+        !skip:
+        
         rts
     }
 
-    DrawSprite: {
+
+
+    drawSprite1: {
+        /*
+            00001000 - 4 Poured Cement  0     0   2  |  1    3
+            00010000 - 5 * EMPTY *      1     1   3  |  2    4
+            01000000 - 7 * EMPTY *      2
+            10000000 - 8 * EMPTY *      3
+        */    
         //x position index: Player_PosX_Index
         //x pixel coords table: Player_X
         ldy PositionFrameIndex
         lda Positions_X_LB, y
         sta VIC.SPRITE_3_X
-
         //crate 1 msb code
         lda VIC.SPRITE_MSB
         and #%11110111
@@ -77,10 +160,98 @@ PouredCement: {
         ldy PositionFrameIndex
         lda Positions_Y, y
         sta VIC.SPRITE_3_Y
-        //y * 8 + x = table index
-        lda FRAME_ID
-        sta Game.SPRITE_POINTERS + 3
+        rts
+    }
 
+    drawSprite2: {
+        /*
+            00001000 - 4 Poured Cement  0     0   2  |  1    3
+            00010000 - 5 * EMPTY *      1     1   3  |  2    4
+            01000000 - 7 * EMPTY *      2
+            10000000 - 8 * EMPTY *      3
+        */    
+        //x position index: Player_PosX_Index
+        //x pixel coords table: Player_X
+        ldy PositionFrameIndex
+        lda Positions_X_LB, y
+        sta VIC.SPRITE_4_X
+        //crate 1 msb code
+        lda VIC.SPRITE_MSB
+        and #%11101111
+        sta VIC.SPRITE_MSB
+
+        ldy PositionFrameIndex
+        lda Positions_X_HB, y
+        beq !+
+        lda VIC.SPRITE_MSB
+        ora #%00010000
+        sta VIC.SPRITE_MSB
+    !:
+        ldy PositionFrameIndex
+        lda Positions_Y, y
+        sta VIC.SPRITE_4_Y
+        rts
+    }
+
+
+    drawSprite3: {
+        /*
+        00001000 - 4 Poured Cement  0     0   2  |  1    3
+        00010000 - 5 * EMPTY *      1     1   3  |  2    4
+        01000000 - 7 * EMPTY *      2
+        10000000 - 8 * EMPTY *      3
+        */    
+        //x position index: Player_PosX_Index
+        //x pixel coords table: Player_X
+        ldy PositionFrameIndex
+        lda Positions_X_LB, y
+        sta VIC.SPRITE_6_X
+        //crate 1 msb code
+        lda VIC.SPRITE_MSB
+        and #%10111111
+        sta VIC.SPRITE_MSB
+
+        ldy PositionFrameIndex
+        lda Positions_X_HB, y
+        beq !+
+        lda VIC.SPRITE_MSB
+        ora #%01000000
+        sta VIC.SPRITE_MSB
+    !:
+        ldy PositionFrameIndex
+        lda Positions_Y, y
+        sta VIC.SPRITE_6_Y
+        rts
+    }
+
+
+    drawSprite4: {
+        /*
+        00001000 - 4 Poured Cement  0     0   2  |  1    3
+        00010000 - 5 * EMPTY *      1     1   3  |  2    4
+        01000000 - 7 * EMPTY *      2
+        10000000 - 8 * EMPTY *      3
+        */    
+        //x position index: Player_PosX_Index
+        //x pixel coords table: Player_X
+        ldy PositionFrameIndex
+        lda Positions_X_LB, y
+        sta VIC.SPRITE_7_X
+        //crate 1 msb code
+        lda VIC.SPRITE_MSB
+        and #%01111111
+        sta VIC.SPRITE_MSB
+
+        ldy PositionFrameIndex
+        lda Positions_X_HB, y
+        beq !+
+        lda VIC.SPRITE_MSB
+        ora #%10000000
+        sta VIC.SPRITE_MSB
+    !:
+        ldy PositionFrameIndex
+        lda Positions_Y, y
+        sta VIC.SPRITE_7_Y
         rts
     }
 
@@ -103,6 +274,7 @@ PouredCement: {
         !skip:
         cmp #2
         bne !skip+
+            lda #0
             jsr HideSprite
             jsr ShowSpill2
             lda #9
@@ -116,6 +288,7 @@ PouredCement: {
         !skip:
         cmp #4
         bne !return+
+            lda #2
             jsr HideSprite
             jsr ShowSpill2
             lda #9
