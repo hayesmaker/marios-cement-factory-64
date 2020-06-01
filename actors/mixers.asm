@@ -755,6 +755,10 @@ Mixers: {
 		lda #0
 		sta NumPoured1
 		sta NumPoured3
+		sta NumPoured2
+		sta NumPoured4
+
+		jsr PouredCement.HideSprite
 
 		lda Tiles.EMPTY + 0
 		ldx Tiles.CEMENT_NEW_LEFT_1 + 1
