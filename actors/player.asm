@@ -38,7 +38,10 @@ PLAYER: {
     FallCountIndex:
         .byte $00
     CrushedSpriteShown:
-        .byte $00     
+        .byte $00
+
+    isVisible:
+        .byte $01         
 
     //player state
     CanOpen:
@@ -104,6 +107,7 @@ PLAYER: {
 
 		ldy #1
 		sty Player_PosX_Index
+        sty isVisible
 
         lda #0
         //sta AddMissFlag
@@ -363,17 +367,14 @@ PLAYER: {
         lda #1
         sta IsPlayerDead
 
-        lda #10
+        lda #9
         sta FallCountIndex
 
         rts
     }
 
     NextFall: {
-        //
-        ldx FallCountIndex
-        dex
-        stx FallCountIndex
+        lda FallCountIndex
         bne !skip+
             lda #0
             sta Game.FallGuyTimer + 0
@@ -384,85 +385,45 @@ PLAYER: {
         //@todo accelerate timer when player should blink
         lda Game.FallGuyTimer + 2
         sta Game.FallGuyTimer + 1
-
-        //todo start fall
-        ldy Player_PosY_Index
-        cpy #0
-        beq !crushDeath+
-        cpy #5
-        beq !checkBlink+
-            iny 
-            sty Player_PosY_Index
-            jsr Sounds.SFX_FALL
-            jmp !checkBlink+
-        !crushDeath:
-            lda FallCountIndex
-            cmp #9
-            bne !skip+
-                jsr BlinkPlayerOn
-        !skip:
-            lda FallCountIndex
-            cmp #8
-            bne !skip+
-                jsr BlinkPlayerOff
-        !skip:
-        !checkBlink:
-            lda FallCountIndex
-            cmp #7
-            bne !skip+
-                jsr BlinkPlayerOn
-        !skip:
-            lda FallCountIndex
-            cmp #6
-            bne !skip+
-                jsr BlinkPlayerOff
-        !skip: 
-            lda FallCountIndex
-            cmp #5
-            bne !skip+
-                jsr BlinkPlayerOn
-        !skip:
-            lda FallCountIndex
-            cmp #4
-            bne !skip+
-                jsr BlinkPlayerOff
-        !skip:
-            lda FallCountIndex
-            cmp #3
-            bne !skip+
-                jsr BlinkPlayerOn        
-        !skip:
-            lda FallCountIndex
-            cmp #2
-            bne !skip+
-                jsr BlinkPlayerOff 
-        !skip:
-            lda FallCountIndex
-            cmp #1
-            bne !return+
-                jsr BlinkPlayerOn               
-        !return:    
+        
+        lda Player_PosY_Index
+        beq !blink+
+        cmp #5
+        beq !blink+
+            inc Player_PosY_Index
+            jsr Sounds.SFX_FALL 
+            jmp !return+
+        !blink:  
+        lda isVisible
+        beq !toggleOn+
+            jsr BlinkPlayerOff
+            jmp !return+
+        !toggleOn:
+            jsr BlinkPlayerOn
+        !return:
+            dec FallCountIndex    
         rts
     }
 
     Respawn: {
+        //reset vars
         lda #0
-        // sta AddMissFlag
+        sta IsPlayerDead
+        lda #0
         sta CrushedSpriteShown
-
+       
+        lda #1
+        sta isVisible
+        //start position
         ldy #2
         sty Player_PosY_Index
         ldy #1
         sty Player_PosX_Index
-
+        //reset player frame no.
         jsr SetFrameNumber
-        
+        //re-init timers
         lda Game.GameTimerTick + 1
         sta Game.GameTimerTick
-
-        lda #0
-        sta IsPlayerDead
-
         rts
     }
 
@@ -537,6 +498,8 @@ PLAYER: {
     */
 
     BlinkPlayerOff: {
+        lda #0
+        sta isVisible
         
         lda VIC.SPRITE_ENABLE 
         and #%11011110
@@ -552,6 +515,9 @@ PLAYER: {
     }
 
     BlinkPlayerOn: {
+        lda #1
+        sta isVisible
+
         jsr Sounds.SFX_SPLAT
         lda VIC.SPRITE_ENABLE 
         ora #%00100001
