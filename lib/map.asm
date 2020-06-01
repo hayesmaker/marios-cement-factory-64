@@ -392,6 +392,56 @@ Map: {
 		ldy #6
 		jsr SwitchCharAtXY
 
+		//check game mode
+		lda TitleScreen.GameMode
+		cmp #TitleScreen.GAME_A
+		bne !skip+
+			//GAME MODE A
+			lda Tiles.EMPTY
+			ldx #25
+			ldy #3
+			jsr SwitchCharAtXY
+
+			lda Tiles.EMPTY
+			ldx #26
+			ldy #3
+			jsr SwitchCharAtXY
+
+			lda Tiles.EMPTY
+			ldx #27
+			ldy #3
+			jsr SwitchCharAtXY
+
+			lda Tiles.EMPTY
+			ldx #28
+			ldy #3
+			jsr SwitchCharAtXY
+			jmp !end+
+		!skip:
+			//GAME MODE B
+			lda Tiles.EMPTY
+			ldx #25
+			ldy #2
+			jsr SwitchCharAtXY
+
+			lda Tiles.EMPTY
+			ldx #26
+			ldy #2
+			jsr SwitchCharAtXY
+
+			lda Tiles.EMPTY
+			ldx #27
+			ldy #2
+			jsr SwitchCharAtXY
+
+			lda Tiles.EMPTY
+			ldx #28
+			ldy #2
+			jsr SwitchCharAtXY
+		!end:
+			
+
+
 		lda #39
 		sta RowLoopIndex
 		!Loop:

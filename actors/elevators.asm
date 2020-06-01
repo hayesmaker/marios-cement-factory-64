@@ -1,8 +1,13 @@
 Elevators: {
 	//getLength: [ _Positions_L_end - Positions_L ]   0 1 2 3 4 5
-	Data_L: //0 - - -[1 2 3]- 8 9 - -12 - - -16 - - *-20- - - - -
+	//LIFT 1
+	liftData_leftA:
 		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0
-	_Data_L_End:
+	__liftData_leftA:
+
+	liftData_leftB:
+		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,1,0,1,0,0,1,0,1,0,0,0,0,0,0
+	__liftData_leftB:
 
 	LeftDataIndex:
 		.byte 0
@@ -15,9 +20,13 @@ Elevators: {
 	StoreYPos:
 		.byte 0		//22  
 		//			  *	 										0 1 2 3 4 5			
-	Data_R:// - - - - -                                       2425 - - - - -
-		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0
-	_Data_R_End:
+	liftData_rightA:
+		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0
+	__liftData_rightA:
+
+	liftData_rightB:
+		.byte 0,0,0,0,1,0,1,0,1,0,0,1,0,1,0,0,1,0,0,1,0,1,0,0,0,0
+	__liftData_rightB:
 
 	RightDataIndex:
 		.byte 0
@@ -198,7 +207,15 @@ Elevators: {
 	    	clc
 	    	adc LeftDataIndex
 	    	tay 
-	    	lda Data_L, y
+	    	
+	    	lda TitleScreen.GameMode
+	    	cmp #TitleScreen.GAME_A
+	    	bne !skip+
+	    		lda liftData_leftA, y
+	    		jmp !end+
+	    	!skip:
+	    		lda liftData_leftB, y
+	    	!end:
 	    	bne !add+
 
 	    	!remove:
@@ -227,8 +244,15 @@ Elevators: {
 			cpy #5
 			bmi !Loop-
 			ldx LeftDataIndex
-			inx
-			cpx #21
+			inx 
+			lda TitleScreen.GameMode
+			cmp #TitleScreen.GAME_A
+			bne !skip+
+				cpx #[__liftData_leftA - liftData_leftA - 5]
+				jmp !end+
+			!skip:
+				cpx #[__liftData_leftB - liftData_leftB - 5]
+			!end:
 			bne !return+
 			ldx #4
 		!return:
@@ -251,7 +275,14 @@ Elevators: {
 			clc
 			adc RightDataIndex
 			tay
-	    	lda Data_R, y
+	    	lda TitleScreen.GameMode
+	    	cmp #TitleScreen.GAME_A
+	    	bne !skip+
+	    		lda liftData_rightA, y
+	    		jmp !end+
+	    	!skip:
+	    		lda liftData_rightB, y
+	    	!end:
 	    	bne !add+
 
 	    	!remove:
@@ -284,15 +315,20 @@ Elevators: {
 		
 			ldx RightDataIndex
 			inx
-
-			cpx #25 //todo: change this val
+			
+			lda TitleScreen.GameMode
+			cmp #TitleScreen.GAME_A
+			bne !skip+
+				cpx #[__liftData_rightA - liftData_rightA - 5]
+				jmp !end+
+			!skip:
+				cpx #[__liftData_rightB - liftData_rightB - 5]
+			!end:
 			bne !return+
-
-			ldx #0 //todo: reset val
+			ldx #4 //todo: reset val
 
 		!return:
 			stx RightDataIndex
-
 			//jsr PLAYER.CheckMovement	
 			
 			rts

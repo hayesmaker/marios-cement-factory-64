@@ -334,7 +334,15 @@ PLAYER: {
         sec 
         sbc Player_PosY_Index
         tay 
-        lda Elevators.Data_L, y
+
+        lda TitleScreen.GameMode
+        cmp #TitleScreen.GAME_A
+        bne !skip+
+            lda Elevators.liftData_leftA, y
+            jmp !end+
+        !skip:
+            lda Elevators.liftData_leftB, y
+        !end:
         bne !next+
             //no lift here
             jsr PlayerFall
@@ -348,7 +356,14 @@ PLAYER: {
         adc Player_PosY_Index
         tay
         dey 
-        lda Elevators.Data_R, y
+        lda TitleScreen.GameMode
+        cmp #TitleScreen.GAME_A
+        bne !skip+
+            lda Elevators.liftData_rightA, y
+            jmp !end+
+        !skip:
+            lda Elevators.liftData_rightB, y
+        !end:
         bne !next+
             //no lift
             jsr PlayerFall
