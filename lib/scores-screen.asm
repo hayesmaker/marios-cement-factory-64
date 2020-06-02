@@ -9,7 +9,7 @@ HiScores: {
 	MyLabel1: .text "HIGH SCORES@"
   MyLabel2: .text "PRESS FIRE@"
   scoresTableName:
-   .text "DOC     @THE     @DESTROYR@MARIO YO@"
+   .text "HAYESMKR@YO MOMMA@BERK    @STEPZ   @"
   __scoresTableName:
   
   NUMBERWANG:
@@ -20,9 +20,9 @@ HiScores: {
      .byte $00
 
   scoresTableHB:
-    .byte $00, $00, $00, $00
+    .byte $11, $09, $05, $03
   scoresTableLB:
-    .byte $35, $25, $15, $05
+    .byte $00, $00, $00, $00
   __scoresTable:  
 
   scoreTemp:
@@ -98,7 +98,7 @@ HiScores: {
         .label row4 = 11
         .label row5 = 20
 
-        .label col1 = 15
+        .label col1 = 14
         .label col2 = 2
         .label col3 = 7
         .label col4 = 7

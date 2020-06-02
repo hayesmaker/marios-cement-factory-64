@@ -80,10 +80,10 @@ Credits: {
         .label row2 = 5
         .label row3 = 8
         .label row4 = 11
-        .label row5 = 13
+        .label row5 = 14
         .label row6 = 20
 
-        .label col1 = 15
+        .label col1 = 16
         .label col2 = 7
         .label col3 = 7
         .label col4 = 7

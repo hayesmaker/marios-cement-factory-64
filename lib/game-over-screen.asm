@@ -23,6 +23,7 @@ GameOverScreen: {
     .text "SORRY MARIO YOU@"
   LABEL_FIRED_2:
     .text "ARE FIRED!@"
+      
   LABEL_FIRED_COL:
     .byte 7
   LABEL_CONGRATS_COL:
@@ -285,6 +286,8 @@ drawFiredMessage:  {
   .label col1 = 12
   .label row2 = 10
   .label col2 = 15
+  .label row3 = 12
+  .label col3 = 10
 
   lda #1
   sta isEntryEnabled
@@ -306,6 +309,7 @@ drawFiredMessage:  {
     inx  
     jmp !loop_text-
   !next:
+
   jsr drawContinueMessage
   jsr enableJoy
 
