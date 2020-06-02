@@ -392,6 +392,7 @@ PLAYER: {
         lda FallCountIndex
         bne !skip+
             lda #0
+            jsr BlinkPlayerOn
             sta Game.FallGuyTimer + 0
             jsr LoseLife            
             jmp !return+
