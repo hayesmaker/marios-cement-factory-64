@@ -429,6 +429,10 @@ PLAYER: {
        
         lda #1
         sta isVisible
+
+        lda VIC.SPRITE_ENABLE 
+        ora #%00000001
+        sta VIC.SPRITE_ENABLE
         //start position
         ldy #2
         sty Player_PosY_Index
