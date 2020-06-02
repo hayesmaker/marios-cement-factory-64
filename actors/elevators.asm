@@ -1,31 +1,32 @@
 Elevators: {
-	//getLength: [ _Positions_L_end - Positions_L ]   0 1 2 3 4 5
-	//LIFT 1
+	
+	//GameA
 	liftData_leftA:
-		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0
+		.byte 0,0,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0
 	__liftData_leftA:
 
-	liftData_leftB:
-		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,1,0,1,0,0,1,0,1,0,0,0,0,0,0
-	__liftData_leftB:
+	liftData_rightA:
+		.byte 0,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,1,0,1,0,1
+	__liftData_rightA:
 
+	
 	LeftDataIndex:
 		.byte 0
 
 	PosIndex_L:
 		.byte 0
-	//todo: make this local var?
 	DrawLoopIndex:
 		.byte 0
 	StoreYPos:
-		.byte 0		//22  
-		//			  *	 										0 1 2 3 4 5			
-	liftData_rightA:
-		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0
-	__liftData_rightA:
+		.byte 0		 
+					
+	//GameB				
+	liftData_leftB:
+		.byte 0,0,0,0,1,0,1,0,0,1,0,1,0,0,1,0,1,0,0,1,0,1,0,0
+	__liftData_leftB:
 
 	liftData_rightB:
-		.byte 0,0,0,0,1,0,1,0,1,0,0,1,0,1,0,0,1,0,0,1,0,1,0,0,0,0
+		.byte 0,0,0,0,1,0,1,0,1,0,0,1,0,1,0,0,1,0,0,1,0,1,0,1
 	__liftData_rightB:
 
 	RightDataIndex:

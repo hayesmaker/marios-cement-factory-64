@@ -40,6 +40,7 @@ Game: {
 	MaxTickStates:          .byte $07
 	TickState:              .byte $00
 	Level:                  .byte $00
+	GameModeAdjustment: 	.byte $00
 	SpeedIncreaseTable:	
 		.byte $00, $02, $04, $06, $08, $0a, $0c, $0e, $10
 		//.byte 16, 16, 16, 16, 16, 16, 16, 16, 16, 16
@@ -208,10 +209,16 @@ Game: {
 		    //inc $d020
 		    //every 50 frames (1 tick = 1 second)
 		    // set level number and subtract from GameTimerTick
+		    lda TitleScreen.GameMode
+		    asl
+		    sta GameModeAdjustment
+
 		    lda Score.currentScore + 1
 		    and #$0f
-		    asl
+		    asl   
 		    sta Level
+		    clc
+		    adc GameModeAdjustment
 		    tay
 
 		    lda GameTimerTick + 1
@@ -259,7 +266,7 @@ Game: {
 		    //jsr Mixers.Update
 		    jmp !+
 		!tick1:
-		    jsr Elevators.Update2
+		    jsr Elevators.Update1
 		    jsr Mixers.Update
 		    //play SOUND1
 	        jsr Sounds.LIFT_TICK
@@ -270,7 +277,7 @@ Game: {
 		    //jsr Mixers.Update
 		    jmp !+
 		!tick3:
-		    jsr Elevators.Update1
+		    jsr Elevators.Update2
 		    jsr Mixers.Update
 		    //jsr ELEVATORS.Update2
 		    //play SOUND1
@@ -284,12 +291,12 @@ Game: {
 		    
 		    jmp !+
 		!tick5:
-		    jsr Elevators.Update2    
+		    jsr Elevators.Update1
 		    jsr Mixers.Update
 
 		    //play SOUND1
 	        jsr Sounds.LIFT_TICK
-		    
+		
 		    jmp !+
 		!tick6: 
 		    //jsr Mixers.Update
@@ -300,7 +307,7 @@ Game: {
 		    lda MaxTickStates
 		    sta TickState
 
-		    jsr Elevators.Update1
+		    jsr Elevators.Update2
 		    jsr Mixers.Update
 
 		    //play SOUND1
