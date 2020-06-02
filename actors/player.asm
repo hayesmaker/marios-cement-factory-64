@@ -304,8 +304,10 @@ PLAYER: {
         bne !return+
         // CHECK IF IN LIFT ZONE
 
+
         lda Player_PosY_Index
         bne !skip+
+            //inc $d021
             //crush player top
             jsr PlayerFall
         !skip:
@@ -373,6 +375,7 @@ PLAYER: {
     }
 
     PlayerFall: {
+        //inc $d020
         //start fall timer
         lda #1
         sta Game.FallGuyTimer + 0
@@ -392,8 +395,9 @@ PLAYER: {
         lda FallCountIndex
         bne !skip+
             lda #0
-            jsr BlinkPlayerOn
             sta Game.FallGuyTimer + 0
+            lda #0
+            jsr BlinkPlayerOn
             jsr LoseLife            
             jmp !return+
         !skip:
