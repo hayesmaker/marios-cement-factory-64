@@ -103,6 +103,9 @@ Titles: {
         lda #$03
         !set:
         jsr music_init
+
+        lda #5
+        jsr music_init + 9
         rts
     }
 

@@ -383,6 +383,10 @@ Game: {
         lda #$03
         !set:
         jsr music_init
+        // lda #10
+        // jsr music_init + 6
+        lda #5
+        jsr music_init + 9
         rts
 	}
 
