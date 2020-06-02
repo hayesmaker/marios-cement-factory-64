@@ -1019,12 +1019,9 @@ Mixers: {
 	}
 
 	AddCement6: {
-		// @todo fix sprite not disappearing heere
-		// inc $d020
 		dec NumPoured6
 		lda NumPoured6
 		bne !skip+
-			inc $d020
 			lda #3
 			jsr PouredCement.HideSprite
 		!skip:
