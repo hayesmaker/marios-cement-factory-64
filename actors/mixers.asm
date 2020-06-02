@@ -277,7 +277,7 @@ Mixers: {
 			cmp #3
 			bne !next+
 				lda #0
-				sta PourTick5
+				sta PourTick6
 				jsr AddCement6
 		!next:
 		!return:
@@ -1024,6 +1024,7 @@ Mixers: {
 		dec NumPoured6
 		lda NumPoured6
 		bne !skip+
+			inc $d020
 			lda #3
 			jsr PouredCement.HideSprite
 		!skip:
