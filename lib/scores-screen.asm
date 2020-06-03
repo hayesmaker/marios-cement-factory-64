@@ -117,35 +117,6 @@ HiScores: {
 		rts
 	}
 
-    /*
-    //units 1s
-    lda currentScore
-    and #$0f
-    asl 
-    clc
-    adc Ui.NUMBER_WANG //#$60
-    sta Game.SCREEN_RAM + 133
-    
-    //units 10s
-    lda currentScore
-    lsr
-    lsr 
-    lsr 
-    lsr 
-    asl
-    clc
-    adc Ui.NUMBER_WANG  //.byte $60 //First char index for 0 
-    sta Game.SCREEN_RAM + 132
-
-    //units 100s
-    lda currentScore + 1
-    and #$0f
-    asl 
-    clc
-    adc Ui.NUMBER_WANG
-    sta Game.SCREEN_RAM + 131
-    */
-
   drawScore: {
     //.label scoreTemp = TEMP8
     .label screenramTemp = TEMP9
