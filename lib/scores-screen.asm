@@ -20,9 +20,9 @@ HiScores: {
      .byte $00
 
   scoresTableHB:
-    .byte $11, $08, $05, $02
-  scoresTableLB:
     .byte $00, $00, $00, $00
+  scoresTableLB:
+    .byte $80, $60, $40, $20
   __scoresTable:  
 
   scoreTemp:

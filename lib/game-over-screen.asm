@@ -176,8 +176,6 @@ checkHighScorePosition: {
   .label tempScoreHB = TEMP4
   .label passIndex = TEMP5
   .label passLen = TEMP6
-
-  //.break
   
   lda Score.currentScore + 0
   sta scoreLB
@@ -189,14 +187,12 @@ checkHighScorePosition: {
   ldy #0
   !loop:
     lda HiScores.scoresTableHB, y
-    sec
-    sbc scoreHB
-    bmi !putScore+
+    cmp scoreHB
+    bcc !putScore+
     bne !skip+
-    lda HiScores.scoresTableLB,y
-    sec
-    sbc scoreLB
-    bmi !putScore+  
+    lda HiScores.scoresTableLB, y
+    cmp scoreLB
+    bcc !putScore+  
     !skip:
     cpy #[HiScores.__scoresTable - HiScores.scoresTableLB]
     beq !return+
