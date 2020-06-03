@@ -10,6 +10,12 @@ Lives: {
 
 	Initialise: {
 		//Remove all Misses
+		jsr clearLivesUI
+
+		rts
+	}
+
+	clearLivesUI: {
 		ldx #29
 		jsr RemoveMiss
 
@@ -43,32 +49,8 @@ Lives: {
 	}
 
 	AddLife: {
-		ldy LivesLost
-		dey
-		ldx LifePosX, y
-		jsr RemoveMiss
-
-		ldx LivesLost
-		dex
-		stx LivesLost
-		bne !skip+
-
-			lda Tiles.EMPTY
-			ldx #30
-			ldy #4
-			jsr Map.SwitchCharAtXY
-
-			lda Tiles.EMPTY
-			ldx #31
-			ldy #4
-			jsr Map.SwitchCharAtXY
-
-			lda Tiles.EMPTY
-			ldx #32
-			ldy #4
-			jsr Map.SwitchCharAtXY
-
-		!skip:
+		jsr clearLivesUI
+		
 		rts
 	}
 

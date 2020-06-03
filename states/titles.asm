@@ -104,7 +104,7 @@ Titles: {
         !set:
         jsr music_init
 
-        lda #5
+        lda #15
         jsr music_init + 9
         rts
     }

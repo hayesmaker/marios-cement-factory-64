@@ -385,7 +385,7 @@ Game: {
         jsr music_init
         // lda #10
         // jsr music_init + 6
-        lda #5
+        lda #15
         jsr music_init + 9
         rts
 	}
