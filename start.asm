@@ -36,11 +36,6 @@ SOUND_SCORE:
 #import "./lib/map.asm"
 #import "./lib/irq.asm"
 #import "./actors/mixers.asm"
-#import "./actors/cement-crates.asm"
-#import "./actors/elevators.asm"
-#import "./actors/player.asm"
-#import "./actors/poured-cement.asm"
-
 /*
 Sprite Map - IN GAME
 ----------
@@ -90,6 +85,12 @@ main:
 
 * = $d000 "Sprites"
 	.import binary "./assets/sprites/sprites.bin"
+
+#import "./actors/cement-crates.asm"
+#import "./actors/elevators.asm"
+#import "./actors/player.asm"
+#import "./actors/poured-cement.asm"
+
 * = $b000 "Map data"
 MAP_TILES: 
 	.import binary "./assets/maps/mcf-bg - Tiles.bin"

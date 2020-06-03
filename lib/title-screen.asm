@@ -59,9 +59,8 @@ TitleScreen: {
         
 		lda #RED
 		sta VIC.SPRITE_COLOR_0
-        //lda #YELLOW
 		sta VIC.SPRITE_COLOR_1
-		lda #YELLOW
+		lda #WHITE
 		sta VIC.SPRITE_COLOR_2
         sta VIC.SPRITE_COLOR_3
         sta VIC.SPRITE_COLOR_4
@@ -73,40 +72,73 @@ TitleScreen: {
 		lda #%00000000
 		sta $d01c 
 
-		lda DefaultFrame + 0
+        .const defaultFrame = $40
+		lda #defaultFrame + 0
 		sta sprite_pointers + 0
 		sta sprite_pointers + 1
-        lda $43
+        
+        lda #defaultFrame + 3
 		sta sprite_pointers + 2
-        lda $44
+        
+        lda #defaultFrame + 4
         sta sprite_pointers + 3
-        lda $45
+        
+        lda #defaultFrame + 5
         sta sprite_pointers + 4
-        lda $4b
+        
+        lda #defaultFrame + 11
         sta sprite_pointers + 5
-        lda $4c
+        
+        lda #defaultFrame + 12
         sta sprite_pointers + 6
-        lda $4d
+        
+        lda #defaultFrame + 13
         sta sprite_pointers + 7
 
 		//double width
-		lda #%00000011
+		lda #%11111111
 		sta $D01D   
         //menu blink sprite enable    
-		lda #%1111111 1
+		lda #%11111111
 		sta VIC.SPRITE_ENABLE
         //block 1 enable sprite msb
         lda #%00000000
         sta VIC.SPRITE_MSB
         
-        lda #104
+        lda #40
         sta VIC.SPRITE_2_X
-        lda #202
+        lda #60
         sta VIC.SPRITE_2_Y
 
+        lda #88
+        sta VIC.SPRITE_3_X
+        lda #60
+        sta VIC.SPRITE_3_Y
+
+        lda #136
+        sta VIC.SPRITE_4_X
+        lda #60
+        sta VIC.SPRITE_4_Y
+
+        lda #40
+        sta VIC.SPRITE_5_X
+        lda #81
+        sta VIC.SPRITE_5_Y
+
+        lda #88
+        sta VIC.SPRITE_6_X
+        lda #81
+        sta VIC.SPRITE_6_Y
+
+        lda #136
+        sta VIC.SPRITE_7_X
+        lda #81
+        sta VIC.SPRITE_7_Y
+
+
+        //*****
         lda #40
         sta VIC.SPRITE_0_X  
-
         lda #88
         sta VIC.SPRITE_1_X    
 
@@ -129,8 +161,8 @@ TitleScreen: {
         sta VIC.SPRITE_0_Y
         sta VIC.SPRITE_1_Y
         //double width
-		lda SelectorTableWidth, y
-		sta $D01D 
+		// lda SelectorTableWidth, y
+		// sta $D01D 
 
 		// //draw game A / B in menu
 		// lda FrameA
@@ -166,23 +198,39 @@ TitleScreen: {
 	}
 
 	Blink: {
-		//y position
-		ldx #%00
-		inc FlashCounter
-		lda FlashCounter
-		and #%00001000
-		beq !NoFlash+
-		ldx #%11
-		!NoFlash:
-		txa
-		ora #%00000100
-		sta VIC.SPRITE_ENABLE
-		rts
-	}
+        //y position
+        inc FlashCounter
+        lda FlashCounter
+        cmp #10                           // 1 flash per second
+        bne !noFlash+
+
+        lda #0
+        sta FlashCounter
+        lda VIC.SPRITE_ENABLE
+        and #1
+
+        beq !turnOn+
+
+        lda VIC.SPRITE_ENABLE
+        and #%11111100
+        sta VIC.SPRITE_ENABLE
+        rts
+
+    !turnOn:
+        lda VIC.SPRITE_ENABLE
+        ora #%00000011
+        sta VIC.SPRITE_ENABLE 
+
+ 
+ 
+    !noFlash:
+        rts
+    }
+
 
     DisableSprites: {
-        lda #%00000000
-        sta VIC.SPRITE_ENABLE
+        //lda #%00000000
+        //sta VIC.SPRITE_ENABLE
         rts        
     }
 
