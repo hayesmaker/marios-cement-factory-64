@@ -63,22 +63,37 @@ TitleScreen: {
 		sta VIC.SPRITE_COLOR_1
 		lda #YELLOW
 		sta VIC.SPRITE_COLOR_2
+        sta VIC.SPRITE_COLOR_3
+        sta VIC.SPRITE_COLOR_4
+        sta VIC.SPRITE_COLOR_5
+        sta VIC.SPRITE_COLOR_6
+        sta VIC.SPRITE_COLOR_7
 
 		//Multicolor mode sprites (1 for on 0 for hi-res)
-		lda #%11111000
+		lda #%00000000
 		sta $d01c 
 
 		lda DefaultFrame + 0
 		sta sprite_pointers + 0
 		sta sprite_pointers + 1
-		lda FrameA
+        lda $43
 		sta sprite_pointers + 2
+        lda $44
+        sta sprite_pointers + 3
+        lda $45
+        sta sprite_pointers + 4
+        lda $4b
+        sta sprite_pointers + 5
+        lda $4c
+        sta sprite_pointers + 6
+        lda $4d
+        sta sprite_pointers + 7
 
 		//double width
 		lda #%00000011
 		sta $D01D   
         //menu blink sprite enable    
-		lda #%00000111 
+		lda #%1111111 1
 		sta VIC.SPRITE_ENABLE
         //block 1 enable sprite msb
         lda #%00000000
@@ -103,6 +118,11 @@ TitleScreen: {
 		rts
 	}
 
+    DrawTitle: {
+
+        rts
+    }
+
 	DrawSprites: {            
 		ldy SelectorTableIndex
         lda SelectorTable, y
@@ -112,11 +132,11 @@ TitleScreen: {
 		lda SelectorTableWidth, y
 		sta $D01D 
 
-		//draw game A / B in menu
-		lda FrameA
-		clc
-		adc GameMode
-		sta sprite_pointers + 2 
+		// //draw game A / B in menu
+		// lda FrameA
+		// clc
+		// adc GameMode
+		// sta sprite_pointers + 2 
 		rts
 
 	}
@@ -204,18 +224,18 @@ TitleScreen: {
         cmp #GAME_MODE_SELECTED
         bne !skip+
     	lda GameMode
-        	bne !+
-                //menu blink sprite enable    
-                lda VIC.SPRITE_ENABLE 
-                and #%00000100
-                sta VIC.SPRITE_ENABLE
-        		lda #GAME_B
-        		jmp !setGameMode+
-        	!:
-        		lda #GAME_A
-        	!setGameMode:                
-        		sta GameMode
-        		jsr DrawSprites
+        	// bne !+
+         //        //menu blink sprite enable    
+         //  //       lda VIC.SPRITE_ENABLE 
+         //  //       and #%00000100
+         //  //       sta VIC.SPRITE_ENABLE
+        	// 	// lda #GAME_B
+        	// 	// jmp !setGameMode+
+        	// !:
+        	// 	//lda #GAME_A
+        	// !setGameMode:                
+        		// sta GameMode
+        		// jsr DrawSprites
         !skip:
         //DO OTHER STUFF ON FIRE
         cmp #OPTIONS_SELECTED
