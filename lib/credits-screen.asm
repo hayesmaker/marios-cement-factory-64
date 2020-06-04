@@ -72,7 +72,7 @@ Credits: {
            sta $Db00, x
 
            inx
-           cpx #$400
+           cpx #0
            bne !loop_colour-
 
         

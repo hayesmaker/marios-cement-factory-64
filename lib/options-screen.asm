@@ -134,7 +134,7 @@ OptionsScreen: {
            sta $Db00, x
 
            inx
-           cpx #$400
+           cpx #0
            bne !loop_colour-
         
         // inc $d021
