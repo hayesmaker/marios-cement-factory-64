@@ -43,6 +43,7 @@ IRQ: {
 		:StoreState()			
 			jsr TitleScreen.setTitleSprites	
 			jsr TitleScreen.AnimateTitle
+			
 			jsr music_play
 			
 			lda #100

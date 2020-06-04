@@ -4,7 +4,6 @@ BasicUpstart2(main)
 .label music_init =*
 .label music_play =*+3	
 .import binary "./assets/sound/music.bin"
-
 SOUND_FALL:
 .import binary "./assets/sound/sfx/SOUND_FALL"
 SOUND_MOVE:
@@ -36,6 +35,11 @@ SOUND_SCORE:
 #import "./lib/map.asm"
 #import "./lib/irq.asm"
 #import "./actors/mixers.asm"
+*=* "*game over"
+#import "./states/gameover.asm"
+#import "./lib/game-over-screen.asm"
+*=* "*end of game over"
+
 /*
 Sprite Map - IN GAME
 ----------
@@ -48,7 +52,7 @@ Sprite Map - IN GAME
 01000000 - 6 Poured Cement
 10000000 - 7 Poured Cement
 */
-* = * "Main" 
+* = * "Main"
 main: 
 //bank out BASIC and Kernal
   lda $01
@@ -76,8 +80,6 @@ main:
 #import "./game/score.asm"
 #import "./game/lives.asm"
 #import "./game/options.asm"
-#import "./states/gameover.asm"
-#import "./lib/game-over-screen.asm"
 #import "./lib/keyboard.asm"
 #import "./actors/poured-cement.asm"
 #import "./actors/player.asm"

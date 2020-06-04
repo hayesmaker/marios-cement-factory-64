@@ -93,12 +93,13 @@ TitleScreen: {
         lda #%00000000
         sta VIC.SPRITE_MSB
 
-        lda #0
-        sta titlesTweenIndex
+        // lda #0
+        // sta titlesTweenIndex
+
+        jsr initTitleSpritesPos
 
         // lda #1
         // sta isAnimating
-
         //***** SELECTOR SPRITES - not multiplexed
         lda #40
         sta VIC.SPRITE_0_X  
@@ -114,7 +115,6 @@ TitleScreen: {
 
     setGameModeSprite: {
         //.const defaultFrame = $40
-
         //double width
         lda #%11111011
         sta $D01D   
@@ -132,6 +132,40 @@ TitleScreen: {
         lda #202
         sta VIC.SPRITE_2_Y
 
+        rts
+    }
+
+    initTitleSpritesPos: {
+
+        lda #40
+        sta VIC.SPRITE_2_X
+        lda #TITLE_TARGET_Y
+        sta VIC.SPRITE_2_Y
+
+        lda #88
+        sta VIC.SPRITE_3_X
+        lda #TITLE_TARGET_Y
+        sta VIC.SPRITE_3_Y
+
+        lda #136
+        sta VIC.SPRITE_4_X
+        lda #TITLE_TARGET_Y
+        sta VIC.SPRITE_4_Y
+
+        lda #40
+        sta VIC.SPRITE_5_X
+        lda #[TITLE_TARGET_Y + 21]
+        sta VIC.SPRITE_5_Y
+
+        lda #88
+        sta VIC.SPRITE_6_X
+        lda #[TITLE_TARGET_Y + 21]
+        sta VIC.SPRITE_6_Y
+
+        lda #136
+        sta VIC.SPRITE_7_X
+        lda #[TITLE_TARGET_Y + 21]
+        sta VIC.SPRITE_7_Y
 
         rts
     }
@@ -156,45 +190,33 @@ TitleScreen: {
         lda #defaultFrame + 5
         sta sprite_pointers + 4
         
-        lda #defaultFrame + 11
+        lda #defaultFrame + 6
         sta sprite_pointers + 5
         
-        lda #defaultFrame + 12
+        lda #defaultFrame + 7
         sta sprite_pointers + 6
         
-        lda #defaultFrame + 13
+        lda #defaultFrame + 8
         sta sprite_pointers + 7
 
         lda #40
         sta VIC.SPRITE_2_X
-        // lda #0
-        // sta VIC.SPRITE_2_Y
-
+        
         lda #88
         sta VIC.SPRITE_3_X
-        // lda #0
-        // sta VIC.SPRITE_3_Y
 
         lda #136
         sta VIC.SPRITE_4_X
-        // lda #0
-        // sta VIC.SPRITE_4_Y
 
         lda #40
         sta VIC.SPRITE_5_X
-        // lda #0
-        // sta VIC.SPRITE_5_Y
-
+       
         lda #88
         sta VIC.SPRITE_6_X
-        // lda #0
-        // sta VIC.SPRITE_6_Y
-
+        
         lda #136
         sta VIC.SPRITE_7_X
-        // lda #0
-        // sta VIC.SPRITE_7_Y
-
+        
         //double width
         lda #%11111111
         sta $D01D

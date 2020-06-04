@@ -155,15 +155,15 @@ init: {
       lda #$ff
       sta hiscorePos
 
-      ldx #0
-      !loop:
-        lda WHITE_SPACE_CHAR
-        sta playerNameEntered, x
-        cpx #8
-        beq !skip+
-        inx
-        jmp !loop-
-      !skip:  
+      // ldx #0
+      // !loop:
+      //   lda #WHITE_SPACE_CHAR
+      //   sta playerNameEntered, x
+      //   cpx #8
+      //   beq !skip+
+      //   inx
+      //   jmp !loop-
+      // !skip:  
 
       jsr checkHighScorePosition
       //y will contain highscorePosition
@@ -175,7 +175,7 @@ init: {
         jsr enableKeys
         jsr drawCongratsMessage
       !return:
-      jsr drawContinueMessage
+      //jsr drawContinueMessage
       rts
 }
 
@@ -491,8 +491,10 @@ keyControl: {
       sta TempA
       lda playerNameIndex
       cmp #8
-      beq NoValidInput
-
+      bne !skip+
+        jmp NoValidInput
+      !skip:
+      
       lda #row
       asl
       tay

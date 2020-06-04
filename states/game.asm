@@ -211,14 +211,16 @@ Game: {
 		    //every 50 frames (1 tick = 1 second)
 		    // set level number and subtract from GameTimerTick
 		    lda TitleScreen.GameMode
-		    asl
+		    cmp #2
+		    bne !skip+
+		    lda TitleScreen.GameMode
 		    sta GameModeAdjustment
-
+		    !skip:
 		    lda Score.currentScore + 1
 		    and #$0f
 		    asl   
 		    sta Level
-		    clc
+		    clc 
 		    adc GameModeAdjustment
 		    tay
 
