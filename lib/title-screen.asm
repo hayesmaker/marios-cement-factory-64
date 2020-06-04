@@ -3,8 +3,8 @@ TitleScreen: {
 	.label screen_ram = $4c00
 	.label sprite_pointers = screen_ram + $3f8
 
-	.label GAME_A = $00
-	.label GAME_B = $01
+	.label GAME_A = $01
+	.label GAME_B = $02
 	
     .label OPTIONS_SELECTED = $00
     .label HISCORE_SELECTED = $01
@@ -13,6 +13,9 @@ TitleScreen: {
     .label PLAY_SELECTED = $04
 
     .const TITLE_SCREEN_LEN = 100
+    .const TITLE_TARGET_Y = 70
+    .const defaultFrame = $40
+
     .label MAIN_MENU = $ff
 
     SCREEN_MODE:
@@ -20,9 +23,11 @@ TitleScreen: {
     
     *=* "Tween Table"
     titlesTween:
-        easeOutBounce(0, 70, TITLE_SCREEN_LEN)
+        easeOutBounce(0, TITLE_TARGET_Y, TITLE_SCREEN_LEN)
     *=* "End Tween Table"    
 
+    isAnimating:
+        .byte $01
     titlesTweenIndex:
         .byte $00
     //@deprecated
@@ -69,25 +74,81 @@ TitleScreen: {
 		lda #RED
 		sta VIC.SPRITE_COLOR_0
 		sta VIC.SPRITE_COLOR_1
-		lda #WHITE
-		sta VIC.SPRITE_COLOR_2
-        sta VIC.SPRITE_COLOR_3
-        sta VIC.SPRITE_COLOR_4
-        sta VIC.SPRITE_COLOR_5
-        sta VIC.SPRITE_COLOR_6
-        sta VIC.SPRITE_COLOR_7
+	
+        lda #defaultFrame + 0
+        sta sprite_pointers + 0
+        sta sprite_pointers + 1
 
 		//Multicolor mode sprites (1 for on 0 for hi-res)
 		lda #%00000000
 		sta $d01c 
 
-        .const defaultFrame = $40
-		lda #defaultFrame + 0
-		sta sprite_pointers + 0
-		sta sprite_pointers + 1
-        
+		//double width
+		lda #%11111111
+		sta $D01D   
+        //menu blink sprite enable    
+		lda #%11111111
+		sta VIC.SPRITE_ENABLE
+        //block 1 enable sprite msb
+        lda #%00000000
+        sta VIC.SPRITE_MSB
+
+        lda #0
+        sta titlesTweenIndex
+
+        // lda #1
+        // sta isAnimating
+
+        //***** SELECTOR SPRITES - not multiplexed
+        lda #40
+        sta VIC.SPRITE_0_X  
+        lda #88
+        sta VIC.SPRITE_1_X    
+        ldy SelectorTableIndex
+        lda SelectorTable, y
+        sta VIC.SPRITE_0_Y
+        sta VIC.SPRITE_1_Y 
+   
+		rts
+	}
+
+    setGameModeSprite: {
+        //.const defaultFrame = $40
+
+        //double width
+        lda #%11111011
+        sta $D01D   
+
+        lda #YELLOW
+        sta VIC.SPRITE_COLOR_2
+
+        lda #defaultFrame
+        clc
+        adc GameMode
+        sta sprite_pointers + 2 
+
+        lda #104
+        sta VIC.SPRITE_2_X
+        lda #202
+        sta VIC.SPRITE_2_Y
+
+
+        rts
+    }
+
+    //Now called from IRQ 
+    setTitleSprites: {
+        //.const defaultFrame = $40
+        lda #WHITE
+        sta VIC.SPRITE_COLOR_2
+        sta VIC.SPRITE_COLOR_3
+        sta VIC.SPRITE_COLOR_4
+        sta VIC.SPRITE_COLOR_5
+        sta VIC.SPRITE_COLOR_6
+        sta VIC.SPRITE_COLOR_7
+    
         lda #defaultFrame + 3
-		sta sprite_pointers + 2
+        sta sprite_pointers + 2
         
         lda #defaultFrame + 4
         sta sprite_pointers + 3
@@ -104,86 +165,58 @@ TitleScreen: {
         lda #defaultFrame + 13
         sta sprite_pointers + 7
 
-		//double width
-		lda #%11111111
-		sta $D01D   
-        //menu blink sprite enable    
-		lda #%11111111
-		sta VIC.SPRITE_ENABLE
-        //block 1 enable sprite msb
-        lda #%00000000
-        sta VIC.SPRITE_MSB
-        
         lda #40
         sta VIC.SPRITE_2_X
-        lda #0
-        sta VIC.SPRITE_2_Y
+        // lda #0
+        // sta VIC.SPRITE_2_Y
 
         lda #88
         sta VIC.SPRITE_3_X
-        lda #0
-        sta VIC.SPRITE_3_Y
+        // lda #0
+        // sta VIC.SPRITE_3_Y
 
         lda #136
         sta VIC.SPRITE_4_X
-        lda #0
-        sta VIC.SPRITE_4_Y
+        // lda #0
+        // sta VIC.SPRITE_4_Y
 
         lda #40
         sta VIC.SPRITE_5_X
-        lda #0
-        sta VIC.SPRITE_5_Y
+        // lda #0
+        // sta VIC.SPRITE_5_Y
 
         lda #88
         sta VIC.SPRITE_6_X
-        lda #0
-        sta VIC.SPRITE_6_Y
+        // lda #0
+        // sta VIC.SPRITE_6_Y
 
         lda #136
         sta VIC.SPRITE_7_X
-        lda #0
-        sta VIC.SPRITE_7_Y
+        // lda #0
+        // sta VIC.SPRITE_7_Y
 
-
-        //*****
-        lda #40
-        sta VIC.SPRITE_0_X  
-        lda #88
-        sta VIC.SPRITE_1_X    
-
-        lda #0
-        sta titlesTweenIndex
-
-        ldy SelectorTableIndex
-        lda SelectorTable, y
-        sta VIC.SPRITE_0_Y
-        sta VIC.SPRITE_1_Y 
-   
-		rts
-	}
-
-    DrawTitle: {
-
-        
-
+        //double width
+        lda #%11111111
+        sta $D01D
 
         rts
     }
+
+    setTitlePositions: {
+        lda #40
+        sta VIC.SPRITE_2_X
+        lda #TITLE_TARGET_Y
+        sta VIC.SPRITE_2_Y
+
+        rts
+    }
+
 
 	DrawSprites: {            
 		ldy SelectorTableIndex
         lda SelectorTable, y
         sta VIC.SPRITE_0_Y
         sta VIC.SPRITE_1_Y
-        //double width
-		// lda SelectorTableWidth, y
-		// sta $D01D 
-
-		// //draw game A / B in menu
-		// lda FrameA
-		// clc
-		// adc GameMode
-		// sta sprite_pointers + 2 
 		rts
 
 	}
@@ -207,18 +240,24 @@ TitleScreen: {
         beq !skip+
     		jsr Blink
     		jsr DrawSprites
-            jsr AnimateTitle
+            // jsr AnimateTitle
             jsr Control
         !skip:
 		rts
 	}
 
     AnimateTitle: {
-
+        lda isAnimating
+        bne !skip+
+            jsr setTitlePositions
+            jmp !end+
+        !skip:
         ldy titlesTweenIndex
         cpy #TITLE_SCREEN_LEN
-        beq !end+
-
+        bne !skip+
+            lda #0
+            sta isAnimating
+        !skip:
         lda titlesTween, y
         sta VIC.SPRITE_2_Y
         sta VIC.SPRITE_3_Y
@@ -237,7 +276,7 @@ TitleScreen: {
 	Blink: {
         inc FlashCounter
         lda FlashCounter
-        cmp #10  //FREQUENCY 
+        cmp #15  //FREQUENCY 
         bne !noFlash+
         lda #0
         sta FlashCounter
@@ -301,26 +340,26 @@ TitleScreen: {
         cmp #GAME_MODE_SELECTED
         bne !skip+
     	lda GameMode
-        	bne !+
-                //menu blink sprite enable    
-                lda VIC.SPRITE_ENABLE 
-                and #%00000100
-                sta VIC.SPRITE_ENABLE
-        		lda #GAME_B
-        		jmp !setGameMode+
+        cmp #GAME_B
+        beq !+ 
+            //menu blink sprite enable    
+    		lda #GAME_B
+    		jmp !setGameMode+
         	!:
-        		lda #GAME_A
+    		lda #GAME_A
         	!setGameMode:                
-        		sta GameMode
-        		jsr DrawSprites
+    		sta GameMode
+        		//jsr DrawSprites
         !skip:
         //DO OTHER STUFF ON FIRE
+        lda SelectorTableIndex
         cmp #OPTIONS_SELECTED
         bne !skip+
             sta SCREEN_MODE
             sta InTitleScreen 
             jsr OptionsScreen.init
         !skip:
+        lda SelectorTableIndex
         cmp #CREDITS_SELECTED
         bne !skip+
             sta SCREEN_MODE
@@ -328,6 +367,7 @@ TitleScreen: {
             sta InTitleScreen
             jsr Credits.init
         !skip:
+        lda SelectorTableIndex
         cmp #HISCORE_SELECTED
         bne !skip+
             sta SCREEN_MODE

@@ -48,7 +48,6 @@ Sprite Map - IN GAME
 01000000 - 6 Poured Cement
 10000000 - 7 Poured Cement
 */
-
 * = * "Main" 
 main: 
 //bank out BASIC and Kernal
@@ -90,7 +89,6 @@ main:
 
 * = $d000 "Sprites"
 	.import binary "./assets/sprites/sprites.bin"
-
 * = $b000 "Map data"
 MAP_TILES: 
 	.import binary "./assets/maps/mcf-bg - Tiles.bin"

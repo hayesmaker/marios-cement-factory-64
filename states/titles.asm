@@ -48,6 +48,7 @@ Titles: {
             lda STATE_IN_PROGRESS
             beq !end+
 
+            //stabilise raster?
             lda #$ff
             cmp $d012
             bne *-3

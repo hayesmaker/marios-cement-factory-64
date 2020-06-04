@@ -86,6 +86,10 @@ OptionsScreen: {
         ldy #0
         sty Player_PosY_Index
 
+        //double width
+        lda #%11111110
+        sta $D01D
+
         //end sprite init
 		    //Turn off bitmap mode
         lda $d011
@@ -299,7 +303,6 @@ OptionsScreen: {
 
     inc DebounceFlag              
     //move cursor right
-    inc $d020
     !end:
     rts 
   }
@@ -316,6 +319,11 @@ OptionsScreen: {
     lda Player_Y, y
     sta VIC.SPRITE_0_Y
     //y * 8 + x = table index
+
+    //double width
+    lda #0
+    sta $D01D
+
     lda FramesTable, y
     sta sprite_pointers + 0
     
