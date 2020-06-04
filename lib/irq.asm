@@ -29,6 +29,9 @@ IRQ: {
 	SwitchToGame: {
 		sei
 		//routine called when interrupt triggers
+
+		lda #0
+     	sta $d012
 		lda #<MainIRQ
 		ldx #>MainIRQ
 		sta $fffe //0314
@@ -44,14 +47,15 @@ IRQ: {
 			jsr TitleScreen.setTitleSprites	
 			jsr TitleScreen.AnimateTitle
 			
+			inc $d020
 			jsr music_play
 			
-			lda #100
-         	sta $d012
-			lda #<TitlesIRQHandler2
-			ldx #>TitlesIRQHandler2
-			sta $fffe //0314
-			stx $ffff //0315
+			// lda #100
+         	// sta $d012
+			// lda #<TitlesIRQHandler2
+			// ldx #>TitlesIRQHandler2
+			// sta $fffe //0314
+			// stx $ffff //0315
 			lsr VIC.INTERRUPT_STATUS     // Acknowledge
 		:RestoreState()	
 		
@@ -59,23 +63,23 @@ IRQ: {
 	}
 
 
-	TitlesIRQHandler2: {
+	// TitlesIRQHandler2: {
 
-		:StoreState()
+	// 	:StoreState()
 
-		jsr TitleScreen.setGameModeSprite
+	// 	jsr TitleScreen.setGameModeSprite
 
-		lda #$00
-     	sta $d012
-		lda #<TitlesIRQHandler
-		ldx #>TitlesIRQHandler
-		sta $fffe //0314
-		stx $ffff //0315
-		lsr VIC.INTERRUPT_STATUS
-		:RestoreState()	
+	// 	lda #$00
+ //     	sta $d012
+	// 	lda #<TitlesIRQHandler
+	// 	ldx #>TitlesIRQHandler
+	// 	sta $fffe //0314
+	// 	stx $ffff //0315
+	// 	lsr VIC.INTERRUPT_STATUS
+	// 	:RestoreState()	
 		
-		rti
-	}
+	// 	rti
+	// }
 
 	MainIRQ: {
 		
