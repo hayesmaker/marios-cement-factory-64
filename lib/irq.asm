@@ -51,10 +51,12 @@ IRQ: {
 		:StoreState()	
 			sei
 
-
-			jsr TitleScreen.setTitleSprites	
-			jsr TitleScreen.AnimateTitle
-			
+			lda TitleScreen.SCREEN_MODE
+			cmp #TitleScreen.OPTIONS_SELECTED
+			beq !skip+
+				jsr TitleScreen.setTitleSprites	
+				jsr TitleScreen.AnimateTitle
+			!skip:
 			jsr music_play
 			
 			lda #100
@@ -76,7 +78,12 @@ IRQ: {
 
 		:StoreState()
 
+		lda TitleScreen.SCREEN_MODE
+		cmp #TitleScreen.OPTIONS_SELECTED
+		beq !skip+
 		jsr TitleScreen.setGameModeSprite
+		!skip:
+
 		sei
 
 		lda #$00

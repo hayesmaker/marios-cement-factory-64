@@ -129,7 +129,7 @@ init: {
          sta $Db00, x
 
          inx
-         cpx #$400
+         cpx #0
          bne !loop_colour-
 
       .label row1 = 1
@@ -155,15 +155,15 @@ init: {
       lda #$ff
       sta hiscorePos
 
-      // ldx #0
-      // !loop:
-      //   lda #WHITE_SPACE_CHAR
-      //   sta playerNameEntered, x
-      //   cpx #8
-      //   beq !skip+
-      //   inx
-      //   jmp !loop-
-      // !skip:  
+      ldx #0
+      !loop:
+        lda #WHITE_SPACE_CHAR
+        sta playerNameEntered, x
+        cpx #7
+        beq !skip+
+        inx
+        jmp !loop-
+      !skip:  
 
       jsr checkHighScorePosition
       //y will contain highscorePosition
