@@ -48,8 +48,9 @@ Titles: {
             lda STATE_IN_PROGRESS
             beq !end+
 
+// AS - 4/6/2020
             //stabilise raster?
-            lda #$ff
+            lda #120
             cmp $d012
             bne *-3
             //DO MUSIC

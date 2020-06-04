@@ -27,6 +27,8 @@ IRQ: {
 	}
 
 	SwitchToGame: {
+
+		:StoreState()
 		sei
 		//routine called when interrupt triggers
 
@@ -37,49 +39,59 @@ IRQ: {
 		sta $fffe //0314
 		stx $ffff //0315
 
+		asl VIC.INTERRUPT_STATUS
+
 		cli
+		:RestoreState()	
 		rts
 	}
 
 	TitlesIRQHandler: {
 		
-		:StoreState()			
+		:StoreState()	
+			sei
+
+
 			jsr TitleScreen.setTitleSprites	
 			jsr TitleScreen.AnimateTitle
 			
-			inc $d020
 			jsr music_play
 			
-			// lda #100
-         	// sta $d012
-			// lda #<TitlesIRQHandler2
-			// ldx #>TitlesIRQHandler2
-			// sta $fffe //0314
-			// stx $ffff //0315
-			lsr VIC.INTERRUPT_STATUS     // Acknowledge
+			lda #100
+         	sta $d012
+			lda #<TitlesIRQHandler2
+			ldx #>TitlesIRQHandler2
+			sta $fffe //0314
+			stx $ffff //0315
+			asl VIC.INTERRUPT_STATUS     // Acknowledge
+
+			cli
 		:RestoreState()	
 		
 		rti
 	}
 
 
-	// TitlesIRQHandler2: {
+	TitlesIRQHandler2: {
 
-	// 	:StoreState()
+		:StoreState()
 
-	// 	jsr TitleScreen.setGameModeSprite
+		jsr TitleScreen.setGameModeSprite
+		sei
 
-	// 	lda #$00
- //     	sta $d012
-	// 	lda #<TitlesIRQHandler
-	// 	ldx #>TitlesIRQHandler
-	// 	sta $fffe //0314
-	// 	stx $ffff //0315
-	// 	lsr VIC.INTERRUPT_STATUS
-	// 	:RestoreState()	
+		lda #$00
+     	sta $d012
+		lda #<TitlesIRQHandler
+		ldx #>TitlesIRQHandler
+		sta $fffe //0314
+		stx $ffff //0315
+		asl VIC.INTERRUPT_STATUS
+
+		cli
+		:RestoreState()	
 		
-	// 	rti
-	// }
+		rti
+	}
 
 	MainIRQ: {
 		
