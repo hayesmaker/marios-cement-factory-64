@@ -73,7 +73,6 @@ main:
      .import binary "./assets/sprites/titles.bin"
 *=$5c00 "colour ram"; colorRam:   .fill picture.getColorRamSize(), picture.getColorRam(i)
 *=$6000 "bitmap";           .fill picture.getBitmapSize(), picture.getBitmap(i)
-
 *=$8000 "modules"
 
 #import "./game/constants.asm"
