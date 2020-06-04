@@ -80,16 +80,16 @@ main:
 #import "./states/gameover.asm"
 #import "./lib/game-over-screen.asm"
 #import "./lib/keyboard.asm"
+#import "./actors/poured-cement.asm"
+#import "./actors/player.asm"
+#import "./actors/cement-crates.asm"
+#import "./actors/elevators.asm"
+#import "./lib/easing.asm"
 
 *=* "end of modules"
 
 * = $d000 "Sprites"
 	.import binary "./assets/sprites/sprites.bin"
-
-#import "./actors/cement-crates.asm"
-#import "./actors/elevators.asm"
-#import "./actors/player.asm"
-#import "./actors/poured-cement.asm"
 
 * = $b000 "Map data"
 MAP_TILES: 

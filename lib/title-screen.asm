@@ -11,12 +11,20 @@ TitleScreen: {
     .label CREDITS_SELECTED = $02
     .label GAME_MODE_SELECTED = $03
     .label PLAY_SELECTED = $04
-	
+
+    .const TITLE_SCREEN_LEN = 100
     .label MAIN_MENU = $ff
 
     SCREEN_MODE:
         .byte MAIN_MENU
+    
+    *=* "Tween Table"
+    titlesTween:
+        easeOutBounce(0, 70, TITLE_SCREEN_LEN)
+    *=* "End Tween Table"    
 
+    titlesTweenIndex:
+        .byte $00
     //@deprecated
     InTitleScreen:
         .byte $00
@@ -44,6 +52,7 @@ TitleScreen: {
     	.byte 154, 170, 186, 202, 218
     SelectorTableWidth:
     	.byte $03,$03,$03,$03,$01
+
 
     /*
         
@@ -107,32 +116,32 @@ TitleScreen: {
         
         lda #40
         sta VIC.SPRITE_2_X
-        lda #60
+        lda #0
         sta VIC.SPRITE_2_Y
 
         lda #88
         sta VIC.SPRITE_3_X
-        lda #60
+        lda #0
         sta VIC.SPRITE_3_Y
 
         lda #136
         sta VIC.SPRITE_4_X
-        lda #60
+        lda #0
         sta VIC.SPRITE_4_Y
 
         lda #40
         sta VIC.SPRITE_5_X
-        lda #81
+        lda #0
         sta VIC.SPRITE_5_Y
 
         lda #88
         sta VIC.SPRITE_6_X
-        lda #81
+        lda #0
         sta VIC.SPRITE_6_Y
 
         lda #136
         sta VIC.SPRITE_7_X
-        lda #81
+        lda #0
         sta VIC.SPRITE_7_Y
 
 
@@ -141,6 +150,9 @@ TitleScreen: {
         sta VIC.SPRITE_0_X  
         lda #88
         sta VIC.SPRITE_1_X    
+
+        lda #0
+        sta titlesTweenIndex
 
         ldy SelectorTableIndex
         lda SelectorTable, y
@@ -151,6 +163,9 @@ TitleScreen: {
 	}
 
     DrawTitle: {
+
+        
+
 
         rts
     }
@@ -192,45 +207,59 @@ TitleScreen: {
         beq !skip+
     		jsr Blink
     		jsr DrawSprites
+            jsr AnimateTitle
             jsr Control
         !skip:
 		rts
 	}
 
+    AnimateTitle: {
+
+        ldy titlesTweenIndex
+        cpy #TITLE_SCREEN_LEN
+        beq !end+
+
+        lda titlesTween, y
+        sta VIC.SPRITE_2_Y
+        sta VIC.SPRITE_3_Y
+        sta VIC.SPRITE_4_Y
+        clc
+        adc #21
+        sta VIC.SPRITE_5_Y
+        sta VIC.SPRITE_6_Y
+        sta VIC.SPRITE_7_Y
+        inc titlesTweenIndex
+        
+        !end:
+        rts
+    }
+
 	Blink: {
-        //y position
         inc FlashCounter
         lda FlashCounter
-        cmp #10                           // 1 flash per second
+        cmp #10  //FREQUENCY 
         bne !noFlash+
-
         lda #0
         sta FlashCounter
         lda VIC.SPRITE_ENABLE
         and #1
-
         beq !turnOn+
-
         lda VIC.SPRITE_ENABLE
         and #%11111100
         sta VIC.SPRITE_ENABLE
         rts
-
     !turnOn:
         lda VIC.SPRITE_ENABLE
         ora #%00000011
-        sta VIC.SPRITE_ENABLE 
-
- 
- 
+        sta VIC.SPRITE_ENABLE  
     !noFlash:
         rts
     }
 
-
-    DisableSprites: {
-        //lda #%00000000
-        //sta VIC.SPRITE_ENABLE
+    teardown: {
+        //lda VIC.SPRITE_ENABLE 
+        lda #%00000000
+        sta VIC.SPRITE_ENABLE
         rts        
     }
 
@@ -263,7 +292,7 @@ TitleScreen: {
         cmp #PLAY_SELECTED
         bne !skip+
             //Start the game
-            jsr DisableSprites
+            jsr teardown
             lda #0
             sta Titles.STATE_IN_PROGRESS
         	//jsr Entry
@@ -272,18 +301,18 @@ TitleScreen: {
         cmp #GAME_MODE_SELECTED
         bne !skip+
     	lda GameMode
-        	// bne !+
-         //        //menu blink sprite enable    
-         //  //       lda VIC.SPRITE_ENABLE 
-         //  //       and #%00000100
-         //  //       sta VIC.SPRITE_ENABLE
-        	// 	// lda #GAME_B
-        	// 	// jmp !setGameMode+
-        	// !:
-        	// 	//lda #GAME_A
-        	// !setGameMode:                
-        		// sta GameMode
-        		// jsr DrawSprites
+        	bne !+
+                //menu blink sprite enable    
+                lda VIC.SPRITE_ENABLE 
+                and #%00000100
+                sta VIC.SPRITE_ENABLE
+        		lda #GAME_B
+        		jmp !setGameMode+
+        	!:
+        		lda #GAME_A
+        	!setGameMode:                
+        		sta GameMode
+        		jsr DrawSprites
         !skip:
         //DO OTHER STUFF ON FIRE
         cmp #OPTIONS_SELECTED

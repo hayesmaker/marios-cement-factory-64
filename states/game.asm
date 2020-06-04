@@ -83,7 +83,7 @@ Game: {
 	}
 
 	
-	entry: {		
+	entry: {	
 	 	lda #1
         sta STATE_IN_PROGRESS	
 
@@ -118,6 +118,7 @@ Game: {
 
 		jsr Random.init
 		jsr Map.DrawMap
+
 	    jsr Lives.Initialise
 	    jsr Elevators.Initialise
 		jsr Crates.Initialise
@@ -385,8 +386,8 @@ Game: {
         jsr music_init
         // lda #10
         // jsr music_init + 6
-        lda #15
-        jsr music_init + 9
+        // lda #15
+        // jsr music_init + 9
         rts
 	}
 
