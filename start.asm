@@ -3,7 +3,7 @@ BasicUpstart2(main)
 *=$1000 "music"
 .label music_init =*
 .label music_play =*+3	
-.import binary "./assets/sound/music.bin"
+.import binary "./assets/sound/music_v15.bin"
 SOUND_FALL:
 .import binary "./assets/sound/sfx/SOUND_FALL"
 SOUND_MOVE:
