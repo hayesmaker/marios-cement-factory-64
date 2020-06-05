@@ -347,6 +347,7 @@ PLAYER: {
         !end:
         bne !next+
             //no lift here
+            jsr Sounds.SFX_FALL
             jsr PlayerFall
         !next:
         rts
@@ -368,6 +369,7 @@ PLAYER: {
         !end:
         bne !next+
             //no lift
+            jsr Sounds.SFX_FALL
             jsr PlayerFall
             
         !next:
@@ -420,6 +422,7 @@ PLAYER: {
             jmp !return+
         !toggleOn:
             jsr BlinkPlayerOn
+            jsr Sounds.SFX_FALL 
         !return:
             dec FallCountIndex    
         rts
@@ -498,29 +501,6 @@ PLAYER: {
         rts
     }
 
-    /*
-    HideSprite: {
-        lda VIC.SPRITE_ENABLE 
-        and #%11110111
-        sta VIC.SPRITE_ENABLE
-        rts
-    }
-    
-    ShowSprite: {
-        //set accumulator
-        //to position index
-        sta PositionFrameIndex  
-
-        lda VIC.SPRITE_ENABLE 
-        ora #%00001000
-        sta VIC.SPRITE_ENABLE
-
-        jsr DrawSprite
-
-        rts
-    }
-    */
-
     BlinkPlayerOff: {
         lda #0
         sta isVisible
@@ -541,8 +521,6 @@ PLAYER: {
     BlinkPlayerOn: {
         lda #1
         sta isVisible
-
-        jsr Sounds.SFX_SPLAT
         lda VIC.SPRITE_ENABLE 
         ora #%00100001
         sta VIC.SPRITE_ENABLE
@@ -1089,6 +1067,7 @@ PLAYER: {
     DoLeft: {
         dex
         stx Player_PosX_Index       
+        
         jsr Sounds.SFX_MOVE
         //jsr ResetTimers
         rts
@@ -1098,6 +1077,7 @@ PLAYER: {
     DoRight: {
         inx 
         stx Player_PosX_Index
+        
         jsr Sounds.SFX_MOVE
         rts
     }

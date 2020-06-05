@@ -22,7 +22,7 @@ Sounds: {
         rts
     }
 
-    SFX_SPLAT: {
+    SFX_CRUNCH: {
         lda Options.isSoundOn
         beq !return+
         lda #<SOUND_CRUNCH

@@ -9,6 +9,8 @@
 .label TEMP9 = $0a
 .label TEMP10 = $0b
 .label TEMP11 = $0c
+.label TEMP12 = $0d
+.label TEMP13 = $0e
 
 
 .label JOY_ZP = $20

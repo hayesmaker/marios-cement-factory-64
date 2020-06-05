@@ -111,6 +111,7 @@ IRQ: {
 			dec Game.ScoreBlinkingTimer + 1
 			dec Game.CratePourTimer1 + 1
 			dec Game.CratePourTimer2 + 1
+			dec Game.AlarmTimer + 1
 			//inc $d020
 			//dec $d021
 			lda #$01

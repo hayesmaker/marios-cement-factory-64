@@ -264,6 +264,12 @@ PouredCement: {
         //disable control
         lda #1
         sta PLAYER.IsPlayerDead
+            
+        lda #0
+        sta Game.AlarmTimer + 0   
+
+        jsr Sounds.SFX_CRUNCH
+
         lda HopperIndex
         cmp #1
         bne !skip+
@@ -320,16 +326,19 @@ PouredCement: {
         lda SpillCountIndex
         cmp #9
         bne !skip+
+            jsr Sounds.SFX_CRUNCH
             jsr ShowSpill2
         !skip:
         lda SpillCountIndex
         cmp #8
         bne !skip+
+            jsr Sounds.SFX_CRUNCH
             jsr ShowSpill3
         !skip:
         lda SpillCountIndex
         cmp #7
         bne !skip+
+            jsr Sounds.SFX_CRUNCH
            jsr HideDriver
            jsr ShowDeadDriver
         !skip:
@@ -341,6 +350,7 @@ PouredCement: {
         lda SpillCountIndex
         cmp #5
         bne !skip+
+            jsr Sounds.SFX_CRUNCH
             jsr ShowDeadDriver
         !skip:
         lda SpillCountIndex
@@ -351,6 +361,7 @@ PouredCement: {
         lda SpillCountIndex
         cmp #3
         bne !skip+
+            jsr Sounds.SFX_CRUNCH
             jsr ShowDeadDriver
         !skip:
         lda SpillCountIndex        
@@ -361,6 +372,7 @@ PouredCement: {
         lda SpillCountIndex
         cmp #1
         bne !skip+
+            jsr Sounds.SFX_CRUNCH
             jsr ShowDeadDriver
         !skip:
         !return:

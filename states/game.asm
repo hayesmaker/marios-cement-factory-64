@@ -36,6 +36,7 @@ Game: {
 	CratePourTimer2: 		.byte 0, 15, 15
 	CementSpillTimer:       .byte 0, 50, 50
 	ScoreBlinkingTimer: 	.byte 0, 25, 25
+	AlarmTimer: 			.byte 0, 10, 10
 	GameCounter:			.byte $00
 	MaxTickStates:          .byte $07
 	TickState:              .byte $00
@@ -367,8 +368,23 @@ Game: {
 		    		jsr Score.ToggleScore
 		    		lda ScoreBlinkingTimer + 2
 		    		sta ScoreBlinkingTimer + 1
-		    !next:	
+		    !next:
 		    jsr Score.RenderScore        
+		    lda PLAYER.IsPlayerDead
+	    	beq !skip+
+	    		lda #0
+	    		sta AlarmTimer + 0
+	    		jmp !end+
+	    	!skip:
+		    jsr Mixers.checkFullMixers
+		    lda AlarmTimer + 0
+			beq !end+
+				lda AlarmTimer + 1
+				bne !end+
+					jsr Sounds.SFX_SCORE
+					lda AlarmTimer + 2
+					sta AlarmTimer + 1
+			!end:
 		    rts        
 		}
 

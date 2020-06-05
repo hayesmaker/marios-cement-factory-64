@@ -85,12 +85,58 @@ Mixers: {
 		rts
 	}
 
+	checkFullMixers: {
+		.label TOP_COUNT_1 = TEMP12
+		.label TOP_COUNT_2 = TEMP13
+		lda #0
+		sta TOP_COUNT_1
+		lda #0
+		sta TOP_COUNT_2
+
+		ldx #0
+		!loop:											
+			lda Hopper1, x           //0(1) 1(2) 2(3)
+			beq !skip+
+				inc TOP_COUNT_1
+			!skip:
+			lda Hopper3, x
+			beq !skip+
+				inc TOP_COUNT_2
+			!skip:
+			cpx #2
+			beq !break+
+			inx
+			jmp !loop-
+		!break:
+
+		lda TOP_COUNT_1
+		cmp #3
+		beq !alarmOn+
+		lda TOP_COUNT_2
+		cmp #3
+		beq !alarmOn+
+			lda #0
+			sta Game.AlarmTimer + 0
+			jmp !return+
+		!alarmOn:
+			lda Game.AlarmTimer + 0
+			bne !return+
+				lda #1
+				sta Game.AlarmTimer + 0
+				lda Game.AlarmTimer + 2
+				sta Game.AlarmTimer + 1
+		!return:
+			//@returns a (0 off, 1 on)
+		rts
+	}
+
 	Update: {
 		lda PLAYER.IsPlayerDead
     	beq !skip+
     		jmp !return+
     	!skip:
 
+    	//Check if any top mixers are full and play alarm
 		inc TwoStep1
 		lda TwoStep1
 		cmp #2
