@@ -8,6 +8,8 @@ OptionsScreen: {
   MyLabelOn: .text "ON @"
   MyLabelOff: .text "OFF@"
 
+  .const MAX_OPTIONS = 3
+
   .label screen_ram = $c000
   .label sprite_pointers = screen_ram + $3f8
 
@@ -171,21 +173,20 @@ OptionsScreen: {
            jmp !loop_text-
           !next:
 
-          ldx #0
-          !loop_text:
-           lda MyLabel4,x       //; read characters from line1 table of text..
-           beq !next+
-           sta screen_ram + row4*$28 + col4, x 
-           inx 
-           jmp !loop_text-
-           
-           !next:
+          // ldx #0
+          // !loop_text:
+          //  lda MyLabel4,x       //; read characters from line1 table of text..
+          //  beq !next+
+          //  sta screen_ram + row4*$28 + col4, x 
+          //  inx 
+          //  jmp !loop_text-
+          //  !next:
 
            ldx #0
            !loop_text:
            lda MyLabel5,x       //; read characters from line1 table of text..
            beq !next+
-           sta screen_ram + row5*$28 + col5, x 
+           sta screen_ram + row4*$28 + col5, x 
            inx 
            jmp !loop_text-
            
@@ -239,15 +240,15 @@ OptionsScreen: {
       lda Player_PosY_Index
       cmp #2
       bne !skip+
-        //Reset High Scores
-      !skip:
-      lda Player_PosY_Index
-      cmp #3
-      bne !skip+
         //go to main menu
         lda #0
         sta shouldUpdate
         jsr Titles.drawScreen
+      !skip:
+      lda Player_PosY_Index
+      cmp #3
+      bne !skip+
+        
       !skip:
 
 
@@ -282,7 +283,7 @@ OptionsScreen: {
     inc DebounceFlag
     //do down
     lda Player_PosY_Index
-    cmp #3
+    cmp #MAX_OPTIONS
     beq !+
       inc Player_PosY_Index
     !:

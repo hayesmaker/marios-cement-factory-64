@@ -26,7 +26,7 @@ Game: {
 
 	//30 frames per tick
 	
-	.label FRAMES_PER_TICK = 26
+	.label FRAMES_PER_TICK = 20
 							// current, currentMax, startValue
 	GameTimerTick:			.byte FRAMES_PER_TICK, FRAMES_PER_TICK, FRAMES_PER_TICK
 	                        //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
@@ -223,7 +223,7 @@ Game: {
 		    sta Level
 		    clc 
 		    adc GameModeAdjustment
-		    tay
+		    tay 
 
 		    lda GameTimerTick + 1
 		    sec
