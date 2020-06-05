@@ -13,7 +13,7 @@ TitleScreen: {
     .label PLAY_SELECTED = $04
 
     .const TITLE_SCREEN_LEN = 100
-    .const TITLE_TARGET_Y = 70
+    .const TITLE_TARGET_Y = 65
     .const defaultFrame = $40
 
     .label MAIN_MENU = $ff

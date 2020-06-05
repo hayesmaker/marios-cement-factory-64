@@ -43,8 +43,8 @@ Game: {
 	Level:                  .byte $00
 	GameModeAdjustment: 	.byte $00
 	SpeedIncreaseTable:	
-		.byte $00, $02, $04, $06, $08, $0a, $0c, $0e, $10
-		//.byte 16, 16, 16, 16, 16, 16, 16, 16, 16, 16
+		.byte $00, $01, $02, $03, $04, $05, $06, $07, $08
+			//.byte 16, 16, 16, 16, 16, 16, 16, 16, 16, 16
 
 	Random: {
         lda seed
@@ -393,11 +393,24 @@ Game: {
 	   	rts
 	}
 
+	checkBonusMusic: {
+		lda Options.isMusicOn
+        beq !noMusic+ 
+            lda #$02
+        jmp !set+
+        !noMusic:
+        lda #$03
+        !set:
+        jsr music_init
+
+		rts
+	}
+
 	checkMusic: {
 		lda Options.isMusicOn
        	beq !noMusic+ 
-        lda #$01
-        jmp !set+
+        	lda #$01
+        	jmp !set+
         !noMusic:
         lda #$03
         !set:

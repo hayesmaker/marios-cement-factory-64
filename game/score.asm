@@ -40,6 +40,7 @@ Score:{
 			jmp !return+
 		!skip:
 
+        jsr Game.checkBonusMusic
 		lda #1
 		sta Game.ScoreBlinkingTimer + 0
 		lda Game.ScoreBlinkingTimer + 2
@@ -64,6 +65,10 @@ Score:{
 		sta upperScore
 		lda #2
 		sta lowerScore
+
+		lda #1
+		sta scoreToggledOn
+		jsr Game.checkMusic
 		rts
 	}
 

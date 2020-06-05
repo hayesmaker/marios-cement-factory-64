@@ -4,8 +4,7 @@ BasicUpstart2(main)
 .label music_init =*
 .label music_play =*+3	
 .import binary "./assets/sound/music_v15.bin"
-SOUND_SCORE:
-.import binary "./assets/sound/sfx/SOUND_SCORE"
+
 SOUND_TICK: 
 .import binary "./assets/sound/sfx/SOUND_TICK"
 SOUND_MOVE:
@@ -14,6 +13,8 @@ SOUND_CRUNCH:
 .import binary "./assets/sound/sfx/SOUND_FALL"
 SOUND_FALL:
 .import binary "./assets/sound/sfx/SOUND_FALL"
+SOUND_SCORE:
+.import binary "./assets/sound/sfx/SOUND_SCORE"
 
 * = * "KoalaImage" 
 .const KOALA_TEMPLATE = "C64FILE, Bitmap=$0000, ScreenRam=$1f40, ColorRam=$2328, BackgroundColor=$2710"

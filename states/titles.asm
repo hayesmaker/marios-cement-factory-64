@@ -99,7 +99,7 @@ Titles: {
     checkMusic: {
         lda Options.isMusicOn
         beq !noMusic+ 
-        lda #$00
+            lda #$00
         jmp !set+
         !noMusic:
         lda #$03
