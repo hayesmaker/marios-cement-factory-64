@@ -3,8 +3,8 @@ TitleScreen: {
 	.label screen_ram = $4c00
 	.label sprite_pointers = screen_ram + $3f8
 
-	.label GAME_A = $01
-	.label GAME_B = $02
+	.label GAME_A = $00
+	.label GAME_B = $01
 	
     .label OPTIONS_SELECTED = $00
     .label HISCORE_SELECTED = $01
@@ -125,6 +125,7 @@ TitleScreen: {
         lda #defaultFrame
         clc
         adc GameMode
+        adc #1
         sta sprite_pointers + 2 
 
         lda #104

@@ -7,25 +7,7 @@ Game: {
 
 	PerformFrameCodeFlag:
 	.byte $00  
-	
-	// FadeIndex:
-	// 	.byte $00, $07
-	// FadeToLightGrey:
-	// 	.byte $00, $06, $0b, $04, $0c, $0f, $0f, $0f
-	// FadeTimer:				.byte 0, 200, 200
-
-	//Timings
-	//02:35
-	//02:35
-	//02:37
-	//02:36
-	//02:38
-
-	//50=1
-	//50+50+20 = 120 frames between cements at Game A 0-100
-
 	//30 frames per tick
-	
 	.label FRAMES_PER_TICK = 20
 							// current, currentMax, startValue
 	GameTimerTick:			.byte FRAMES_PER_TICK, FRAMES_PER_TICK, FRAMES_PER_TICK
@@ -40,8 +22,7 @@ Game: {
 	GameCounter:			.byte $00
 	MaxTickStates:          .byte $07
 	TickState:              .byte $00
-	Level:                  .byte $00
-	GameModeAdjustment: 	.byte $00
+
 	SpeedIncreaseTable:	
 		.byte $00, $01, $02, $03, $04, $05, $06, $07, $08
 			//.byte 16, 16, 16, 16, 16, 16, 16, 16, 16, 16
@@ -88,6 +69,11 @@ Game: {
 	 	lda #1
         sta STATE_IN_PROGRESS	
 
+        //Turn Off Bitmap Mode
+		lda $d011
+        and #%11011111
+        sta $d011
+
        	jsr checkMusic
 		//Reset Sprites
 		//Multicolor mode sprites (1 for on 0 for hi-res)
@@ -101,14 +87,6 @@ Game: {
 		lda #$00
 		sta $d020 
 		sta $d021
-		//set Level to 0 
-		sta Level 
-		//inc $d020
-		//Turn off bitmap mode
-		lda $d011
-        and #%11011111
-        sta $d011
-
        
 		//bank out BASIC & Kernal ROM
 		lda $01    
@@ -135,6 +113,7 @@ Game: {
 		    sta GameCounter
 
 		    lda GameTimerTick + 2
+		    sta GameTimerTick + 1
 		    sta GameTimerTick + 0
 		    
 		    //Init Timers
@@ -211,22 +190,18 @@ Game: {
 		    //inc $d020
 		    //every 50 frames (1 tick = 1 second)
 		    // set level number and subtract from GameTimerTick
-		    lda TitleScreen.GameMode
-		    cmp #2
-		    bne !skip+
-		    lda TitleScreen.GameMode
-		    sta GameModeAdjustment
-		    !skip:
 		    lda Score.currentScore + 1
 		    and #$0f
-		    asl   
-		    sta Level
-		    clc 
-		    adc GameModeAdjustment
-		    tay 
+		    asl 
+		    // cmp #8
+		    // beq !skip+
+			   //  clc 
+			   //  adc TitleScreen.GameMode //Adds 0 | 1 : GameA |  GameB
+		    // !skip:
+		    tay
 
 		    lda GameTimerTick + 1
-		    sec
+		    sec 
 		    sbc SpeedIncreaseTable, y 
 		    sta GameTimerTick + 0
 		    inc GameCounter
@@ -267,12 +242,10 @@ Game: {
 		!tick0: 
 		    //Reset TickState counter
 		    jsr Crates.Update1
-		    //jsr Mixers.Update
 		    jmp !+
 		!tick1:
 		    jsr Elevators.Update1
 		    jsr Mixers.Update
-		    //play SOUND1
 	        jsr Sounds.LIFT_TICK
 		    //
 		    jmp !+
@@ -283,42 +256,28 @@ Game: {
 		!tick3:
 		    jsr Elevators.Update2
 		    jsr Mixers.Update
-		    //jsr ELEVATORS.Update2
-		    //play SOUND1
 	        jsr Sounds.LIFT_TICK
 
 		    jmp !+
 		!tick4:
 		    jsr Crates.Update2
-		    //jsr Mixers.Update
-		    //jsr CRATES.Update2
-		    
 		    jmp !+
 		!tick5:
 		    jsr Elevators.Update1
 		    jsr Mixers.Update
-
-		    //play SOUND1
 	        jsr Sounds.LIFT_TICK
 		
 		    jmp !+
 		!tick6: 
-		    //jsr Mixers.Update
-
 		    jmp !+
 		!tick7:
-		    //tickstate = 0
 		    lda MaxTickStates
 		    sta TickState
 
 		    jsr Elevators.Update2
 		    jsr Mixers.Update
-
-		    //play SOUND1
-	       	jsr Sounds.LIFT_TICK
-		        
+	       	jsr Sounds.LIFT_TICK		        
 		    jmp !end+
-		    //jsr ELEVATORS.Update2
 		!:  
 		    dec TickState
 		!end:    
@@ -415,10 +374,6 @@ Game: {
         lda #$03
         !set:
         jsr music_init
-        // lda #10
-        // jsr music_init + 6
-        // lda #15
-        // jsr music_init + 9
         rts
 	}
 

@@ -7,11 +7,19 @@ Score:{
 	bonusOn: .byte 0
 	scoreToAdd: .byte 0
 	isBonus: .byte $00
-	upperScore: .byte 1
-	lowerScore: .byte 2
+	hasBonusTriggered: .byte $00
+	
+	upperScore: .byte $10
+	lowerScore: .byte $20
+	// .const UPPER_SCORE = 10
+	// .const LOWER_SCORE = 20
+
 	scoreToggledOn: .byte 1
 
-	Reset:{
+	Reset: {
+		lda #0
+		sta hasBonusTriggered
+
 		lda #$00
 		sta currentScore + 0
 		lda #$00
@@ -48,9 +56,9 @@ Score:{
 
 		lda #1
 		sta bonusOn
-		lda #2
+		lda #$20
 		sta upperScore
-		lda #4
+		lda #$40
 		sta lowerScore
 		!return:
 		rts
@@ -61,9 +69,9 @@ Score:{
 		sta Game.ScoreBlinkingTimer + 0
 		lda #0
 		sta bonusOn
-		lda #1
+		lda #$10
 		sta upperScore
-		lda #2
+		lda #$20
 		sta lowerScore
 
 		lda #1
@@ -86,33 +94,16 @@ Score:{
 		adc #0
 		sta currentScore+1
 
-		//if score added is 299 AND score goes to 301
-		lda scoreToAdd
-		cmp #2
-		bne !skipTo300Check+
-
-		lda currentScore + 0
-		cmp #$01
-		bne !skipTo300Check+
-		lda currentScore + 1
-		cmp #3
-		bne !skipTo300Check+
-			//check if player has a lost a life
-			jsr EnableBonus	
-		!skipTo300Check:
-		//check if score is 300
-		lda currentScore + 0
-		bne !skip+
-		//do stuff
-		lda currentScore + 1
-		cmp #3
-		bne !skip+
-			//check if player has a lost a life
-			jsr EnableBonus
-		!skip:
-
-
-
+		//Check for a BONUS ROUND
+		lda hasBonusTriggered
+		bne !skipBonusChecking+
+			lda currentScore + 1
+			cmp #$03
+			bcc !skipBonusChecking+
+				lda #1
+				sta hasBonusTriggered
+				jsr EnableBonus
+		!skipBonusChecking:
 		cld
 		rts
 	}
