@@ -382,12 +382,6 @@ drawScore: {
     adc HiScores.NUMBERWANG //$30
     inx
     sta screen_ram + row*$28 + col, x
-    /*
-   lda Score.currentScore + 0
-  sta scoreLB
-  lda Score.currentScore + 1
-  sta scoreHB
-    */
 
   rts
 }
@@ -646,8 +640,10 @@ onDeletePressed: {
   adc playerNameIndex
   tay 
   lda #WHITE_SPACE_CHAR
-  sta playerNameEntered, y  //h a y e s m a k e r
   sta (screenramTemp),y
+
+  ldy playerNameIndex
+  sta playerNameEntered, y
 
   inc delDebounce
 

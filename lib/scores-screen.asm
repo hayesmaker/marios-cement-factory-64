@@ -6,8 +6,8 @@ HiScores: {
   rowScreenTable: .fillword 25, screen_ram + (i * 40)
 
   .encoding "screencode_upper"
-	MyLabel1: .text "HIGH SCORES@"
-  MyLabel2: .text "PRESS FIRE@"
+    MyLabel1: .text "HIGH SCORES@"
+    MyLabel2: .text "PRESS FIRE@"
   scoresTableName:
    .text "HAYESMKR@KYOKUSAG@BERK    @STEPZ   @"
   __scoresTableName:
@@ -114,8 +114,25 @@ HiScores: {
         !next:
         jsr drawNames
         jsr drawScore
+        jsr drawContinueMessage
 		rts
 	}
+
+drawContinueMessage: {
+  .label row = 20
+  .label col = 15
+
+   ldx #0
+   !loop_text:  
+      lda MyLabel2,x       //; read characters from line1 table of text..
+      beq !next+
+      sta screen_ram + row*$28 + col, x 
+      inx  
+      jmp !loop_text-
+    !next:
+
+        rts
+    }
 
   drawScore: {
     //.label scoreTemp = TEMP8
