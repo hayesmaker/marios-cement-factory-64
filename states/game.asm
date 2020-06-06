@@ -23,8 +23,8 @@ Game: {
 	MaxTickStates:          .byte $07
 	TickState:              .byte $00
 
-	SpeedIncreaseTable:	
-		.byte $00, $01, $02, $03, $04, $05, $06, $07, $08, $08, $09
+	SpeedIncreaseTable:
+		.byte $00, $02, $03, $05, $07, $08, $09, $0a, $0b, $0c, $0d
 
 	Random: {
         lda seed
@@ -86,6 +86,8 @@ Game: {
 		lda #$00
 		sta $d020 
 		sta $d021
+
+		
        
 		//bank out BASIC & Kernal ROM
 		lda $01    
@@ -189,6 +191,20 @@ Game: {
 		    //inc $d020
 		    //every 50 frames (1 tick = 1 second)
 		    // set level number and subtract from GameTimerTick
+
+		    //Set Max level if oever 1000
+		    lda Score.currentScore + 1
+		    lsr
+			lsr 
+			lsr 
+			lsr 
+			asl
+			//otherwise check the level number based on hundreds
+			beq !checkLevel+
+				//max level
+				lda #9
+				jmp !skip+
+			!checkLevel:
 		    lda Score.currentScore + 1
 		    and #$0f 
 		    cmp #9

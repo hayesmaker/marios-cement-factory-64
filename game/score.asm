@@ -9,8 +9,8 @@ Score:{
 	isBonus: .byte $00
 	hasBonusTriggered: .byte $00
 	
-	upperScore: .byte $10
-	lowerScore: .byte $20
+	upperScore: .byte $1
+	lowerScore: .byte $2
 	// .const UPPER_SCORE = 10
 	// .const LOWER_SCORE = 20
 
@@ -56,9 +56,9 @@ Score:{
 
 		lda #1
 		sta bonusOn
-		lda #$20
+		lda #$2
 		sta upperScore
-		lda #$40
+		lda #$4
 		sta lowerScore
 		!return:
 		rts
@@ -73,9 +73,9 @@ Score:{
 		sta Game.ScoreBlinkingTimer + 0
 		lda #0
 		sta bonusOn
-		lda #$10
+		lda #$1
 		sta upperScore
-		lda #$20
+		lda #$2
 		sta lowerScore
 
 		lda #1
