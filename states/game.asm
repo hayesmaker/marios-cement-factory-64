@@ -24,8 +24,7 @@ Game: {
 	TickState:              .byte $00
 
 	SpeedIncreaseTable:	
-		.byte $00, $01, $02, $03, $04, $05, $06, $07, $08
-			//.byte 16, 16, 16, 16, 16, 16, 16, 16, 16, 16
+		.byte $00, $01, $02, $03, $04, $05, $06, $07, $08, $08, $09
 
 	Random: {
         lda seed
@@ -191,15 +190,13 @@ Game: {
 		    //every 50 frames (1 tick = 1 second)
 		    // set level number and subtract from GameTimerTick
 		    lda Score.currentScore + 1
-		    and #$0f
-		    asl 
-		    // cmp #8
-		    // beq !skip+
-			   //  clc 
-			   //  adc TitleScreen.GameMode //Adds 0 | 1 : GameA |  GameB
-		    // !skip:
+		    and #$0f 
+		    cmp #9
+		    beq !skip+
+			    clc 
+			    adc TitleScreen.GameMode //Adds 0 | 1 : GameA |  GameB
+		    !skip:
 		    tay
-
 		    lda GameTimerTick + 1
 		    sec 
 		    sbc SpeedIncreaseTable, y 
