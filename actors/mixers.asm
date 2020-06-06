@@ -176,7 +176,7 @@ Mixers: {
 			inc PourTick1
 			lda PourTick1
 			//increase number to change pour delay
-			cmp #3
+			cmp #4
 			bne !next+
 				lda #0
 				sta PourTick1
@@ -209,8 +209,8 @@ Mixers: {
 		beq !next+
 			inc PourTick2
 			lda PourTick2
-			//increase number to change pour delay
-			cmp #3
+			//increase number to change pour delay // changed #3 to #6 to increase delay
+			cmp #4
 			bne !next+
 				lda #0
 				sta PourTick2
@@ -242,8 +242,8 @@ Mixers: {
 		beq !next+
 			inc PourTick3
 			lda PourTick3
-			//increase number to change pour delay
-			cmp #3
+			//increase number to change pour delay //changed #3 to #6 to increase delay
+			cmp #4
 			bne !next+
 				lda #0
 				sta PourTick3
@@ -276,7 +276,7 @@ Mixers: {
 			inc PourTick4
 			lda PourTick4
 			//increase number to change pour delay
-			cmp #3
+			cmp #4
 			bne !next+
 				lda #0
 				sta PourTick4

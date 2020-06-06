@@ -65,6 +65,10 @@ Score:{
 	}
 
 	DisableBonus: {
+
+		lda bonusOn
+		beq !return+
+
 		lda #0
 		sta Game.ScoreBlinkingTimer + 0
 		lda #0
@@ -77,6 +81,8 @@ Score:{
 		lda #1
 		sta scoreToggledOn
 		jsr Game.checkMusic
+
+		!return:
 		rts
 	}
 
