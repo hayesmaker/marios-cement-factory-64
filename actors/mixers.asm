@@ -1,4 +1,5 @@
 Mixers: {
+	.const POUR_TICK_NUM = 3
 
 	//left hand mixers
 	//upper
@@ -176,7 +177,7 @@ Mixers: {
 			inc PourTick1
 			lda PourTick1
 			//increase number to change pour delay
-			cmp #4
+			cmp #POUR_TICK_NUM
 			bne !next+
 				lda #0
 				sta PourTick1
@@ -210,7 +211,7 @@ Mixers: {
 			inc PourTick2
 			lda PourTick2
 			//increase number to change pour delay // changed #3 to #6 to increase delay
-			cmp #4
+			cmp #POUR_TICK_NUM
 			bne !next+
 				lda #0
 				sta PourTick2
@@ -243,7 +244,7 @@ Mixers: {
 			inc PourTick3
 			lda PourTick3
 			//increase number to change pour delay //changed #3 to #6 to increase delay
-			cmp #4
+			cmp #POUR_TICK_NUM
 			bne !next+
 				lda #0
 				sta PourTick3
@@ -276,7 +277,7 @@ Mixers: {
 			inc PourTick4
 			lda PourTick4
 			//increase number to change pour delay
-			cmp #4
+			cmp #POUR_TICK_NUM
 			bne !next+
 				lda #0
 				sta PourTick4
@@ -309,7 +310,7 @@ Mixers: {
 			inc PourTick5
 			lda PourTick5
 			//increase number to change pour delay
-			cmp #3
+			cmp #POUR_TICK_NUM
 			bne !next+
 				lda #0
 				sta PourTick5
@@ -320,7 +321,7 @@ Mixers: {
 			inc PourTick6
 			lda PourTick6
 			//increase number to change pour delay
-			cmp #3
+			cmp #POUR_TICK_NUM
 			bne !next+
 				lda #0
 				sta PourTick6
