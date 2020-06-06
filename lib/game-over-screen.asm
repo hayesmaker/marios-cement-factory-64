@@ -13,6 +13,7 @@ GameOverScreen: {
   .encoding "screencode_upper"
   MyLabel1: .text "GAME OVER@"
   MyLabel2: .text "PRESS FIRE@"
+  MyLabel3: .text "YOU SCORED@"
 
   LABEL_CONGRATS_1:
     .text "EMPLOYEE OF THE DAY@"
@@ -133,7 +134,7 @@ init: {
          bne !loop_colour-
 
       .label row1 = 1
-      .label col1 = 16
+      .label col1 = 15
 
       ldx #0
       !loop_text:  
@@ -283,6 +284,8 @@ drawCongratsMessage:  {
     jmp !loop_text-
   !next:
 
+  jsr drawScore
+
   rts
 }
 
@@ -316,8 +319,75 @@ drawFiredMessage:  {
     jmp !loop_text-
   !next:
 
+  jsr drawScore
   jsr drawContinueMessage
   jsr enableJoy
+
+  rts
+}
+
+drawScore: {
+
+  .label row = 16
+  .label col = 13
+
+   ldx #0
+   !loop_text:  
+      lda MyLabel3,x       //; read characters from line1 table of text..
+      beq !next+
+      sta screen_ram + row*$28 + col, x 
+      inx  
+      jmp !loop_text-
+    !next:
+
+    //thousands
+    lda Score.currentScore + 1
+    beq !skip+
+    lsr
+    lsr 
+    lsr 
+    lsr 
+    clc
+    adc HiScores.NUMBERWANG  //.byte $30 //First char index for 0 
+    inx
+    sta screen_ram + row*$28 + col, x
+
+    !skip:
+    //hundreds
+    lda Score.currentScore + 1
+    and #$0f
+    asl 
+    clc
+    adc HiScores.NUMBERWANG
+    inx
+    sta screen_ram + row*$28 + col, x
+
+    !skip:
+    //tens
+    lda Score.currentScore + 0
+    lsr
+    lsr 
+    lsr 
+    lsr 
+    clc
+    adc HiScores.NUMBERWANG  //.byte $30 //First char index for 0 
+    inx
+    sta screen_ram + row*$28 + col, x
+
+    !skip:
+    //units
+    lda Score.currentScore + 0
+    and #$0f
+    clc
+    adc HiScores.NUMBERWANG //$30
+    inx
+    sta screen_ram + row*$28 + col, x
+    /*
+   lda Score.currentScore + 0
+  sta scoreLB
+  lda Score.currentScore + 1
+  sta scoreHB
+    */
 
   rts
 }
