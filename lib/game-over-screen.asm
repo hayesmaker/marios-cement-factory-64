@@ -356,7 +356,6 @@ drawScore: {
     //hundreds
     lda Score.currentScore + 1
     and #$0f
-    asl 
     clc
     adc HiScores.NUMBERWANG
     inx
