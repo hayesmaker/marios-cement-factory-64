@@ -60,6 +60,11 @@ main:
   ora #%000101
   sta $01
 
+    //Restore Key Fix - Thanks RichmondMike!
+    //; Disable run/stop + restore keys
+	lda #$FC 
+	sta $0328
+
 	!stateLoop:
 	jsr Titles.entry
 	jsr Game.entry

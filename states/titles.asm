@@ -77,7 +77,7 @@ Titles: {
         lda #%00000010
         sta $dd00
 
-        lda #0
+        lda #RED
         sta $d020   // border
         lda #picture.getBackgroundColor()
         sta $d021   // background
