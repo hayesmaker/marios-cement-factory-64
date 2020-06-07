@@ -188,8 +188,7 @@ Game: {
 		    beq !doTick+
 		        jmp !end+
 		    !doTick:
-		    //inc $d020
-		    //every 50 frames (1 tick = 1 second)
+		    //1 TICK every 50 frames (1 tick = 1 second)
 		    // set level number and subtract from GameTimerTick
 
 		    //Set Max level if oever 1000
@@ -220,78 +219,57 @@ Game: {
 		    inc GameCounter
 
 		    //Tick Switch Statement
+		    
 		    lda TickState
 		    cmp #$07
-		    beq !tick0+
-
+		    bne !skip+
+		    	 jsr Crates.Update1
+		    !skip:
 		    lda TickState
 		    cmp #$06
-		    beq !tick1+
-
+		    bne !skip+
+		    	jsr Elevators.Update1
+			    jsr Mixers.Update
+		        jsr Sounds.LIFT_TICK
+		    !skip:
 		    lda TickState
 		    cmp #$05
-		    beq !tick2+
+		    bne !skip+
 
+		    !skip:
 		    lda TickState
 		    cmp #$04
-		    beq !tick3+
-
+		    bne !skip+
+		    	jsr Elevators.Update2
+			    jsr Mixers.Update
+		        jsr Sounds.LIFT_TICK
+		    !skip:
 		    lda TickState
 		    cmp #$03
-		    beq !tick4+
-
+		    bne !skip+
+		    	jsr Crates.Update2
+		    !skip:	
 		    lda TickState
 		    cmp #$02
-		    beq !tick5+
-
+		    bne !skip+
+		    	jsr Elevators.Update1
+			    jsr Mixers.Update
+		        jsr Sounds.LIFT_TICK
+		    !skip:
 		    lda TickState
 		    cmp #$01
-		    beq !tick6+
-
+		    bne !skip+
+		    	//noop
+		    !skip:
 		    lda TickState
-		    beq !tick7+
-
-		//MAIN GAME ACTIONS ON TICKS
-		!tick0: 
-		    //Reset TickState counter
-		    jsr Crates.Update1
-		    jmp !+
-		!tick1:
-		    jsr Elevators.Update1
-		    jsr Mixers.Update
-	        jsr Sounds.LIFT_TICK
-		    //
-		    jmp !+
-		!tick2:
-		    //
-		    //jsr Mixers.Update
-		    jmp !+
-		!tick3:
-		    jsr Elevators.Update2
-		    jsr Mixers.Update
-	        jsr Sounds.LIFT_TICK
-
-		    jmp !+
-		!tick4:
-		    jsr Crates.Update2
-		    jmp !+
-		!tick5:
-		    jsr Elevators.Update1
-		    jsr Mixers.Update
-	        jsr Sounds.LIFT_TICK
-		
-		    jmp !+
-		!tick6: 
-		    jmp !+
-		!tick7:
-		    lda MaxTickStates
-		    sta TickState
-
-		    jsr Elevators.Update2
-		    jsr Mixers.Update
-	       	jsr Sounds.LIFT_TICK		        
-		    jmp !end+
-		!:  
+		    bne !skip+
+		    	lda MaxTickStates
+			    sta TickState
+			    jsr Elevators.Update2
+			    jsr Mixers.Update
+		       	jsr Sounds.LIFT_TICK		        
+			    jmp !end+
+		    !skip:    
 		    dec TickState
 		!end:    
 		    rts

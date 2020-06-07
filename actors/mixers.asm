@@ -198,7 +198,6 @@ Mixers: {
 							lda #1
 							sta PouredCement.HopperIndex
 							jsr PouredCement.SpillCement
-							
 							jmp !draw+
 				!skip:
 				jsr AddCement1
@@ -804,6 +803,13 @@ Mixers: {
 		sta NumPoured2
 		sta NumPoured4
 
+		sta PourTick1
+		sta PourTick2
+		sta PourTick3
+		sta PourTick4
+		sta PourTick5
+		sta PourTick6
+
 		lda #0
 		jsr PouredCement.HideSprite
 		lda #2
@@ -865,8 +871,8 @@ Mixers: {
 		rts
 	}
 
-	// 0   1
-	// 2   3
+	// 1   3
+	// 2   4
 	//--------
 	// 4   5	
 	// Upper Left
@@ -894,8 +900,8 @@ Mixers: {
 		rts
 	}
 
-	// 0   1
-	// 2   3
+	// 1   3
+	// 2   4
 	//--------
 	// 4   5
 	//PouredCement initiated by Player
@@ -927,7 +933,7 @@ Mixers: {
 	// 1   3
 	// 2   4
 	//--------
-	// 4   5
+	// 5   6
 	//PouredCement initiated by Player
 	PlayerDrop5: {
 		ldy#2
@@ -943,6 +949,7 @@ Mixers: {
 			inc NumPoured5
 
 			//Remove the Tube from Hopper 2
+			//Lower Left Mixer
 			ldy #2
 			lda #0	
 			sta Hopper2, y
@@ -952,10 +959,10 @@ Mixers: {
 		rts
 	}
 
-	// 0   1
-	// 2   3
+	// 1   3
+	// 2   4
 	//--------
-	// 4   5
+	// 5   6
 	//PouredCement initiated by Player
 	PlayerDrop6: {
 		//check if tube is in the hopper
@@ -982,10 +989,10 @@ Mixers: {
 	}
 
 
-	// 0   1
-	// 2   3
+	// 1   3
+	// 2   4
 	//--------
-	// 4   5
+	// 5   6
 	//Public: Add Cement to a Hopper 0
 	AddCement1: {
 		//remove NumPoured count
@@ -1031,10 +1038,10 @@ Mixers: {
 		rts
 	}
 
-	// 0   2
 	// 1   3
+	// 2   4
 	//--------
-	// 4   5
+	// 5   6
 	//Public: Add Cement to a Hopper index:2
 	// Add Cement Top Right
 	AddCement3: {
@@ -1059,10 +1066,10 @@ Mixers: {
 		rts
 	}
 
-	// 0   2
 	// 1   3
+	// 2   4
 	//--------
-	// 4   5
+	// 5   6
 	//Public: Add Cement to a Hopper 3
 	// Add Cement Lower Right
 	AddCement4: {
