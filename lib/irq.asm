@@ -1,6 +1,9 @@
 IRQ: {
 	Setup: {
 		sei	
+		
+		jsr DisableNMI
+
 		//disable CIA Interrupts 
 		lda #$7f
 		sta $dc0d
@@ -24,6 +27,16 @@ IRQ: {
 		cli
 
 		rts
+	}
+
+	DisableNMI: {
+	    lda #<nmi
+	    sta $fffa
+	    lda #>nmi
+	    sta $fffb
+	    rts
+	  nmi:
+	    rti
 	}
 
 	SwitchToGame: {
