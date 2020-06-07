@@ -36,7 +36,7 @@ Mixers: {
 	PourTick3: .byte $00
 	PourTick4: .byte $00
 	PourTick5: .byte $00
-	PourTick6: .byte $00
+	PourTick6: .byte $00		
 
 	TwoStep1: .byte $00
 	TwoStep2: .byte $00
@@ -513,23 +513,26 @@ Mixers: {
 		lda #1
 		ldy #2
 		sta Hopper2, y
-
 		!check:
-
 			ldy #1
 			lda Hopper2, y
 			bne !skip+
-
-		ldy #0
-		lda Hopper2, y
+		//use decrement to draw tube at pos 0 to fix overpouring bug
+		ldx #0
+		lda Hopper2, x
 		beq !skip+
 		//check middle isnt full
 		//push top tube to pos1
-		lda #0
-		sta Hopper2, y
-		lda #1
-		ldy #1
-		sta Hopper2, y
+			dec Hopper2, x
+			lda #1
+			ldy #1
+			sta Hopper2, y
+			
+			// lda Hopper2, x
+			// bne !skip+
+			// 	lda #0
+			// 	jsr PouredCement.HideSprite
+			!skip:
 
 		!skip:
 		rts
@@ -562,19 +565,23 @@ Mixers: {
 			ldy #1
 			lda Hopper4, y
 			bne !skip+
-
-		ldy #0
-		lda Hopper4, y
+		//use decrement to draw tube at pos 0 to fix overpouring bug
+		ldx #0
+		lda Hopper4, x
 		beq !skip+
 		//check middle isnt full
-		//push top tube to pos1
-		lda #0
-		sta Hopper4, y
-		lda #1
-		ldy #1
-		sta Hopper4, y
+		//push top tube to pos 0
+			dec Hopper4, x
+			lda #1
+			ldy #1
+			sta Hopper4, y
+			// lda Hopper4, x
+			// bne !skip+
+			// 	lda #2
+			// 	jsr PouredCement.HideSprite
+			!skip:
 
-		!skip:
+		!skip:		
 		rts
 	}
 
@@ -697,13 +704,14 @@ Mixers: {
 		lda Hopper2, y
 
 		beq !remove+
-		// Add Cement At 1
+	// Add Cement At 1
 		ldx Tiles.Cements.Hopper2.PosX + 0
 		ldy Tiles.Cements.Hopper2.PosY + 0
 		jsr AddCementAtXY
 		jmp !next+
 
-	!remove: 
+	!remove:
+
 		ldx Tiles.Cements.Hopper2.PosX + 0
 		ldy Tiles.Cements.Hopper2.PosY + 0
 		jsr ClearCementAtXY
@@ -713,7 +721,7 @@ Mixers: {
 		lda Hopper2, y
 
 		beq !remove+
-		// Add Cement At 1
+	// Add Cement At 2
 		ldx Tiles.Cements.Hopper2.PosX + 0
 		ldy Tiles.Cements.Hopper2.PosY + 1
 		jsr AddCementAtXY
@@ -729,7 +737,7 @@ Mixers: {
 		lda Hopper2, y
 
 		beq !remove+
-		// Add Cement At 1
+	// Add Cement At 3
 		ldx Tiles.Cements.Hopper2.PosX + 0
 		ldy Tiles.Cements.Hopper2.PosY + 2
 		jsr AddCementAtXY
@@ -943,11 +951,10 @@ Mixers: {
 			jsr Score.onLowerMixer
 			//show poured cement at position 1
 			lda #1
-			jsr PouredCement.ShowSprite	
+			jsr PouredCement.ShowSprite
 
 			//increase cements poured to mixer
 			inc NumPoured5
-
 			//Remove the Tube from Hopper 2
 			//Lower Left Mixer
 			ldy #2
@@ -1013,7 +1020,6 @@ Mixers: {
 		lda #1
 		ldy #0
 		sta Hopper1, y
-
 		//jsr DrawTubes1
 		rts
 	}
@@ -1026,15 +1032,19 @@ Mixers: {
 	// Add cement bottom left
 	AddCement2: {
 		//remove cement from poured cements
+		//.break
 		dec NumPoured2
+		ldx #0
 		lda NumPoured2
 		bne !skip+
 			lda #0
 			jsr PouredCement.HideSprite
 		!skip:
+
 		lda #1
-		ldy #0
-		sta Hopper2, y
+		ldx #0
+		inc Hopper2, x
+			
 		rts
 	}
 
@@ -1082,8 +1092,8 @@ Mixers: {
 		!skip:
 		//Add a Tube to next Hopper 4
 		lda #1
-		ldy #0
-		sta Hopper4, y
+		ldx #0
+		inc Hopper4, x
 		rts
 	}
 
