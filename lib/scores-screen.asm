@@ -9,7 +9,7 @@ HiScores: {
     MyLabel1: .text "HIGH SCORES@"
     MyLabel2: .text "PRESS FIRE@"
   scoresTableName:
-   .text "HAYESMKR@KYOKUSAG@BERK    @STEPZ   @"
+   .text "HAYESMKR@AMKNIGHT@SHALLAN @STEPZ   @"
   __scoresTableName:
   
   NUMBERWANG:
@@ -120,7 +120,7 @@ HiScores: {
 
 drawContinueMessage: {
   .label row = 20
-  .label col = 15
+  .label col = 14
 
    ldx #0
    !loop_text:  
