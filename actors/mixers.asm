@@ -137,7 +137,6 @@ Mixers: {
     		jmp !return+
     	!skip:
 
-    	//Check if any top mixers are full and play alarm
 		inc TwoStep1
 		lda TwoStep1
 		cmp #2
@@ -711,7 +710,7 @@ Mixers: {
 		jsr ClearCementAtXY
 	
 	!next:
-		ldy #01
+		ldy #1
 		lda Hopper2, y
 
 		beq !remove+
@@ -727,7 +726,7 @@ Mixers: {
 		jsr ClearCementAtXY
 
 	!next:
-		ldy #02
+		ldy #2
 		lda Hopper2, y
 
 		beq !remove+
@@ -866,6 +865,11 @@ Mixers: {
 		rts
 	}
 
+	// 0   1
+	// 2   3
+	//--------
+	// 4   5	
+	// Upper Left
 	//PouredCement initiated by Player
 	PlayerDrop2: {
 		ldy #2
@@ -890,6 +894,12 @@ Mixers: {
 		rts
 	}
 
+	// 0   1
+	// 2   3
+	//--------
+	// 4   5
+	//PouredCement initiated by Player
+	// Upper Right
 	PlayerDrop4: {
 		ldy #2
 		lda Hopper3, y
@@ -914,7 +924,10 @@ Mixers: {
 		rts
 	}
 
-
+	// 1   3
+	// 2   4
+	//--------
+	// 4   5
 	//PouredCement initiated by Player
 	PlayerDrop5: {
 		ldy#2
@@ -926,12 +939,12 @@ Mixers: {
 			lda #1
 			jsr PouredCement.ShowSprite	
 
-			//increase cements poured to mixer 2
+			//increase cements poured to mixer
 			inc NumPoured5
 
 			//Remove the Tube from Hopper 2
 			ldy #2
-			lda #0
+			lda #0	
 			sta Hopper2, y
 
 			jsr DrawTubes2
@@ -939,9 +952,10 @@ Mixers: {
 		rts
 	}
 
-	// 1   2
-	// 3   4
-	// 5   6
+	// 0   1
+	// 2   3
+	//--------
+	// 4   5
 	//PouredCement initiated by Player
 	PlayerDrop6: {
 		//check if tube is in the hopper
@@ -950,14 +964,14 @@ Mixers: {
 
 		beq !return+
 			jsr Score.onLowerMixer
-			//show poured cement at position 1
+			//show poured cement at position 3
 			lda #3
 			jsr PouredCement.ShowSprite	
 
 			//increase cements poured to truck
 			inc NumPoured6
 
-			//Remove the Tube from Hopper 2
+			//Remove the Tube from Hopper 4
 			ldy #2
 			lda #0
 			sta Hopper4, y
@@ -968,9 +982,11 @@ Mixers: {
 	}
 
 
-
-	//Public: Add Cement to a Hopper at index
-
+	// 0   1
+	// 2   3
+	//--------
+	// 4   5
+	//Public: Add Cement to a Hopper 0
 	AddCement1: {
 		//remove NumPoured count
 		dec NumPoured1
@@ -995,6 +1011,12 @@ Mixers: {
 		rts
 	}
 
+	// 1   3
+	// 2   4
+	//--------
+	// 5   6
+	//Public: Add Cement to a Hopper 2 
+	// Add cement bottom left
 	AddCement2: {
 		//remove cement from poured cements
 		dec NumPoured2
@@ -1006,13 +1028,15 @@ Mixers: {
 		lda #1
 		ldy #0
 		sta Hopper2, y
-		
-		jsr DrawTubes2
-
 		rts
 	}
 
-
+	// 0   2
+	// 1   3
+	//--------
+	// 4   5
+	//Public: Add Cement to a Hopper index:2
+	// Add Cement Top Right
 	AddCement3: {
 		//remove cement from poured cements
 		dec NumPoured3
@@ -1028,15 +1052,19 @@ Mixers: {
 		ldy Tiles.CEMENT_NEW_RIGHT_2 + 2
 		jsr Map.SwitchCharAtXY
 		
-		//Add Cement to Hopper1
+		//Add Cement to Hopper (index 2)
 		lda #1
 		ldy #0
 		sta Hopper3, y
-
-		//jsr DrawTubes3
 		rts
 	}
 
+	// 0   2
+	// 1   3
+	//--------
+	// 4   5
+	//Public: Add Cement to a Hopper 3
+	// Add Cement Lower Right
 	AddCement4: {
 		//remove 1 from poured cement stack
 		dec NumPoured4
@@ -1045,16 +1073,14 @@ Mixers: {
 			lda #2
 			jsr PouredCement.HideSprite
 		!skip:
-
-		//Add a Tube to next Hopper
+		//Add a Tube to next Hopper 4
 		lda #1
 		ldy #0
 		sta Hopper4, y
-
-		jsr DrawTubes4
 		rts
 	}
 
+	//Add to truck
 	AddCement5: {		
 		dec NumPoured5
 		lda NumPoured5
@@ -1065,6 +1091,7 @@ Mixers: {
 		rts
 	}
 
+	//Add to truck
 	AddCement6: {
 		dec NumPoured6
 		lda NumPoured6
