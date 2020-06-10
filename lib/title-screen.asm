@@ -1,3 +1,5 @@
+#import "./lib/keyscan.asm"
+
 TitleScreen: {
 
 	.label screen_ram = $4c00
@@ -95,7 +97,6 @@ TitleScreen: {
 
         // lda #0
         // sta titlesTweenIndex
-
         jsr initTitleSpritesPos
 
         // lda #1
@@ -264,6 +265,7 @@ TitleScreen: {
     		jsr Blink
     		jsr DrawSprites
             // jsr AnimateTitle
+            jsr KeyControl
             jsr Control
         !skip:
 		rts
@@ -323,6 +325,17 @@ TitleScreen: {
         lda #%00000000
         sta VIC.SPRITE_ENABLE
         rts        
+    }
+
+    KeyControl: {
+        jsr KeyScan
+        isKeyPressed("shift")
+        bcc !+      
+            inc $d020
+            lda $d020
+            sta Options.customBorder
+        !:
+        rts
     }
 
 

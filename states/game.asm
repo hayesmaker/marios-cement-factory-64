@@ -22,6 +22,8 @@ Game: {
 	GameCounter:			.byte $00
 	MaxTickStates:          .byte $07
 	TickState:              .byte $00
+	isPaused: 				.byte $00
+	isDukeMode: 			.byte $00
 
 	SpeedIncreaseTable:
 		.byte $00, $02, $03, $05, $07, $08, $09, $0a, $0b, $0c, $0d
@@ -83,8 +85,9 @@ Game: {
 		sta $D01D
 
 		//border & background colour
-		lda #$00
+		lda Options.customBorder
 		sta $d020 
+		lda #$0F
 		sta $d021
 
 		
@@ -168,6 +171,10 @@ Game: {
 			bne !skip+				
 				jmp !exitGame+
 			!skip:
+			jsr KeyControl
+
+			lda isPaused
+			bne !Loop-
 
 			//do Frame Code
 			inc ZP_COUNTER
@@ -341,6 +348,31 @@ Game: {
 		!exitGame:
 		jsr teardown
 	   	rts
+	}
+
+	KeyControl: {
+		jsr KeyScan
+		isKeyPressed("f7")
+		bcc !+
+			lda isPaused
+			bne !unpause+
+				lda #1
+				jmp !store+
+			!unpause:
+				lda GameTimerTick + 2
+			    sta GameTimerTick + 1
+			    sta GameTimerTick + 0
+				lda #0
+			!store:
+				sta isPaused
+		!:	
+		isKeyPressed("shift")
+        bcc !+      
+            inc $d020
+            lda $d020
+            sta Options.customBorder
+        !:
+		rts
 	}
 
 	checkBonusMusic: {

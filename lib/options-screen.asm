@@ -5,6 +5,7 @@ OptionsScreen: {
   MyLabel3: .text "SFX:@"
   MyLabel4: .text "RESET SCORES@"
   MyLabel5: .text "MAIN MENU@"
+  MyVersionTxt: .text "VERSION 1.1@"
   MyLabelOn: .text "ON @"
   MyLabelOff: .text "OFF@"
 
@@ -192,11 +193,28 @@ OptionsScreen: {
            
            !next:  
 
+        jsr printVersion
         jsr printMusic
         jsr printSound
 
         rts
 	}
+
+  printVersion: {
+    .const row = 23
+    .const col = 28
+
+    ldx #0
+     !loop_text:
+     lda MyVersionTxt,x       //; read characters from line1 table of text..
+     beq !next+
+     sta screen_ram + row*$28 + col, x 
+     inx 
+     jmp !loop_text-
+     !next:
+
+    rts
+  }
 
   update: {
     jsr control

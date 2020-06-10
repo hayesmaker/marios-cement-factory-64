@@ -103,7 +103,7 @@ VIC: {
 		lda #LIGHT_GREY
 		sta VIC.BACKGROUND_COLOR
 		//lda #GREY
-		sta VIC.BORDER_COLOR
+		//sta VIC.BORDER_COLOR
 
 		lda #RED
 		sta VIC.EXTENDED_BG_COLOR_1

@@ -5,6 +5,9 @@ Options: {
 	isSoundOn:
 		.byte $01
 
+	customBorder:
+		.byte $0F	
+
 	toggleMusic: {
 		lda isMusicOn
 		bne !turnOff+
@@ -17,7 +20,7 @@ Options: {
 		!set:	
 		sta isMusicOn		
 		rts
-	}		
+	}
 
 	toggleSound: {
 		lda isSoundOn
