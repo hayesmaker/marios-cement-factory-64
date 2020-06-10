@@ -357,8 +357,31 @@ Game: {
 
 	KeyControl: {
 		jsr KeyScan
-		isKeyPressed("f7")
-		bcc !+
+		isKeyDown("shift")
+        bcc !next+      
+			isKeyPressed("f1")
+			bcc !+
+				lda isDukeMode
+				bne !unduke+
+					jsr Map.dukeModeOn
+					lda #1
+				 	sta GameTimerTick + 0
+					jmp !store+
+				!unduke:
+					lda #LIGHT_GREY
+					sta $d020
+					sta $d021
+					jsr Map.dukeModeOff
+					lda GameTimerTick + 2
+				    sta GameTimerTick + 1
+				    sta GameTimerTick + 0
+					lda #0
+				!store:
+					sta isDukeMode
+			!:		
+        !next:
+        isKeyPressed("f7")
+			bcc !next+
 			lda isPaused
 			bne !unpause+
 				lda #1
@@ -370,33 +393,11 @@ Game: {
 				lda #0
 			!store:
 				sta isPaused
-		!:
-		isKeyPressed("f1")
-		bcc !+
-			lda isDukeMode
-			bne !unduke+
-				jsr Map.dukeModeOn
-				lda #1
-			 	sta GameTimerTick + 0
-				jmp !store+
-			!unduke:
-				lda #LIGHT_GREY
-				sta $d020
-				sta $d021
-				jsr Map.dukeModeOff
-				lda GameTimerTick + 2
-			    sta GameTimerTick + 1
-			    sta GameTimerTick + 0
-				lda #0
-			!store:
-				sta isDukeMode
-		!:		
-		isKeyPressed("shift")
-        bcc !+      
-            inc $d020
-            lda $d020
-            sta Options.customBorder
-        !:
+			!next:
+		// inc $d020
+        // lda $d020
+        // sta Options.customBorder
+
 		rts
 	}
 
