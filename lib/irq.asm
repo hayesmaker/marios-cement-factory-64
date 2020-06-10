@@ -70,6 +70,7 @@ IRQ: {
 				jsr TitleScreen.setTitleSprites	
 				jsr TitleScreen.AnimateTitle
 			!skip:
+
 			jsr music_play
 			
 			lda #100
@@ -130,7 +131,10 @@ IRQ: {
 			lda #$01
 			sta Game.PerformFrameCodeFlag
 
+			lda Game.isDukeMode
+		    	bne !skip+
 			jsr music_play
+			!skip:
 			lsr VIC.INTERRUPT_STATUS      // **********************8
 		:RestoreState()	
 		

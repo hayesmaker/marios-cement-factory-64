@@ -11,6 +11,7 @@
 	.eval KeyList.add( List().add("shift", 1, $80))
 	.eval KeyList.add( List().add("delete", 0, $01))
 	.eval KeyList.add( List().add("f7", 0, $08))
+	.eval KeyList.add( List().add("f1", 0, $10))
 }
 
 

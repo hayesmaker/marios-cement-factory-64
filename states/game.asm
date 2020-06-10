@@ -90,8 +90,6 @@ Game: {
 		lda #$0F
 		sta $d021
 
-		
-       
 		//bank out BASIC & Kernal ROM
 		lda $01    
 		and #%11111000
@@ -224,7 +222,14 @@ Game: {
 		    sbc SpeedIncreaseTable, y 
 		    sta GameTimerTick + 0
 		    inc GameCounter
+		    lda isDukeMode
+		    beq !skip+
 
+		    	inc $d020
+		    	inc $d021
+		    	lda #1
+		    	sta GameTimerTick + 0
+		    !skip:
 		    //Tick Switch Statement
 		    
 		    lda TickState
@@ -365,7 +370,27 @@ Game: {
 				lda #0
 			!store:
 				sta isPaused
-		!:	
+		!:
+		isKeyPressed("f1")
+		bcc !+
+			lda isDukeMode
+			bne !unduke+
+				jsr Map.dukeModeOn
+				lda #1
+			 	sta GameTimerTick + 0
+				jmp !store+
+			!unduke:
+				lda #LIGHT_GREY
+				sta $d020
+				sta $d021
+				jsr Map.dukeModeOff
+				lda GameTimerTick + 2
+			    sta GameTimerTick + 1
+			    sta GameTimerTick + 0
+				lda #0
+			!store:
+				sta isDukeMode
+		!:		
 		isKeyPressed("shift")
         bcc !+      
             inc $d020

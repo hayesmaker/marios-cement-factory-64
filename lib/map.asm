@@ -3,8 +3,8 @@
 Map: {
 	TileScreenLocations: 
 		.byte 0,1,40,41
-	// RowColourTable:
-	// 	.fillword 25, VIC.COLOR_RAM + (i * 40)
+	RowColourTable:
+		.fillword 25, VIC.COLOR_RAM + (i * 40)
 	RowScreenTable:
 		.fillword 25, Game.SCREEN_RAM + (i * 40)
 
@@ -63,6 +63,8 @@ Map: {
 		
 
 	Initialise: {
+
+		.label rowTableIndex = TEMP6
 
 		lda Tiles.EMPTY
 		ldx Tiles.SWITCH_1_DOWN + 1
@@ -439,21 +441,116 @@ Map: {
 			ldy #2
 			jsr SwitchCharAtXY
 		!end:
+
+		.label row = 24
+       	lda #RED
+		ldx #39
+        !loop_colour:        	 
+           sta VIC.COLOR_RAM + row*$28, x     //Change colour? COLOR_RAM
+           dex
+           bpl !loop_colour-
 			
+		rts
+	}
 
+	dukeModeOff: {
 
-		lda #39
-		sta RowLoopIndex
-		!Loop:
-			lda Tiles.EMPTY
-			ldx RowLoopIndex
-			ldy #24
-			jsr SwitchCharAtXY
+		/*
+		ldx #0
+          !loop_text:
+          lda MyLabel4,x       //; read characters from line1 table of text..
+          beq !next+
+          sta screen_ram + row4*$28 + col4, x 
+          inx 
+          jmp !loop_text-
+          !next:
+		*/
+		lda #0
+		ldx #38
+		ldy #18
+		jsr SwitchCharAtXY
+		lda #0
+		ldx #39
+		ldy #18
+		jsr SwitchCharAtXY
 
-			dec RowLoopIndex
-			bpl !Loop-	
+		lda #0
+		ldx #39
+		ldy #19
+		jsr SwitchCharAtXY
 
+		lda #0
+		ldx #38
+		ldy #20
+		jsr SwitchCharAtXY
+		lda #0
+		ldx #39
+		ldy #20
+		jsr SwitchCharAtXY
 
+		lda #0
+		ldx #38
+		ldy #21
+		jsr SwitchCharAtXY
+		lda #0
+		ldx #38
+		ldy #22
+		jsr SwitchCharAtXY
+		lda #0
+		ldx #39
+		ldy #22
+		jsr SwitchCharAtXY
+		rts
+	}
+
+	dukeModeOn: {
+
+		/*
+		ldx #0
+          !loop_text:
+          lda MyLabel4,x       //; read characters from line1 table of text..
+          beq !next+
+          sta screen_ram + row4*$28 + col4, x 
+          inx 
+          jmp !loop_text-
+          !next:
+		*/
+		lda #188
+		ldx #38
+		ldy #18
+		jsr SwitchCharAtXY
+		lda #189
+		ldx #39
+		ldy #18
+		jsr SwitchCharAtXY
+
+		lda #195
+		ldx #39
+		ldy #19
+		jsr SwitchCharAtXY
+
+		lda #190
+		ldx #38
+		ldy #20
+		jsr SwitchCharAtXY
+		lda #196
+		ldx #39
+		ldy #20
+		jsr SwitchCharAtXY
+
+		lda #191
+		ldx #38
+		ldy #21
+		jsr SwitchCharAtXY
+
+		lda #193
+		ldx #38
+		ldy #22
+		jsr SwitchCharAtXY
+		lda #192
+		ldx #39
+		ldy #22
+		jsr SwitchCharAtXY
 		rts
 	}
 

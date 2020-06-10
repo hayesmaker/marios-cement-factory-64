@@ -1,11 +1,11 @@
 OptionsScreen: {
 	.encoding "screencode_upper"
-	MyLabel1: .text "OPTIONS@"
-  MyLabel2: .text "MUSIC:@"
+	MyLabel1: .text "OPT[]()IONS@"
+  MyLabel2: .text "MU**00--++**££SIC:@"
   MyLabel3: .text "SFX:@"
   MyLabel4: .text "RESET SCORES@"
   MyLabel5: .text "MAIN MENU@"
-  MyVersionTxt: .text "VERSION 1.1@"
+  MyVersionTxt: .text "VERSION 111@"
   MyLabelOn: .text "ON @"
   MyLabelOff: .text "OFF@"
 

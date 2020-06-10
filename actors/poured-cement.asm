@@ -770,6 +770,31 @@ PouredCement: {
     }
 
     ShowDrivers: {
+        lda Tiles.DRIVER_RIGHT_1 + 0
+        ldx Tiles.DRIVER_RIGHT_1 + 1
+        ldy Tiles.DRIVER_RIGHT_1 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_RIGHT_2 + 0
+        ldx Tiles.DRIVER_RIGHT_2 + 1
+        ldy Tiles.DRIVER_RIGHT_2 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_RIGHT_3 + 0
+        ldx Tiles.DRIVER_RIGHT_3 + 1
+        ldy Tiles.DRIVER_RIGHT_3 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_RIGHT_4 + 0
+        ldx Tiles.DRIVER_RIGHT_4 + 1
+        ldy Tiles.DRIVER_RIGHT_4 + 2
+        jsr Map.SwitchCharAtXY
+
+        lda Tiles.DRIVER_RIGHT_5 + 0
+        ldx Tiles.DRIVER_RIGHT_5 + 1
+        ldy Tiles.DRIVER_RIGHT_5 + 2
+        jsr Map.SwitchCharAtXY
+
 
         lda Tiles.DRIVER_LEFT_1 + 0
         ldx Tiles.DRIVER_LEFT_1 + 1
