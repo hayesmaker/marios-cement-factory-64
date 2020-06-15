@@ -1,6 +1,6 @@
 Game: {
 	STATE_IN_PROGRESS:
-        .byte $01
+    .byte $01
 
 	.label SCREEN_RAM = $c000
 	.label SPRITE_POINTERS = SCREEN_RAM + $3f8
@@ -8,9 +8,8 @@ Game: {
 	PerformFrameCodeFlag:
 	.byte $00  
 	//30 frames per tick
-	.label FRAMES_PER_TICK = 20
 							// current, currentMax, startValue
-	GameTimerTick:			.byte FRAMES_PER_TICK, FRAMES_PER_TICK, FRAMES_PER_TICK
+	GameTimerTick:			.byte $00, $00, $00
 	                        //0: timer on: 1,0, 1: timer current frame: 50, 2: timer initial frame 
 	PushButtonTimer:        .byte 0, 10, 10
 	FallGuyTimer:           .byte 0, 35, 35
@@ -24,9 +23,23 @@ Game: {
 	TickState:              .byte $00
 	isPaused: 				.byte $00
 	isDukeMode: 			.byte $00
-
-	SpeedIncreaseTable:
-		.byte $00, $02, $03, $05, $07, $08, $09, $0a, $0b, $0c, $0d
+	
+	TickTable1:
+		.byte 18, 15, 14, 13, 13, 13, 12, 10, 10, 9, 6
+	TickTable2:
+		.byte 18, 15, 15, 14, 14, 14, 13, 11, 10, 9, 7
+	TickTable3:
+		.byte 19, 16, 16, 15, 15, 15, 14, 12, 11, 10, 8
+	TickTable4:
+		.byte 19, 16, 16, 15, 15, 15, 15, 13, 11, 10, 9
+	TickTable5:
+		.byte 20, 17, 17, 16, 16, 16, 15, 14, 12, 11, 10
+	TickTable6:
+		.byte 20, 17, 17, 17, 16, 16, 16, 15, 12, 11, 11
+	TickTable7:
+		.byte 21, 18, 18, 18, 17, 17, 16, 16, 13, 12, 12
+	TickTable8:
+		.byte 21, 18, 18, 18, 17, 17, 17, 17, 13, 12, 12
 
 	Random: {
         lda seed
@@ -97,7 +110,6 @@ Game: {
 		sta $01
 		jsr VIC.SetupRegisters	
 
-		jsr Random.init
 		jsr Map.DrawMap
 
 	    jsr Lives.Initialise
@@ -206,21 +218,65 @@ Game: {
 			//otherwise check the level number based on hundreds
 			beq !checkLevel+
 				//max level
-				lda #9
+				lda #10
 				jmp !skip+
 			!checkLevel:
 		    lda Score.currentScore + 1
 		    and #$0f 
-		    cmp #9
+		    cmp #10
 		    beq !skip+
 			    clc 
 			    adc TitleScreen.GameMode //Adds 0 | 1 : GameA |  GameB
 		    !skip:
 		    tay
-		    lda GameTimerTick + 1
-		    sec 
-		    sbc SpeedIncreaseTable, y 
+		   //y = level 0-10
+
+		   // Load Accumalator with TickTable,y
+		   // Choose Ticktable to load from RNG 0-7
+		   // Tick Time Logic choose random table for tick time
+		   jsr Random
+		   cmp #31
+		   bcs !next+
+		   		lda TickTable1, y
+		   		jmp !setTick+
+		   !next:
+		   cmp #63
+		   bcs !next+
+		   		lda TickTable2, y
+		   		jmp !setTick+
+		   	!next:		
+		   	cmp #95
+		   	bcs !next+
+		   		lda TickTable3, y
+		   		jmp !setTick+
+		   	!next:	
+		   	cmp #127	
+		   	bcs !next+
+		   		lda TickTable4, y
+		   		jmp !setTick+
+		   	!next:
+		   	cmp #159
+		   	bcs !next+
+		   		lda TickTable5, y
+		   		jmp !setTick+
+		   	!next:
+		   	cmp #191
+		   	bcs !next+
+		   		lda TickTable6, y
+		   		jmp !setTick+
+		   	!next:
+		   	cmp #223
+		   	bcs !next+
+		   		lda TickTable7, y
+		   		jmp !setTick+
+		   	!next:
+		   		lda TickTable8, y		   						
+		   	!setTick:
 		    sta GameTimerTick + 0
+		    sta GameTimerTick + 2
+		    
+		    //Tick Timer Logic end
+
 		    inc GameCounter
 		    lda isDukeMode
 		    beq !skip+

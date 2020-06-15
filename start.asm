@@ -60,6 +60,9 @@ main:
   ora #%000101
   sta $01
 
+//RNG Seed
+  jsr Game.Random.init
+
     //Restore Key Fix 
 	!stateLoop:
 	jsr Titles.entry

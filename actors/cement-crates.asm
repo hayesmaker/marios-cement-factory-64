@@ -263,13 +263,10 @@ Crates: {
 			ldx #0
 			stx PositionsTableIndex1
 			jsr checkFill
-			lda shouldFill
 			bne !isFull+
 				lda EmptyCrate
 				jmp !setCrate+
 			!isFull:
-				lda #0
-				sta shouldFill
 				lda FullCrate
 			!setCrate:
 				sta CurrentCrate1
@@ -301,13 +298,10 @@ Crates: {
 			ldx #0
 			stx PositionsTableIndex2
 			jsr checkFill
-			lda shouldFill
 			bne !isFull+
 				lda EmptyCrate
 				jmp !setCrate+
 			!isFull:
-				lda #0
-				sta shouldFill
 				lda FullCrate
 			!setCrate:
 				sta CurrentCrate2
@@ -444,13 +438,12 @@ Crates: {
 
 	checkFill:{
 		jsr Game.Random
-		cmp #150
+		cmp #128
 		bcc !doFill+
+		lda #0
 		jmp !return+
 		!doFill:
 			lda #1
-			sta shouldFill
-			//inc $d020
 		!return:
 		rts
 	}
