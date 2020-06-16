@@ -25,7 +25,7 @@ Game: {
 	isDukeMode: 			.byte $00
 	
 	TickTable1:
-		.byte 18, 15, 14, 13, 13, 13, 12, 10, 10, 9, 6
+		.byte 18, 15, 14, 13, 12, 12, 11, 10, 9, 8, 6
 	TickTable2:
 		.byte 18, 15, 15, 14, 14, 14, 13, 11, 10, 9, 7
 	TickTable3:
@@ -35,11 +35,11 @@ Game: {
 	TickTable5:
 		.byte 20, 17, 17, 16, 16, 16, 15, 14, 12, 11, 10
 	TickTable6:
-		.byte 20, 17, 17, 17, 16, 16, 16, 15, 12, 11, 11
+		.byte 20, 17, 17, 17, 16, 16, 16, 15, 12, 11, 10
 	TickTable7:
-		.byte 21, 18, 18, 18, 17, 17, 16, 16, 13, 12, 12
+		.byte 21, 18, 18, 18, 17, 17, 16, 16, 13, 12, 11
 	TickTable8:
-		.byte 21, 18, 18, 18, 17, 17, 17, 17, 13, 12, 12
+		.byte 21, 18, 18, 18, 17, 17, 17, 17, 13, 12, 11
 
 	Random: {
         lda seed
@@ -217,14 +217,12 @@ Game: {
 			asl
 			//otherwise check the level number based on hundreds
 			beq !checkLevel+
-				//max level
+				// //max level
 				lda #10
 				jmp !skip+
 			!checkLevel:
-		    lda Score.currentScore + 1
-		    and #$0f 
-		    cmp #10
-		    beq !skip+
+			    lda Score.currentScore + 1
+			    and #$0f
 			    clc 
 			    adc TitleScreen.GameMode //Adds 0 | 1 : GameA |  GameB
 		    !skip:
