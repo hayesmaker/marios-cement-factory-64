@@ -1,11 +1,11 @@
 PLAYER: {
 	
 	Player_X: //0    1    2    3    4    5
-		.byte 104, 130, 156, 190, 215, 239
+		.byte 105, 130, 156, 189, 215, 238
 	Player_X_MB:
 		.byte 0, 0, 0, 0, 0, 0            	
 	Player_Y: //*                    //* //* = dead 
-		.byte 70, 88, 121, 152, 179, 208
+		.byte 70, 89, 121, 153, 181, 208
 		
 	Player_PosX_Index:
 		.byte 0

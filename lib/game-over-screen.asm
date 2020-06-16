@@ -329,7 +329,7 @@ drawFiredMessage:  {
 drawScore: {
 
   .label row = 16
-  .label col = 13
+  .label col = 12
 
    ldx #0
    !loop_text:  

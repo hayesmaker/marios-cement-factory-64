@@ -105,4 +105,3 @@ MAP:
 	.import binary "./assets/maps/mcf-bg - Chars.bin"
 * = $f800 "Titles-Charset"
     .import binary "./assets/maps/thereyabloodygo.bin"
-
