@@ -5,3 +5,6 @@ mcf-project.sublime-workspace
 .idea/
 out/
 exomiser/
+.macro*
+opcodes-*
+bitmap.asm
