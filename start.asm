@@ -22,13 +22,13 @@ SOUND_SCORE:
 * = * "End of KoalaImage"
 
 * = * "CODE"
-#import "./game/sounds.asm" 
+#import "./game/sounds.asm"
 #import "./lib/title-screen.asm"
 #import "./lib/options-screen.asm"
 #import "./lib/credits-screen.asm"
 #import "./lib/scores-screen.asm"
 #import "./states/titles.asm"
-#import "./states/game.asm"
+#import "./states/game.asm"	             
 #import "./lib/zeropage.asm"
 #import "./lib/labels.asm"	
 #import "./lib/vic.asm"
@@ -54,13 +54,13 @@ Sprite Map - IN GAME
 */
 * = * "Main"
 main: 
-//bank out BASIC and Kernal
+  //bank out BASIC and Kernal
   lda $01
   and #%11111000
   ora #%000101
   sta $01
 
-//RNG Seed
+  //RNG Seed
   jsr Game.Random.init
 
     //Restore Key Fix 

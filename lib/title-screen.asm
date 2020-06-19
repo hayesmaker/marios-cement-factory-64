@@ -329,7 +329,7 @@ TitleScreen: {
 
     KeyControl: {
         jsr KeyScan
-        isKeyPressed("shift")
+        isKeyPressed("f3")
         bcc !+      
             inc $d020
             lda $d020

@@ -5,7 +5,7 @@ OptionsScreen: {
   MyLabel3: .text "SFX:@"
   MyLabel4: .text "RESET SCORES@"
   MyLabel5: .text "MAIN MENU@"
-  MyVersionTxt: .text "VERSION 1.1@"
+  MyVersionTxt: .text "VERSION 1.2@"
   MyLabelOn: .text "ON @"
   MyLabelOff: .text "OFF@"
 
@@ -301,7 +301,7 @@ OptionsScreen: {
     inc DebounceFlag
     //do down
     lda Player_PosY_Index
-    cmp #MAX_OPTIONS
+    cmp #MAX_OPTIONS - 1
     beq !+
       inc Player_PosY_Index
     !:

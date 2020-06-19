@@ -443,13 +443,22 @@ Map: {
 		!end:
 
 		.label row = 24
+		//clear bottom row color
        	lda #RED
 		ldx #39
         !loop_colour:        	 
            sta VIC.COLOR_RAM + row*$28, x     //Change colour? COLOR_RAM
            dex
            bpl !loop_colour-
-			
+		
+		//clear bottom row	
+		lda #0
+		ldx #39
+		!loop_row:
+			sta Game.SCREEN_RAM + row*$28,x
+			dex
+			bpl !loop_row-
+
 		rts
 	}
 

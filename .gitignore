@@ -7,4 +7,4 @@ out/
 exomiser/
 .macro*
 opcodes-*
-bitmap.asm
+bitmap.asm	

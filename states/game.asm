@@ -111,7 +111,6 @@ Game: {
 		jsr VIC.SetupRegisters	
 
 		jsr Map.DrawMap
-
 	    jsr Lives.Initialise
 	    jsr Elevators.Initialise
 		jsr Crates.Initialise
@@ -278,9 +277,8 @@ Game: {
 		    inc GameCounter
 		    lda isDukeMode
 		    beq !skip+
-
-		    	inc $d020
-		    	inc $d021
+		    	// inc $d020
+		    	// inc $d021
 		    	lda #1
 		    	sta GameTimerTick + 0
 		    !skip:
@@ -411,6 +409,12 @@ Game: {
 
 	KeyControl: {
 		jsr KeyScan
+		isKeyPressed("f3")
+		bcc !next+
+			inc $d020
+            lda $d020
+            sta Options.customBorder
+		!next:
 		isKeyDown("shift")
         bcc !next+      
 			isKeyPressed("f1")
