@@ -3,8 +3,8 @@ DebugLift:
 
 Score:{
 
-	.const UPPER_SCORE_DEFAULT = $01; 
-	.const LOWER_SCORE_DEFAULT = $02;
+	.const UPPER_SCORE_DEFAULT = $10; 
+	.const LOWER_SCORE_DEFAULT = $20;
 	.const UPPER_SCORE_BONUS = $02;
 	.const LOWER_SCORE_BONUS = $04;
 

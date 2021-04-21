@@ -6,9 +6,9 @@ GameOverScreen: {
   rowScreenTable: .fillword 25, screen_ram + (i * 40)
 
   charShiftTable:
-    .byte $12, $1B, $24d
+    .byte $12, $1B, $24
   maxScorePass:
-    .byte $04 
+    .byte $04 //overridden in init replace with const
 
   .encoding "screencode_upper"
   MyLabel1: .text "GAME OVER@"
@@ -19,25 +19,31 @@ GameOverScreen: {
     .text "EMPLOYEE OF THE DAY@"
   LABEL_CONGRATS_2:
     .text "ENTER YOUR NAME@"
+  
   LABEL_FIRED_1:
     .text "SORRY MARIO YOU@"
   LABEL_FIRED_2:
-    .text "ARE FIRED!@"      
+    .text "ARE FIRED!@"
+      
   LABEL_FIRED_COL:
     .byte 7
   LABEL_CONGRATS_COL:
   .text 6
 
-  shouldUpdate:
+ shouldUpdate:
     .byte $00
   DebounceFlag:
     .byte $00
   DebounceFireFlag:
     .byte $00
+
   isEntryEnabled:
     .byte $00  
+
   hiscorePos:
     .byte $ff  
+
+
   playerNameEntered: 
     .fill 8, WHITE_SPACE_CHAR
 
@@ -47,13 +53,13 @@ playerNameIndex:
   .byte 0   
 
 //from amk
-.const firstLetter = 1            // the char number of A in the char set
+.const firstLetter = 1              // the char number of A in the char set
 .const asciiA = 65                // the ascii value used by kick
 .const charOffsetLetter = firstLetter - asciiA  // map asci to the char set
-.const firstNumber = 30           // 0 in the char set
+.const firstNumber = 30             // 0 in the char set
 .const ascii0 = 48                // the acsii value for 0 used by kick 
 .const charOffsetNumber = firstNumber - ascii0  // map ascii to the char set
-//.const titleLine = screenRam + 3*40 + 11  // memory address to start printing 
+//.const titleLine = screenRam + 3*40 + 11    // memory address to start printing 
 
 playerScore:
   .text "    "
@@ -65,10 +71,11 @@ keyPressedX:
   .byte 0
 delDebounce:
   .byte 0
+
 joyEnabled:
   .byte 0
 keysEnabled:
-  .byte 0
+  .byte 0 
 
 init: {
       lda #1
@@ -90,7 +97,7 @@ init: {
       */
       lda #%00001110
       sta $d018
-      //border & background colour
+   //border & background colour
       lda #BLACK
       sta $d020   // border
       lda #RED
@@ -99,7 +106,7 @@ init: {
       ldy #0
       sty delDebounce
 
-      //clear screen
+  //clear screen
       ldx #0
       lda #$20 //space character? (it said so on internet)
       !loop:   
@@ -143,7 +150,7 @@ init: {
       lda #0
       sta playerNameIndex
 
-      lda #4
+      lda #4 //Must Edit for new players
       sta maxScorePass
 
       lda #$ff
@@ -166,7 +173,7 @@ init: {
         jsr  drawFiredMessage
         jmp !return+
       !skip:
-        jsr enableInput
+        jsr enableKeys
         jsr drawCongratsMessage
       !return:
       //jsr drawContinueMessage
@@ -179,6 +186,7 @@ checkHighScorePosition: {
   .label tempScoreLB = TEMP3
   .label tempScoreHB = TEMP4
   .label passIndex = TEMP5
+  .label passLen = TEMP6
   
   lda Score.currentScore + 0
   sta scoreLB
@@ -198,29 +206,26 @@ checkHighScorePosition: {
     bcc !putScore+  
     !skip:
     cpy #[HiScores.__scoresTable - HiScores.scoresTableLB]
-    beq !return+                                              
+    beq !return+
     iny
     jmp !loop-
 
-    //save hiscore position and length of hish score table
+    //shift all scores down the table from current score position
     !putScore:
     sty hiscorePos
-    lda #[HiScores.__scoresTable - HiScores.scoresTableLB - 1]
-    sta passIndex
+    lda #[HiScores.__scoresTable - HiScores.scoresTableLB] 
+    sec
+    sbc hiscorePos
+    sbc #1
+    sta passLen                                            
+    ldy #0
+    sty passIndex
 
-    //shift down scores if you are equal or higher in the table
     !loop:
-
-    lda passIndex                                           
-    cmp #[HiScores.__scoresTable - HiScores.scoresTableLB - 1]                                  
+    lda passLen
     beq !skip+
-
-    lda passIndex
-    cmp hiscorePos
-    bmi !skip+  
-
-    tay                                                    
-    lda HiScores.scoresTableLB, y                           
+    ldy hiscorePos
+    lda HiScores.scoresTableLB, y
     sta tempScoreLB
     lda HiScores.scoresTableHB, y
     sta tempScoreHB
@@ -231,13 +236,12 @@ checkHighScorePosition: {
     sta HiScores.scoresTableHB, y
 
     !skip:
-    lda passIndex                                         
-    sec 
-    sbc #1                                                
-    sta passIndex                                         
-    bcs !loop-
+    inc passIndex
+    lda passIndex
+    cmp passLen
+    bne !loop-
 
-    //save current score into score table at hiscore position
+    //save current score into score table
     ldy hiscorePos
     lda scoreLB
     sta HiScores.scoresTableLB, y
@@ -294,7 +298,7 @@ drawFiredMessage:  {
   .label row3 = 12
   .label col3 = 10
 
-  lda #0
+  lda #1
   sta isEntryEnabled
 
   ldx #0
@@ -317,7 +321,7 @@ drawFiredMessage:  {
 
   jsr drawScore
   jsr drawContinueMessage
-  jsr disableKeyInput
+  jsr enableJoy
 
   rts
 }
@@ -400,17 +404,17 @@ drawContinueMessage: {
   rts
 }
 
-enableInput: {
+enableKeys: {
   lda #1
   sta keysEnabled
-  lda #1
+  lda #0
   sta joyEnabled
 
   rts
 
 }
 
-disableKeyInput: {
+enableJoy: {
   lda #0
   sta keysEnabled
   sta $dc02 //NO IDEA why THIS IS NECESSARY //ENABLES JOYSTICK
@@ -569,7 +573,7 @@ keyControl: {
       sta (screenramTemp),y
       //add letter to stored payerName
       ldy playerNameIndex
-      sta playerNameEntered, y  //h a y e s m k r 
+      sta playerNameEntered, y  //h a y e s m a k e r
       inc playerNameIndex
 
     NoNewAphanumericKey:
@@ -647,13 +651,13 @@ onDeletePressed: {
 }
 
 commitName: {
-  .label playerNameCharIndex = TEMP14
-  .label letterIndex = TEMP15
-  .label scorePos = TEMP16
-  .label tempLetter = TEMP17
-  .label passIndex = TEMP18
-  .label passLen = TEMP19
-  .label arrayLen = TEMP20
+  .label playerNameCharIndex = TEMP1
+  .label letterIndex = TEMP2
+  .label scorePos = TEMP3
+  .label tempLetter = TEMP4
+  .label passIndex = TEMP5
+  .label passLen = TEMP6
+  .label arrayLen = TEMP7 
   
   lda hiscorePos
   cmp #$ff
@@ -674,7 +678,7 @@ commitName: {
   sta arrayLen
 
   lda scorePos
-  cmp #3
+  cmp maxScorePass
   beq !drawName+
 
   !outerLoop:
@@ -740,7 +744,7 @@ onEnterPressed: {
   lda #0
   sta isEntryEnabled
   jsr drawContinueMessage
-  jsr disableKeyInput
+  jsr enableJoy
   jsr commitName
 
 
