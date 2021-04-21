@@ -5,8 +5,9 @@ GameOverScreen: {
 
   rowScreenTable: .fillword 25, screen_ram + (i * 40)
 
+  //todo: rewrite this lookup table to make clearer/more dynamic
   charShiftTable:
-    .byte $12, $1B, $24
+    .byte $12, $1B, $24, $2D, $36
   maxScorePass:
     .byte $04 //overridden in init replace with const
 
@@ -30,8 +31,6 @@ GameOverScreen: {
   LABEL_CONGRATS_COL:
   .text 6
 
- shouldUpdate:
-    .byte $00
   DebounceFlag:
     .byte $00
   DebounceFireFlag:
@@ -39,7 +38,6 @@ GameOverScreen: {
 
   isEntryEnabled:
     .byte $00  
-
   hiscorePos:
     .byte $ff  
 
@@ -173,7 +171,7 @@ init: {
         jsr  drawFiredMessage
         jmp !return+
       !skip:
-        jsr enableKeys
+        jsr enableNameInput
         jsr drawCongratsMessage
       !return:
       //jsr drawContinueMessage
@@ -298,7 +296,7 @@ drawFiredMessage:  {
   .label row3 = 12
   .label col3 = 10
 
-  lda #1
+  lda #0
   sta isEntryEnabled
 
   ldx #0
@@ -321,7 +319,7 @@ drawFiredMessage:  {
 
   jsr drawScore
   jsr drawContinueMessage
-  jsr enableJoy
+  jsr disableNameInput
 
   rts
 }
@@ -404,20 +402,20 @@ drawContinueMessage: {
   rts
 }
 
-enableKeys: {
+enableNameInput: {
   lda #1
   sta keysEnabled
-  lda #0
+  lda #1
   sta joyEnabled
 
   rts
 
 }
 
-enableJoy: {
+disableNameInput: {
   lda #0
   sta keysEnabled
-  sta $dc02 //NO IDEA why THIS IS NECESSARY //ENABLES JOYSTICK
+  sta $dc02       //Requred after Key input to ENABLE JOYSTICK
   lda #1
   sta joyEnabled
 
@@ -430,6 +428,8 @@ enableJoy: {
 update: {
   lda joyEnabled
   beq !skip+
+    lda #0
+    sta $dc02     //Requred after Key input to ENABLE JOYSTICK
     jsr joyControl
   !skip:
   lda keysEnabled
@@ -461,19 +461,21 @@ joyControl: {
     bne !movement+
     !:
     !Fire:
-        lda keysEnabled
+        lda isEntryEnabled
         bne !skip+
         //doFire
         lda #0
         sta isEntryEnabled
-        sta shouldUpdate
-
         lda #0
         sta GameOver.STATE_IN_PROGRESS
         
-
       !skip:
-    
+        //commit letter to score
+        inc $d020
+
+
+    !skip:    
+
     inc DebounceFireFlag
     !movement:   
     //Check if we need debounce
@@ -678,7 +680,8 @@ commitName: {
   sta arrayLen
 
   lda scorePos
-  cmp maxScorePass
+  //todo: replace #4 with score names number const    
+  cmp #4
   beq !drawName+
 
   !outerLoop:
@@ -744,7 +747,7 @@ onEnterPressed: {
   lda #0
   sta isEntryEnabled
   jsr drawContinueMessage
-  jsr enableJoy
+  jsr disableNameInput
   jsr commitName
 
 

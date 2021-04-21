@@ -46,6 +46,7 @@ HiScores: {
         //init joystick
         lda #$01
         sta DebounceFireFlag
+        
         lda #$00
         sta DebounceFlag
 
