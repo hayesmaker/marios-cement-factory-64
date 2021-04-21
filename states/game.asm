@@ -442,7 +442,8 @@ Game: {
 			bcc !next+
 			lda isPaused
 			bne !unpause+
-				lda #1
+				// inc $d020
+				// lda #1
 				jmp !store+
 			!unpause:
 				lda GameTimerTick + 2

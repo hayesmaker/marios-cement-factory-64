@@ -6,10 +6,10 @@ HiScores: {
   rowScreenTable: .fillword 25, screen_ram + (i * 40)
 
   .encoding "screencode_upper"
-    MyLabel1: .text "HIGH SCORES@"
+    MyLabel1: .text "TODAY'S TOP EMPLOYEES@"
     MyLabel2: .text "PRESS FIRE@"
   scoresTableName:
-   .text "HAYESMKR@AMKNIGHT@SHALLAN @STEPZ   @"
+   .text "BATTLEBB@I-A-N   @AMIGALUV@MIIDOLF @DADLERTL@"
   __scoresTableName:
   
   NUMBERWANG:
@@ -19,10 +19,15 @@ HiScores: {
   rowIndex:
      .byte $00
 
+/*
+-    .byte $09, $07, $04, $03
+-    .byte $99, $00, $50, $00
+*/
+
   scoresTableHB:
-    .byte $09, $07, $04, $03
+    .byte $10, $07, $05, $01, $00
   scoresTableLB:
-    .byte $99, $00, $50, $00
+    .byte $69, $50, $50, $64, $50
   __scoresTable:  
 
   scoreTemp:
@@ -98,7 +103,7 @@ HiScores: {
         .label row4 = 11
         .label row5 = 20
 
-        .label col1 = 14
+        .label col1 = 9
         .label col2 = 2
         .label col3 = 7
         .label col4 = 7
@@ -280,10 +285,7 @@ drawContinueMessage: {
   }
 
   update: {
-    //inc $d020
     jsr control
-    //jsr drawSprites
-    jsr keyControl
     rts
   }
 
@@ -370,10 +372,4 @@ drawContinueMessage: {
     rts
     
   }
-
-  keyControl: {
-
-    rts
-  }
-
 }

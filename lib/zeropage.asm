@@ -11,6 +11,14 @@
 .label TEMP11 = $0c
 .label TEMP12 = $0d
 .label TEMP13 = $0e
+.label TEMP14 = $0f //for highscores 14-20?
+.label TEMP15 = $10
+.label TEMP16 = $11
+.label TEMP17 = $12
+.label TEMP18 = $13
+.label TEMP19 = $14
+.label TEMP20 = $15
+
 
 
 .label JOY_ZP = $20

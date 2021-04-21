@@ -3,17 +3,18 @@ DebugLift:
 
 Score:{
 
+	.const UPPER_SCORE_DEFAULT = $01; 
+	.const LOWER_SCORE_DEFAULT = $02;
+	.const UPPER_SCORE_BONUS = $02;
+	.const LOWER_SCORE_BONUS = $04;
+
 	currentScore: .byte $00, $00
 	bonusOn: .byte 0
 	scoreToAdd: .byte 0
 	isBonus: .byte $00
 	hasBonusTriggered: .byte $00
-	
-	upperScore: .byte $1
-	lowerScore: .byte $2
-	// .const UPPER_SCORE = 10
-	// .const LOWER_SCORE = 20
-
+	upperScore: .byte UPPER_SCORE_DEFAULT
+	lowerScore: .byte LOWER_SCORE_DEFAULT
 	scoreToggledOn: .byte 1
 
 	Reset: {
@@ -56,9 +57,9 @@ Score:{
 
 		lda #1
 		sta bonusOn
-		lda #$2
+		lda UPPER_SCORE_BONUS
 		sta upperScore
-		lda #$4
+		lda LOWER_SCORE_BONUS
 		sta lowerScore
 		!return:
 		rts
@@ -73,9 +74,9 @@ Score:{
 		sta Game.ScoreBlinkingTimer + 0
 		lda #0
 		sta bonusOn
-		lda #$1
+		lda UPPER_SCORE_DEFAULT
 		sta upperScore
-		lda #$2
+		lda LOWER_SCORE_DEFAULT
 		sta lowerScore
 
 		lda #1
@@ -96,9 +97,9 @@ Score:{
 		clc
 		adc scoreToAdd
 		sta currentScore + 0
-		lda currentScore+1
+		lda currentScore + 1
 		adc #0
-		sta currentScore+1
+		sta currentScore + 1
 
 		//Check for a BONUS ROUND
 		lda hasBonusTriggered

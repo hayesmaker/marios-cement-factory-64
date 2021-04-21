@@ -4,7 +4,6 @@ BasicUpstart2(main)
 .label music_init =*
 .label music_play =*+3	
 .import binary "./assets/sound/music_v15.bin"
-
 SOUND_TICK: 
 .import binary "./assets/sound/sfx/SOUND_TICK"
 SOUND_MOVE:
@@ -28,7 +27,7 @@ SOUND_SCORE:
 #import "./lib/credits-screen.asm"
 #import "./lib/scores-screen.asm"
 #import "./states/titles.asm"
-#import "./states/game.asm"	             
+#import "./states/game.asm"
 #import "./lib/zeropage.asm"
 #import "./lib/labels.asm"	
 #import "./lib/vic.asm"

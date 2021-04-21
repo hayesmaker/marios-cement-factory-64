@@ -4,6 +4,42 @@
 		"selected_items":
 		[
 			[
+				"pas",
+				"passIndex"
+			],
+			[
+				"hig",
+				"highscorePosition"
+			],
+			[
+				"hisco",
+				"hiscorePos"
+			],
+			[
+				"pass",
+				"passLen"
+			],
+			[
+				"UPP",
+				"UPPER_SCORE_DEFAULT"
+			],
+			[
+				"LOWER_S",
+				"LOWER_SCORE_BONUS"
+			],
+			[
+				"LOWER",
+				"LOWER_SCORE_DEFAULT"
+			],
+			[
+				"LOW",
+				"LOW_SCORE_DEFAULT"
+			],
+			[
+				"HI_SC",
+				"HIGH_SCORE_DEFAULT"
+			],
+			[
 				"STAT",
 				"STATE_WALK_RIGHT"
 			],
@@ -478,63 +514,11 @@
 			[
 				"Dra",
 				"DrawTubes1"
-			],
-			[
-				"Ceme",
-				"CementsPoured"
-			],
-			[
-				"Update",
-				"Update3"
-			],
-			[
-				"Open",
-				"OpenHopper4"
-			],
-			[
-				"Swi",
-				"Switch4Up"
-			],
-			[
-				"posi",
-				"position4"
-			],
-			[
-				"CharsPos",
-				"CharsPosition13"
-			],
-			[
-				"Char",
-				"CharsPosition04"
-			],
-			[
-				"C",
-				"CharsPosition11"
-			],
-			[
-				"CharPosition",
-				"CharsPosition03"
 			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "start.asm",
-			"settings":
-			{
-				"buffer_size": 2812,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Users/hayesmaker64/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
-			"settings":
-			{
-				"buffer_size": 199,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -596,7 +580,7 @@
 	},
 	"console":
 	{
-		"height": 0.0,
+		"height": 419.0,
 		"history":
 		[
 		]
@@ -616,6 +600,17 @@
 	],
 	"file_history":
 	[
+		"/C/C64/Workspace/marios-cement-factory-64/game/score.asm",
+		"/C/C64/Workspace/marios-cement-factory-64/exomiser/crunch.bat",
+		"/C/C64/Workspace/marios-cement-factory-64/exomiser/README.md",
+		"/C/C64/Workspace/marios-cement-factory-64/lib/scores-screen.asm",
+		"/C/C64/Workspace/marios-cement-factory-64/lib/game-over-screen.asm",
+		"/C/C64/Workspace/marios-cement-factory-64/start.asm",
+		"/C/C64/Workspace/marios-cement-factory-64/lib/zeropage.asm",
+		"/C/C64/Workspace/marios-cement-factory-64/states/game.asm",
+		"/C/C64/Workspace/marios-cement-factory-64/lib/options-screen.asm",
+		"/C/C64/Workspace/marios-cement-factory-64/game/constants.asm",
+		"/C/Users/hayesmaker64/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/C/Users/hayesmaker64/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
 		"/C/C64/Workspace/legend-of-wilf/src/main.asm",
 		"/C/C64/Workspace/legend-of-wilf/src/actors/player.asm",
@@ -624,17 +619,11 @@
 		"/C/C64/Workspace/legend-of-wilf/src/lib/zeropage.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/actors/elevators.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/lib/title-screen.asm",
-		"/C/C64/Workspace/marios-cement-factory-64/lib/scores-screen.asm",
-		"/C/C64/Workspace/marios-cement-factory-64/game/score.asm",
-		"/C/C64/Workspace/marios-cement-factory-64/start.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/lib/map.asm",
-		"/C/C64/Workspace/marios-cement-factory-64/lib/game-over-screen.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/tests/64spec.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/tests/specs.asm",
-		"/C/C64/Workspace/marios-cement-factory-64/lib/zeropage.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/lib/credits-screen.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/states/gameover.asm",
-		"/C/C64/Workspace/marios-cement-factory-64/states/game.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/states/titles.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/lib/irq.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/game/lives.asm",
@@ -644,8 +633,6 @@
 		"/C/C64/Workspace/marios-cement-factory-64/actors/cement-crates.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/lib/title-screen2.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/actors/poured-cement.asm",
-		"/C/C64/Workspace/marios-cement-factory-64/lib/options-screen.asm",
-		"/C/C64/Workspace/marios-cement-factory-64/game/constants.asm",
 		"/C/C64/Workspace/Fireman/main.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/game/sounds.asm",
 		"/C/C64/Workspace/marios-cement-factory-64/assets/sound/MariosFactory_00ch3_01ch2_02ch0_v8_1000 (1).bin",
@@ -667,7 +654,7 @@
 	],
 	"find":
 	{
-		"height": 37.0
+		"height": 42.0
 	},
 	"find_in_files":
 	{
@@ -681,6 +668,26 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"UPPER_SCORE_DEFAULT",
+			"maxScorePass",
+			"passLen",
+			"pause",
+			"MyLabel1",
+			"firstLetter",
+			"maxScorePass",
+			"passIndex",
+			"commitName",
+			"keyControl",
+			"AddPoints",
+			"scoreToAdd",
+			"UPPER_SCORE",
+			"UPPER_SCORE_BONUS",
+			"LOWER_SCORE_DEFAULT",
+			"UPPER_SCORE_BONUS",
+			"HIGH_SCORE_DEFAULT",
+			"lowerScore",
+			"LOW_SCORE_DEFAULT",
+			"upperScore"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -698,79 +705,14 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "start.asm",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2812,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2038,
-								2038
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Kick Assembler (C64)/Syntaxes/KickAssembler (C64).tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 1659.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 0,
-			"sheets":
-			[
-				{
-					"buffer": 1,
-					"file": "/C/Users/hayesmaker64/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 199,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								199,
-								199
-							]
-						],
-						"settings":
-						{
-							"edit_settings_other_view_id": 47,
-							"edit_settings_view": "user",
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 37.0
+		"height": 42.0
 	},
 	"input":
 	{
@@ -785,18 +727,11 @@
 				0,
 				1,
 				1
-			],
-			[
-				1,
-				0,
-				2,
-				1
 			]
 		],
 		"cols":
 		[
 			0.0,
-			0.548828125,
 			1.0
 		],
 		"rows":
@@ -808,7 +743,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 387.0
+		"height": 367.0
 	},
 	"output.find_results":
 	{
@@ -818,7 +753,7 @@
 	"project": ".propject.sublime-project",
 	"replace":
 	{
-		"height": 70.0
+		"height": 80.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -857,7 +792,7 @@
 	"show_tabs": true,
 	"side_bar_visible": true,
 	"side_bar_width": 248.0,
-	"status_bar_visible": true,
+	"status_bar_visible": false,
 	"template_settings":
 	{
 	}

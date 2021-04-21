@@ -5,7 +5,7 @@ OptionsScreen: {
   MyLabel3: .text "SFX:@"
   MyLabel4: .text "RESET SCORES@"
   MyLabel5: .text "MAIN MENU@"
-  MyVersionTxt: .text "VERSION 1.2@"
+  MyVersionTxt: .text "VERSION 1.3@"
   MyLabelOn: .text "ON @"
   MyLabelOff: .text "OFF@"
 
