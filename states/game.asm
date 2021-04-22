@@ -277,7 +277,7 @@ Game: {
 		    inc GameCounter
 		    lda isDukeMode
 		    beq !skip+
-		    	// inc $d020
+		    	inc $d020
 		    	// inc $d021
 		    	lda #1
 		    	sta GameTimerTick + 0
@@ -443,7 +443,7 @@ Game: {
 			lda isPaused
 			bne !unpause+
 				// inc $d020
-				// lda #1
+				lda #1
 				jmp !store+
 			!unpause:
 				lda GameTimerTick + 2
@@ -453,10 +453,6 @@ Game: {
 			!store:
 				sta isPaused
 			!next:
-		// inc $d020
-        // lda $d020
-        // sta Options.customBorder
-
 		rts
 	}
 

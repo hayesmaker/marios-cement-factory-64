@@ -437,8 +437,9 @@ Crates: {
 	}
 
 	checkFill:{
+		clc
 		jsr Game.Random
-		cmp #128
+		cmp #150
 		bcc !doFill+
 		lda #0
 		jmp !return+

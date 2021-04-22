@@ -1,5 +1,5 @@
 Lives: {
-	LivesLost:
+	numLivesLost:
 		.byte $00
 
 	xPosition:
@@ -16,6 +16,7 @@ Lives: {
 	}
 
 	clearLivesUI: {
+		//Clear MISS Gfx
 		ldx #29
 		jsr RemoveMiss
 
@@ -41,28 +42,27 @@ Lives: {
 		ldy #4
 		jsr Map.SwitchCharAtXY
 
-		//reset lives
-		lda #0
-		sta LivesLost
-
 		rts
 	}
 
 	AddLife: {
 		jsr clearLivesUI
 		
+		//reset lives
+		lda #0
+		sta numLivesLost
+		
 		rts
 	}
 
 	LoseLife: {
-
-		ldy LivesLost
+		ldy numLivesLost
 		ldx LifePosX, y
 		jsr AddMiss
 
-		inc LivesLost
-		lda LivesLost
-		cmp #3 //#3
+		inc numLivesLost
+		lda numLivesLost
+		cmp #3
 		bne !skip+
 			lda #0
 			sta Game.STATE_IN_PROGRESS
@@ -72,14 +72,6 @@ Lives: {
 	}
 
 	AddMiss: {
-		//171
-		//172
-		//173
-		//174
-
-		//175
-		//176
-		//177
 		stx xPosition
 
 		lda #171
@@ -119,13 +111,11 @@ Lives: {
 		ldy #4
 		jsr Map.SwitchCharAtXY
 
-
-
 		rts
 	}
 
 
-
+	//set X to charIndexX of Miss graphic tile
 	RemoveMiss: {
 		stx xPosition
 

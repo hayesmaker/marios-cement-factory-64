@@ -15,7 +15,7 @@ SOUND_FALL:
 SOUND_SCORE:
 .import binary "./assets/sound/sfx/SOUND_SCORE"
 
-* = * "KoalaImage" 
+* = * "KoalaImage"
 .const KOALA_TEMPLATE = "C64FILE, Bitmap=$0000, ScreenRam=$1f40, ColorRam=$2328, BackgroundColor=$2710"
 .var picture = LoadBinary("./assets/maps/titles.kla", KOALA_TEMPLATE)
 * = * "End of KoalaImage"

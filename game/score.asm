@@ -43,7 +43,7 @@ Score:{
 	}
 
 	EnableBonus: {
-		lda Lives.LivesLost
+		lda Lives.numLivesLost
 		beq !skip+
 			jsr Lives.AddLife
 			jmp !return+
