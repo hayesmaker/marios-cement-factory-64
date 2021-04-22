@@ -71,11 +71,11 @@ main:
 
 *=* "End main"
 
-*=$4c00 "bitmap screen ram"; .fill picture.getScreenRamSize(), picture.getScreenRam(i)
-*=$5000 "Menu Sprites"
-     .import binary "./assets/sprites/titles.bin"
-*=$5c00 "colour ram"; colorRam:   .fill picture.getColorRamSize(), picture.getColorRam(i)
-*=$6000 "bitmap";           .fill picture.getBitmapSize(), picture.getBitmap(i)
+*=$4c00 "bitmap screen ram"; 		.fill picture.getScreenRamSize(), picture.getScreenRam(i)
+*=$5000 "Menu Sprites";				
+.import binary "./assets/sprites/titles.bin"
+*=$5c00 "colour ram"; colorRam:   	.fill picture.getColorRamSize(), picture.getColorRam(i)
+*=$6000 "bitmap";           		.fill picture.getBitmapSize(), picture.getBitmap(i)
 *=$8000 "modules"
 
 #import "./game/constants.asm"

@@ -209,20 +209,23 @@ checkHighScorePosition: {
     jmp !loop-
 
     //shift all scores down the table from current score position
+    //bug.. last score isn't overwritten.
     !putScore:
     sty hiscorePos
     lda #[HiScores.__scoresTable - HiScores.scoresTableLB] 
     sec
     sbc hiscorePos
-    sbc #1
-    sta passLen                                            
-    ldy #0
-    sty passIndex
+    sbc #1    //?                                 
+    sta passIndex
+    beq !skip+
 
     !loop:
-    lda passLen
-    beq !skip+
-    ldy hiscorePos
+    clc 
+    lda passIndex
+    adc hiscorePos
+    sec
+    sbc #1
+    tay
     lda HiScores.scoresTableLB, y
     sta tempScoreLB
     lda HiScores.scoresTableHB, y
@@ -233,12 +236,10 @@ checkHighScorePosition: {
     lda tempScoreHB
     sta HiScores.scoresTableHB, y
 
-    !skip:
-    inc passIndex
-    lda passIndex
-    cmp passLen
+    dec passIndex
     bne !loop-
 
+    !skip:
     //save current score into score table
     ldy hiscorePos
     lda scoreLB
@@ -551,8 +552,6 @@ keyControl: {
       ldy #0
       sty delDebounce
 
-      // Check A for Alphanumeric keys
-      //.break
       sta TempA
       lda playerNameIndex
       cmp #8

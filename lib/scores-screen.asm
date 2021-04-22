@@ -19,15 +19,10 @@ HiScores: {
   rowIndex:
      .byte $00
 
-/*
--    .byte $09, $07, $04, $03
--    .byte $99, $00, $50, $00
-*/
-
   scoresTableHB:
-    .byte $10, $07, $05, $01, $00
+    .byte $10, $05, $03, $02, $01
   scoresTableLB:
-    .byte $69, $50, $50, $64, $50
+    .byte $00, $00, $00, $00, $00
   __scoresTable:  
 
   scoreTemp:
