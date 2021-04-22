@@ -8,8 +8,9 @@ HiScores: {
   .encoding "screencode_upper"
     MyLabel1: .text "TODAY'S TOP EMPLOYEES@"
     MyLabel2: .text "PRESS FIRE@"
+  
   scoresTableName:
-   .text "BATTLEBB@I-A-N   @AMIGALUV@MIIDOLF @DADLERTL@"
+   .text "BATTLEBB@I-A-N   @AMIGALUV@MIIDOLF @DADLERTL@MARIO   @"
   __scoresTableName:
   
   NUMBERWANG:
@@ -20,10 +21,17 @@ HiScores: {
      .byte $00
 
   scoresTableHB:
-    .byte $10, $05, $03, $02, $01
+    .byte $10, $05, $03, $02, $01, $00
   scoresTableLB:
-    .byte $00, $00, $00, $00, $00
-  __scoresTable:  
+    .byte $00, $00, $00, $00, $00, $50
+  __scoresTable:
+
+//Uncomment Low scores for testing highscore
+/*  scoresTableHB:
+    .byte $04, $03, $02, $01, $00
+  scoresTableLB:
+    .byte $00, $00, $00, $00, $50
+  __scoresTable:  */
 
   scoreTemp:
       .byte $00, $00

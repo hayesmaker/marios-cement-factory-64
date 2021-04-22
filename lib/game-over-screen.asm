@@ -5,11 +5,13 @@ GameOverScreen: {
 
   rowScreenTable: .fillword 25, screen_ram + (i * 40)
 
+
+
   //todo: rewrite this lookup table to make clearer/more dynamic
   charShiftTable:
     .byte $12, $1B, $24, $2D, $36
   maxScorePass:
-    .byte $04 //overridden in init replace with const
+    .byte $00 //overridden in init replace with const
 
   .encoding "screencode_upper"
   MyLabel1: .text "GAME OVER@"
@@ -150,7 +152,8 @@ init: {
       lda #0
       sta playerNameIndex
 
-      lda #4 //Must Edit for new players
+      //Hi Score table LEN
+      lda #[HiScores.__scoresTable - HiScores.scoresTableLB - 1] 
       sta maxScorePass
 
       lda #$ff
@@ -475,25 +478,16 @@ joyControl: {
         lda #0
         sta GameOver.STATE_IN_PROGRESS        
       !skip:
-        //commit letter to score
-        
         jsr commitLetter
-
-        lda playerNameIndex
-        cmp #8
-        bne !skip+
-        jsr onEnterPressed
-
+        //commit letter to score
     !skip:    
-
-    lda isEntryEnabled
-    beq !end+
-
     inc DebounceFireFlag
+    
     !movement:   
     //Check if we need debounce
     lda DebounceFlag
     beq !+
+
     //Otherwise check if we can turn it off
     lda JOY_ZP
     and #[JOY_LT + JOY_RT + JOY_UP + JOY_DN]
@@ -525,6 +519,8 @@ joyControl: {
     bne !+
     inc DebounceFlag
     //move player left
+      lda isEntryEnabled
+      beq !end+
       jsr cycleLetterLeft
     !:
     !Right:
@@ -534,6 +530,8 @@ joyControl: {
     bne !end+
     inc DebounceFlag              
     //move cursor right
+      lda isEntryEnabled
+      beq !end+
       jsr cycleLetterRight
 
     !end:
@@ -603,6 +601,13 @@ commitLetter: {
   sta joyCharIndex
   inc playerNameIndex
 
+  lda playerNameIndex
+  cmp #8
+  bne !skip+
+  
+  jsr onEnterPressed
+
+  !skip:
   rts
 }
 
@@ -739,7 +744,7 @@ commitName: {
 
   lda scorePos
   //todo: replace #4 with score names number const    
-  cmp #4
+  cmp #[HiScores.__scoresTable - HiScores.scoresTableLB - 1]
   beq !drawName+
 
   !outerLoop:

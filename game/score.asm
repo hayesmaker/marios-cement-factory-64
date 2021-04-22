@@ -3,8 +3,8 @@ DebugLift:
 
 Score:{
 
-	.const UPPER_SCORE_DEFAULT = $10; 
-	.const LOWER_SCORE_DEFAULT = $20;
+	.const UPPER_SCORE_DEFAULT = $01; 
+	.const LOWER_SCORE_DEFAULT = $02;
 	.const UPPER_SCORE_BONUS = $02;
 	.const LOWER_SCORE_BONUS = $04;
 
@@ -57,9 +57,9 @@ Score:{
 
 		lda #1
 		sta bonusOn
-		lda UPPER_SCORE_BONUS
+		lda #UPPER_SCORE_BONUS
 		sta upperScore
-		lda LOWER_SCORE_BONUS
+		lda #LOWER_SCORE_BONUS
 		sta lowerScore
 		!return:
 		rts
@@ -74,9 +74,9 @@ Score:{
 		sta Game.ScoreBlinkingTimer + 0
 		lda #0
 		sta bonusOn
-		lda UPPER_SCORE_DEFAULT
+		lda #UPPER_SCORE_DEFAULT
 		sta upperScore
-		lda LOWER_SCORE_DEFAULT
+		lda #LOWER_SCORE_DEFAULT
 		sta lowerScore
 
 		lda #1
