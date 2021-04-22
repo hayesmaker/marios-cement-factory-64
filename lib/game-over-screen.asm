@@ -61,6 +61,8 @@ playerNameIndex:
 
 playerScore:
   .text "    "
+joyCharIndex:
+  .byte firstLetter
 savePosition:
   .byte 0
 keyPressed:
@@ -153,6 +155,9 @@ init: {
 
       lda #$ff
       sta hiscorePos
+
+      lda #1
+      sta joyCharIndex
 
       ldx #0
       !loop:
@@ -468,14 +473,21 @@ joyControl: {
         lda #0
         sta isEntryEnabled
         lda #0
-        sta GameOver.STATE_IN_PROGRESS
-        
+        sta GameOver.STATE_IN_PROGRESS        
       !skip:
         //commit letter to score
-        inc $d020
+        
+        jsr commitLetter
 
+        lda playerNameIndex
+        cmp #8
+        bne !skip+
+        jsr onEnterPressed
 
     !skip:    
+
+    lda isEntryEnabled
+    beq !end+
 
     inc DebounceFireFlag
     !movement:   
@@ -513,7 +525,7 @@ joyControl: {
     bne !+
     inc DebounceFlag
     //move player left
-    
+      jsr cycleLetterLeft
     !:
     !Right:
 
@@ -522,20 +534,82 @@ joyControl: {
     bne !end+
     inc DebounceFlag              
     //move cursor right
+      jsr cycleLetterRight
 
     !end:
     rts
     
   }
 
-keyControl: {
-    .label TempA = TEMP4
-    .label TempX = TEMP5
-    .label TempY = TEMP6
+  renderLetter: {
+    .label tempLetter = TEMP4
     .label screenramTemp = TEMP9
-
     .label row = 10
     .label col = 15
+
+    lda #row
+    asl
+    tay
+    lda rowScreenTable, y
+    sta screenramTemp
+    lda rowScreenTable + 1, y
+    sta screenramTemp + 1
+    lda #col
+    clc 
+    adc playerNameIndex
+    tay 
+    lda tempLetter
+    sta (screenramTemp),y
+    //add letter to stored payerName
+    ldy playerNameIndex
+    sta playerNameEntered, y  //h a y e s m a k e r
+    rts
+}
+
+cycleLetterLeft: {
+  .label tempLetter = TEMP4
+  sec
+  lda joyCharIndex  //h a y e s m a k e r
+  sbc #1
+  cmp #0
+  bne !skip+
+    lda #$1a  //cycle back to z
+  !skip:
+  sta joyCharIndex
+  sta tempLetter
+  jsr renderLetter
+
+  rts
+}  
+
+cycleLetterRight: {
+  .label tempLetter = TEMP4
+  clc
+  lda joyCharIndex  //h a y e s m a k e r
+  adc #1
+  cmp #$1b //past z?
+  bne !skip+
+    lda #1
+  !skip:
+  sta joyCharIndex
+  sta tempLetter
+  jsr renderLetter
+  rts
+}
+
+commitLetter: {
+  lda joyCharIndex
+  lda #0
+  sta joyCharIndex
+  inc playerNameIndex
+
+  rts
+}
+
+keyControl: {
+    .label tempLetter = TEMP4
+    .label TempX = TEMP5
+    .label TempY = TEMP6
 
     lda isEntryEnabled
     bne !skip+
@@ -552,29 +626,14 @@ keyControl: {
       ldy #0
       sty delDebounce
 
-      sta TempA
+      sta tempLetter
       lda playerNameIndex
       cmp #8
       bne !skip+
         jmp NoValidInput
       !skip:
       
-      lda #row
-      asl
-      tay
-      lda rowScreenTable, y
-      sta screenramTemp
-      lda rowScreenTable + 1, y
-      sta screenramTemp + 1
-      lda #col
-      clc 
-      adc playerNameIndex
-      tay 
-      lda TempA
-      sta (screenramTemp),y
-      //add letter to stored payerName
-      ldy playerNameIndex
-      sta playerNameEntered, y  //h a y e s m a k e r
+      jsr renderLetter
       inc playerNameIndex
 
     NoNewAphanumericKey:
