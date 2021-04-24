@@ -10,6 +10,9 @@ Lives: {
 
 	Initialise: {
 		//Remove all Misses
+		//reset lives
+		lda #0
+		sta numLivesLost
 		jsr clearLivesUI
 
 		rts
